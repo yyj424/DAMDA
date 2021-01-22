@@ -8,5 +8,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         //taeyeon 브랜치 만들어서 push 해보겠음
+        //주석
+
     }
 }
