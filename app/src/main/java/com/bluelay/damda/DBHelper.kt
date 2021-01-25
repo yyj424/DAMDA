@@ -69,7 +69,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
         private val WIS_COL_LINK = "link"
         private val WIS_COL_COLOR = "color"
 
-        private val MOV_TABLE_NAME = "Bucket"
+        private val MOV_TABLE_NAME = "Movie"
         private val MOV_COL_ID = "_id"
         private val MOV_COL_WDATE = "wdate"
         private val MOV_COL_DATE = "date"
@@ -83,10 +83,10 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
     override fun onCreate(db: SQLiteDatabase?) {
        var createTable =
                 "CREATE TABLE $CON_TABLE_NAME" +
-                        "($CON_COL_ID Integer PRIMARY KEY," +
-                        "$CON_COL_TYPE_ID Integer," +
-                        "$CON_COL_TYPE Integer," +
-                        "$CON_COL_FOLDER_ID Integer)"
+                        "($CON_COL_ID Integer PRIMARY KEY, " +
+                        "$CON_COL_TYPE_ID Integer, " +
+                        "$CON_COL_TYPE Integer, " +
+                        "$CON_COL_FOLDER_ID Integer);"
         db?.execSQL(createTable)
 
         createTable =
