@@ -7,77 +7,93 @@ import android.database.sqlite.SQLiteOpenHelper
 class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
     companion object {
-        private val DB_NAME = "DAMDA.db"
-        private val DB_VERSION = 1
+        val DB_NAME = "DAMDA.db"
+        val DB_VERSION = 1
 
-        private val CON_TABLE_NAME = "Connect"
-        private val CON_COL_ID = "_id"
-        private val CON_COL_FOLDER_ID = "folder_id"
-        private val CON_COL_TYPE = "type"
-        private val CON_COL_TYPE_ID = "type_id"
+        val CON_TABLE_NAME = "Connect"
+        val CON_COL_ID = "_id"
+        val CON_COL_FOLDER_ID = "folder_id"
+        val CON_COL_TYPE = "type"
+        val CON_COL_TYPE_ID = "type_id"
 
-        private val FOL_TABLE_NAME = "Folder"
-        private val FOL_COL_ID = "_id"
-        private val FOL_COL_NAME = "name"
+        val FOL_TABLE_NAME = "Folder"
+        val FOL_COL_ID = "_id"
+        val FOL_COL_NAME = "name"
 
-        private val TOD_TABLE_NAME = "Todo"
-        private val TOD_COL_ID = "_id"
-        private val TOD_COL_WDATE = "wdate"
-        private val TOD_COL_DATE = "date"
-        private val TOD_COL_CONTENT = "content"
-        private val TOD_COL_CHECKED = "checked"
-        private val TOD_COL_COLOR = "color"
+        val TODL_TABLE_NAME = "TodoList"
+        val TODL_COL_ID = "_id"
+        val TODL_COL_WDATE = "wdate"
+        val TODL_COL_DATE = "date"
+        val TODL_COL_COLOR = "color"
 
-        private val REC_TABLE_NAME = "Recipe"
-        private val REC_COL_ID = "_id"
-        private val REC_COL_WDATE = "wdate"
-        private val REC_COL_CONTENT = "content"
-        private val REC_COL_NAME = "name"
-        private val REC_COL_COLOR = "color"
-        private val REC_COL_INGREDIENTS = "ingredients"
+        val TOD_TABLE_NAME = "Todo"
+        val TOD_COL_ID = "_id"
+        val TOD_COL_TID = "tid"
+        val TOD_COL_CONTENT = "content"
+        val TOD_COL_CHECKED = "checked"
 
-        private val MEM_TABLE_NAME = "Memo"
-        private val MEM_COL_ID = "_id"
-        private val MEM_COL_WDATE = "wdate"
-        private val MEM_COL_CONTENT = "content"
-        private val MEM_COL_COLOR = "color"
+        val REC_TABLE_NAME = "Recipe"
+        val REC_COL_ID = "_id"
+        val REC_COL_WDATE = "wdate"
+        val REC_COL_CONTENT = "content"
+        val REC_COL_NAME = "name"
+        val REC_COL_COLOR = "color"
+        val REC_COL_INGREDIENTS = "ingredients"
 
-        private val BUC_TABLE_NAME = "Bucket"
-        private val BUC_COL_ID = "_id"
-        private val BUC_COL_WDATE = "wdate"
-        private val BUC_COL_DATE = "date"
-        private val BUC_COL_CONTENT = "content"
-        private val BUC_COL_CHECKED = "checked"
-        private val BUC_COL_COLOR = "color"
+        val MEM_TABLE_NAME = "Memo"
+        val MEM_COL_ID = "_id"
+        val MEM_COL_WDATE = "wdate"
+        val MEM_COL_CONTENT = "content"
+        val MEM_COL_COLOR = "color"
 
-        private val DIA_TABLE_NAME = "Diary"
-        private val DIA_COL_ID = "_id"
-        private val DIA_COL_WDATE = "wdate"
-        private val DIA_COL_DATE = "date"
-        private val DIA_COL_CONTENT = "content"
-        private val DIA_COL_MOODPIC = "moodpic"
-        private val DIA_COL_WEATHER = "weather"
-        private val DIA_COL_COLOR = "color"
+        val BUCL_TABLE_NAME = "BucketList"
+        val BUCL_COL_ID = "_id"
+        val BUCL_COL_WDATE = "wdate"
+        val BUCL_COL_DATE = "date"
+        val BUCL_COL_COLOR = "color"
 
-        private val WIS_TABLE_NAME = "Wish"
-        private val WIS_COL_ID = "_id"
-        private val WIS_COL_WDATE = "wdate"
-        private val WIS_COL_CATEGORY = "category"
-        private val WIS_COL_CHECKED = "checked"
-        private val WIS_COL_PRICE = "price"
-        private val WIS_COL_ITEM = "item"
-        private val WIS_COL_LINK = "link"
-        private val WIS_COL_COLOR = "color"
+        val BUC_TABLE_NAME = "Bucket"
+        val BUC_COL_ID = "_id"
+        val BUC_COL_BID = "bid"
+        val BUC_COL_CONTENT = "content"
+        val BUC_COL_CHECKED = "checked"
 
-        private val MOV_TABLE_NAME = "Movie"
-        private val MOV_COL_ID = "_id"
-        private val MOV_COL_WDATE = "wdate"
-        private val MOV_COL_DATE = "date"
-        private val MOV_COL_CONTENT = "content"
-        private val MOV_COL_TITLE = "title"
-        private val MOV_COL_SCORE = "score"
-        private val MOV_COL_POSTERPIC = "posterpic"
-        private val MOV_COL_COLOR = "color"
+        val WEE_TABLE_NAME = "Weekly"
+        val WEE_COL_ID = "_id"
+        val WEE_COL_WDATE = "wdate"
+        val WEE_COL_DATE = "date"
+        val WEE_COL_COLOR = "color"
+
+        val DIA_TABLE_NAME = "Diary"
+        val DIA_COL_ID = "_id"
+        val DIA_COL_DID = "did"
+        val DIA_COL_CONTENT = "content"
+        val DIA_COL_MOODPIC = "moodpic"
+        val DIA_COL_WEATHER = "weather"
+
+        val WISL_TABLE_NAME = "WishList"
+        val WISL_COL_ID = "_id"
+        val WISL_COL_WDATE = "wdate"
+        val WISL_COL_CATEGORY = "category"
+        val WISL_COL_COLOR = "color"
+
+        val WIS_TABLE_NAME = "Wish"
+        val WIS_COL_ID = "_id"
+        val WIS_COL_WID = "wid"
+        val WIS_COL_CHECKED = "checked"
+        val WIS_COL_PRICE = "price"
+        val WIS_COL_ITEM = "item"
+        val WIS_COL_LINK = "link"
+
+        val MOV_TABLE_NAME = "Movie"
+        val MOV_COL_ID = "_id"
+        val MOV_COL_WDATE = "wdate"
+        val MOV_COL_DATE = "date"
+        val MOV_COL_CONTENT = "content"
+        val MOV_COL_TITLE = "title"
+        val MOV_COL_SCORE = "score"
+        val MOV_COL_POSTERPIC = "posterpic"
+        val MOV_COL_COLOR = "color"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -96,19 +112,26 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
         db?.execSQL(createTable)
 
         createTable =
+                "CREATE TABLE $TODL_TABLE_NAME" +
+                        "($TODL_COL_ID Integer PRIMARY KEY," +
+                        "$TODL_COL_WDATE Integer," +
+                        "$TODL_COL_DATE TEXT," +
+                        "$TODL_COL_COLOR TEXT)"
+        db?.execSQL(createTable)
+
+        createTable =
                 "CREATE TABLE $TOD_TABLE_NAME" +
                         "($TOD_COL_ID Integer PRIMARY KEY," +
-                        "$TOD_COL_WDATE TEXT," +
-                        "$TOD_COL_DATE TEXT," +
+                        "$TOD_COL_TID Integer," +
                         "$TOD_COL_CONTENT TEXT," +
                         "$TOD_COL_CHECKED Integer," +
-                        "$TOD_COL_COLOR TEXT)"
+                        "FOREIGN KEY($TOD_COL_TID) REFERENCES $TODL_TABLE_NAME ($TODL_COL_ID) ON DELETE CASCADE)"
         db?.execSQL(createTable)
 
         createTable =
                 "CREATE TABLE $REC_TABLE_NAME" +
                         "($REC_COL_ID Integer PRIMARY KEY," +
-                        "$REC_COL_WDATE TEXT," +
+                        "$REC_COL_WDATE Integer," +
                         "$REC_COL_INGREDIENTS TEXT," +
                         "$REC_COL_CONTENT TEXT," +
                         "$REC_COL_NAME TEXT" +
@@ -118,48 +141,69 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
         createTable =
                 "CREATE TABLE $MEM_TABLE_NAME" +
                         "($MEM_COL_ID Integer PRIMARY KEY," +
-                        "$MEM_COL_WDATE TEXT," +
+                        "$MEM_COL_WDATE Integer," +
                         "$MEM_COL_CONTENT TEXT," +
                         "$MEM_COL_COLOR TEXT)"
         db?.execSQL(createTable)
 
         createTable =
+                "CREATE TABLE $BUCL_TABLE_NAME" +
+                        "($BUCL_COL_ID Integer PRIMARY KEY," +
+                        "$BUCL_COL_WDATE Integer," +
+                        "$BUCL_COL_DATE TEXT," +
+                        "$BUCL_COL_COLOR TEXT)"
+        db?.execSQL(createTable)
+
+        createTable =
                 "CREATE TABLE $BUC_TABLE_NAME" +
                         "($BUC_COL_ID Integer PRIMARY KEY," +
-                        "$BUC_COL_WDATE TEXT," +
-                        "$BUC_COL_DATE TEXT," +
-                        "$BUC_COL_CONTENT TEXT," +
-                        "$BUC_COL_CHECKED Integer," +
-                        "$BUC_COL_COLOR TEXT)"
+                        "$BUC_COL_BID Integer," +
+                        "$BUC_COL_CONTENT Integer," +
+                        "$BUC_COL_CHECKED TEXT," +
+                        "FOREIGN KEY($BUC_COL_BID) REFERENCES $BUCL_TABLE_NAME ($BUCL_COL_ID) ON DELETE CASCADE)"
+        db?.execSQL(createTable)
+
+        createTable =
+                "CREATE TABLE $WEE_TABLE_NAME" +
+                        "($WEE_COL_ID Integer PRIMARY KEY," +
+                        "$WEE_COL_WDATE Integer," +
+                        "$WEE_COL_DATE TEXT," +
+                        "$WEE_COL_COLOR TEXT)"
         db?.execSQL(createTable)
 
         createTable =
                 "CREATE TABLE $DIA_TABLE_NAME" +
                         "($DIA_COL_ID Integer PRIMARY KEY," +
-                        "$DIA_COL_WDATE TEXT," +
-                        "$DIA_COL_DATE TEXT," +
+                        "$DIA_COL_DID Integer," +
                         "$DIA_COL_WEATHER TEXT," +
                         "$DIA_COL_MOODPIC TEXT," +
                         "$DIA_COL_CONTENT TEXT," +
-                        "$DIA_COL_COLOR TEXT)"
+                        "FOREIGN KEY($DIA_COL_DID) REFERENCES $WEE_TABLE_NAME ($WEE_COL_ID) ON DELETE CASCADE)"
+        db?.execSQL(createTable)
+
+        createTable =
+                "CREATE TABLE $WISL_TABLE_NAME" +
+                        "($WISL_COL_ID Integer PRIMARY KEY," +
+                        "$WISL_COL_WDATE Integer," +
+                        "$WISL_COL_CATEGORY TEXT," +
+                        "$WISL_COL_COLOR TEXT)"
         db?.execSQL(createTable)
 
         createTable =
                 "CREATE TABLE $WIS_TABLE_NAME" +
                         "($WIS_COL_ID Integer PRIMARY KEY," +
-                        "$WIS_COL_WDATE TEXT," +
-                        "$WIS_COL_CATEGORY TEXT," +
+                        "$WIS_COL_WID Integer," +
                         "$WIS_COL_ITEM TEXT," +
                         "$WIS_COL_PRICE Integer," +
                         "$WIS_COL_LINK TEXT," +
                         "$WIS_COL_CHECKED Integer," +
-                        "$WIS_COL_COLOR TEXT)"
+                        "FOREIGN KEY($WIS_COL_WID) REFERENCES $WISL_TABLE_NAME ($WISL_COL_ID) ON DELETE CASCADE)"
         db?.execSQL(createTable)
 
         createTable =
                 "CREATE TABLE $MOV_TABLE_NAME" +
                         "($MOV_COL_ID Integer PRIMARY KEY," +
-                        "$MOV_COL_WDATE TEXT," +
+                        "$MOV_COL_WDATE Integer," +
                         "$MOV_COL_DATE TEXT," +
                         "$MOV_COL_TITLE TEXT," +
                         "$MOV_COL_POSTERPIC TEXT," +
@@ -180,5 +224,12 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
         db.execSQL("DROP TABLE if exists $WIS_TABLE_NAME")
         db.execSQL("DROP TABLE if exists $MOV_TABLE_NAME")
         onCreate(db)
+    }
+
+    override fun onOpen(db: SQLiteDatabase) {
+        super.onOpen(db)
+        if (!db.isReadOnly) {
+            db.execSQL("PRAGMA foreign_keys=ON;")
+        }
     }
 }
