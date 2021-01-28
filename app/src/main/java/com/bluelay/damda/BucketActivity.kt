@@ -1,5 +1,6 @@
 package com.bluelay.damda
 
+import android.content.ContentValues
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
@@ -28,10 +29,22 @@ class BucketActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        for(bucket in bucketList){
+        var contentValues = ContentValues()
+        contentValues.put("wdate" , System.currentTimeMillis());
+        contentValues.put("color" , 0);
+        val bid = database.insert("BucketList", null, contentValues)
 
-            Log.d("yyj", "con: " +  bucket.content + " // ch: " + bucket.checked)
+        for(bucket in bucketList){
+            contentValues.clear()
+            if (bucket.content != "") {
+            contentValues.put("bid", bid)
+            contentValues.put("date", "2020.01.28")
+            contentValues.put("checked", bucket.checked)
+            contentValues.put("content", bucket.content)
+            database.insert("Bucket", null, contentValues) }
         }
+        Log.d("yyj", "insert")
+        //dbHelper.close() ondestroy
         //startActivity(Intent(this, MainActivity::class.java))
         //finish()
     }
