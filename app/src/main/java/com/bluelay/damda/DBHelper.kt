@@ -49,12 +49,12 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
         val BUCL_TABLE_NAME = "BucketList"
         val BUCL_COL_ID = "_id"
         val BUCL_COL_WDATE = "wdate"
-        val BUCL_COL_DATE = "date"
         val BUCL_COL_COLOR = "color"
 
         val BUC_TABLE_NAME = "Bucket"
         val BUC_COL_ID = "_id"
         val BUC_COL_BID = "bid"
+        val BUC_COL_DATE = "date"
         val BUC_COL_CONTENT = "content"
         val BUC_COL_CHECKED = "checked"
 
@@ -150,7 +150,6 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                 "CREATE TABLE $BUCL_TABLE_NAME" +
                         "($BUCL_COL_ID Integer PRIMARY KEY," +
                         "$BUCL_COL_WDATE Integer," +
-                        "$BUCL_COL_DATE TEXT," +
                         "$BUCL_COL_COLOR TEXT)"
         db?.execSQL(createTable)
 
@@ -158,6 +157,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                 "CREATE TABLE $BUC_TABLE_NAME" +
                         "($BUC_COL_ID Integer PRIMARY KEY," +
                         "$BUC_COL_BID Integer," +
+                        "$BUC_COL_DATE TEXT," +
                         "$BUC_COL_CONTENT Integer," +
                         "$BUC_COL_CHECKED TEXT," +
                         "FOREIGN KEY($BUC_COL_BID) REFERENCES $BUCL_TABLE_NAME ($BUCL_COL_ID) ON DELETE CASCADE)"
@@ -216,11 +216,15 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE if exists $CON_TABLE_NAME")
         db.execSQL("DROP TABLE if exists $FOL_TABLE_NAME")
+        db.execSQL("DROP TABLE if exists $TODL_TABLE_NAME")
         db.execSQL("DROP TABLE if exists $TOD_TABLE_NAME")
         db.execSQL("DROP TABLE if exists $REC_TABLE_NAME")
         db.execSQL("DROP TABLE if exists $MEM_TABLE_NAME")
+        db.execSQL("DROP TABLE if exists $BUCL_TABLE_NAME")
         db.execSQL("DROP TABLE if exists $BUC_TABLE_NAME")
+        db.execSQL("DROP TABLE if exists $WEE_TABLE_NAME")
         db.execSQL("DROP TABLE if exists $DIA_TABLE_NAME")
+        db.execSQL("DROP TABLE if exists $WISL_TABLE_NAME")
         db.execSQL("DROP TABLE if exists $WIS_TABLE_NAME")
         db.execSQL("DROP TABLE if exists $MOV_TABLE_NAME")
         onCreate(db)
