@@ -3,6 +3,7 @@ package com.bluelay.damda
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,11 +16,11 @@ class ToDoAdapter (val context : Context, val toDoList : ArrayList<ToDo>) : Base
         val view : View = LayoutInflater.from(context).inflate(R.layout.adapter_view_todo, null)
 
         val cbToDo = view.findViewById<CheckBox>(R.id.cbToDo)
-        val etContent = view.findViewById<EditText>(R.id.etToDoContent)
+        val etToDoContent = view.findViewById<EditText>(R.id.etToDoContent)
 
         val toDo = toDoList[position]
         cbToDo.isChecked = toDo.checked == 1
-        etContent.setText(toDo.content)
+        etToDoContent.setText(toDo.content)
 
         val textWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -29,10 +30,19 @@ class ToDoAdapter (val context : Context, val toDoList : ArrayList<ToDo>) : Base
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                etContent.setText(s.toString())
+                toDoList[position].content = s.toString()
             }
         }
-        etContent.addTextChangedListener(textWatcher)
+        etToDoContent.addTextChangedListener(textWatcher)
+
+        cbToDo.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                toDoList[position].checked = 1
+            }
+            else {
+                toDoList[position].checked = 0
+            }
+        }
 
         return view
     }
@@ -47,4 +57,5 @@ class ToDoAdapter (val context : Context, val toDoList : ArrayList<ToDo>) : Base
     override fun getItemId(position: Int): Long {
         return 0
     }
+
 }
