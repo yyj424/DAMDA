@@ -116,7 +116,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                         "($TODL_COL_ID Integer PRIMARY KEY," +
                         "$TODL_COL_WDATE Integer," +
                         "$TODL_COL_DATE TEXT," +
-                        "$TODL_COL_COLOR TEXT)"
+                        "$TODL_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
         createTable =
@@ -135,7 +135,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                         "$REC_COL_INGREDIENTS TEXT," +
                         "$REC_COL_CONTENT TEXT," +
                         "$REC_COL_NAME TEXT" +
-                        "$REC_COL_COLOR TEXT)"
+                        "$REC_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
         createTable =
@@ -143,14 +143,14 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                         "($MEM_COL_ID Integer PRIMARY KEY," +
                         "$MEM_COL_WDATE Integer," +
                         "$MEM_COL_CONTENT TEXT," +
-                        "$MEM_COL_COLOR TEXT)"
+                        "$MEM_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
         createTable =
                 "CREATE TABLE $BUCL_TABLE_NAME" +
                         "($BUCL_COL_ID Integer PRIMARY KEY," +
                         "$BUCL_COL_WDATE Integer," +
-                        "$BUCL_COL_COLOR TEXT)"
+                        "$BUCL_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
         createTable =
@@ -168,7 +168,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                         "($WEE_COL_ID Integer PRIMARY KEY," +
                         "$WEE_COL_WDATE Integer," +
                         "$WEE_COL_DATE TEXT," +
-                        "$WEE_COL_COLOR TEXT)"
+                        "$WEE_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
         createTable =
@@ -186,7 +186,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                         "($WISL_COL_ID Integer PRIMARY KEY," +
                         "$WISL_COL_WDATE Integer," +
                         "$WISL_COL_CATEGORY TEXT," +
-                        "$WISL_COL_COLOR TEXT)"
+                        "$WISL_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
         createTable =
@@ -209,7 +209,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                         "$MOV_COL_POSTERPIC TEXT," +
                         "$MOV_COL_SCORE real," +
                         "$MOV_COL_CONTENT Integer," +
-                        "$MOV_COL_COLOR TEXT)"
+                        "$MOV_COL_COLOR Integer)"
         db?.execSQL(createTable)
     }
 
