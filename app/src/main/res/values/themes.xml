@@ -2,4 +2,10 @@
     <!-- Base application theme. -->
     <style name="Theme.DAMDA" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:fontFamily">@font/nanumsquareroundb</item>
+        <item name="colorAccent">#6593f5</item>
+    </style>
+
 </resources>
