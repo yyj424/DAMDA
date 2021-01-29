@@ -1,3 +1,3 @@
 package com.bluelay.damda
 
-data class ToDo(val content: String, val checked: Int)
+data class ToDo(var content: String, var checked: Int)
