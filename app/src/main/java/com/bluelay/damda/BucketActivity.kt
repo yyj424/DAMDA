@@ -38,11 +38,13 @@ class BucketActivity : AppCompatActivity() {
         var selectArgs = arrayOf(bid.toString())
         var c : Cursor = database.query("Bucket", columns, selection, selectArgs, null, null, null)
         bucketList.clear()
-        while (c.moveToNext()) {
-            bucketList.add(Bucket(c.getString(c.getColumnIndex(DBHelper.BUC_COL_CONTENT)), c.getInt(c.getColumnIndex(DBHelper.BUC_COL_CHECKED))))
-        }
-        for (i in 1.. (10 - bucketList.size)) {
-            bucketList.add(Bucket("", 0))
+        for (i in 1.. 10) {
+            if (c.moveToNext()) {
+                bucketList.add(Bucket(c.getString(c.getColumnIndex(DBHelper.BUC_COL_CONTENT)), c.getInt(c.getColumnIndex(DBHelper.BUC_COL_CHECKED))))
+            }
+            else {
+                bucketList.add(Bucket("", 0))
+            }
         }
     }
     override fun onBackPressed() {
