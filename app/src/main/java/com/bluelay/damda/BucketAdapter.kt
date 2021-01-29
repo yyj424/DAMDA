@@ -14,8 +14,8 @@ class BucketAdapter (val context : Context, val bucketList : ArrayList<Bucket>) 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view : View = LayoutInflater.from(context).inflate(R.layout.adapter_view_bucket, null)
 
-        val cbBucket = view.findViewById<CheckBox>(R.id.cb_bucket)
-        val etBucket = view.findViewById<EditText>(R.id.et_bucket)
+        val cbBucket = view.findViewById<CheckBox>(R.id.cbBucket)
+        val etBucket = view.findViewById<EditText>(R.id.etBucket)
 
         val bucket = bucketList[position]
         cbBucket.isChecked = bucket.checked == 1
