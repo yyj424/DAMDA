@@ -15,8 +15,8 @@ class ToDoAdapter (val context : Context, val toDoList : ArrayList<ToDo>) : Base
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view : View = LayoutInflater.from(context).inflate(R.layout.adapter_view_todo, null)
 
-        val cbToDo = view.findViewById<CheckBox>(R.id.cbToDo)
-        val etToDoContent = view.findViewById<EditText>(R.id.etToDoContent)
+        val cbToDo : CheckBox = view.findViewById(R.id.cbToDo)
+        val etToDoContent : EditText = view.findViewById(R.id.etToDoContent)
 
         val toDo = toDoList[position]
         cbToDo.isChecked = toDo.checked == 1
