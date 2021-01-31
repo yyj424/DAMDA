@@ -25,6 +25,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
         val TODL_COL_WDATE = "wdate"
         val TODL_COL_DATE = "date"
         val TODL_COL_COLOR = "color"
+        val TODL_COL_LOCK = "lock"
 
         val TOD_TABLE_NAME = "Todo"
         val TOD_COL_ID = "_id"
