@@ -29,7 +29,7 @@
                 android:textSize="35sp" />
 
             <EditText
-                android:id="@+id/editTextTextPersonName"
+                android:id="@+id/etRecipeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -50,7 +50,7 @@
                 android:orientation="vertical">
 
                 <EditText
-                    android:id="@+id/editTextTextPersonName2"
+                    android:id="@+id/etIngredients"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
@@ -77,7 +77,7 @@
             </LinearLayout>
 
             <MultiAutoCompleteTextView
-                android:id="@+id/multiAutoCompleteTextView2"
+                android:id="@+id/etRecipeContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
