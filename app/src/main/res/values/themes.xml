@@ -8,4 +8,8 @@
         <item name="colorAccent">#6593f5</item>
     </style>
 
+    <style name="EditTextPasswordStyle" parent="Widget.AppCompat.EditText">
+        <item name="colorControlActivated">#6593f5</item>
+        <item name="colorControlNormal">#000000</item>
+    </style>
 </resources>
