@@ -14,8 +14,6 @@
         app:layout_constraintHorizontal_bias="0.464"
         app:layout_constraintStart_toEndOf="@+id/btn_select_memo"
         app:layout_constraintTop_toBottomOf="@+id/textView12"
-        android:background="@drawable/border"
-        android:scaleType="centerInside"
         app:srcCompat="@drawable/icon_folder" />
 
     <ImageView
