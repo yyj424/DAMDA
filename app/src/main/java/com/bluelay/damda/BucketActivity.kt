@@ -36,7 +36,7 @@ class BucketActivity : AppCompatActivity() {
         var columns = arrayOf(DBHelper.BUC_COL_ID, DBHelper.BUC_COL_DATE, DBHelper.BUC_COL_CHECKED, DBHelper.BUC_COL_CONTENT)
         var selection = "bid=?"
         var selectArgs = arrayOf(bid.toString())
-        var c : Cursor = database.query("Bucket", columns, selection, selectArgs, null, null, null)
+        var c : Cursor = database.query(DBHelper.BUC_TABLE_NAME, columns, selection, selectArgs, null, null, null)
         bucketList.clear()
         for (i in 1.. 10) {
             if (c.moveToNext()) {
@@ -47,6 +47,7 @@ class BucketActivity : AppCompatActivity() {
             }
         }
     }
+
     override fun onBackPressed() {
         Log.d("yyj", "BackPressed")
         var contentValues = ContentValues()
