@@ -1,33 +1,32 @@
 package com.bluelay.damda
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.CheckBox
-import android.widget.CompoundButton
-import android.widget.EditText
-import org.w3c.dom.Text
+import android.widget.*
+import androidx.core.content.ContextCompat.startActivity
 
-class WishAdapter (val context : Context, val wishList : ArrayList<Wish>) : BaseAdapter() {
+
+class WishAdapter(val context: Context, val wishList: ArrayList<Wish>) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view : View = LayoutInflater.from(context).inflate(R.layout.adapter_view_wish, null)
-
         val cbWish = view.findViewById<CheckBox>(R.id.cbWish)
         val etWishItem = view.findViewById<EditText>(R.id.etWishItem)
         val etWishPrice = view.findViewById<EditText>(R.id.etWishPrice)
-        val cbWishLink = view.findViewById<CheckBox>(R.id.cbWishLink)
+        val btnWishLink = view.findViewById<Button>(R.id.btnWishLink)
 
         val wish = wishList[position]
         cbWish.isChecked = wish.checked == 1
         etWishItem.setText(wish.item)
-        etWishPrice.setText(wish.price)
-        cbWishLink.isChecked = wish.link == 1
+        etWishPrice.setText(wish.price.toString())
 
-        val textWatcher = object : TextWatcher {
+        etWishItem.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -36,18 +35,47 @@ class WishAdapter (val context : Context, val wishList : ArrayList<Wish>) : Base
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 wishList[position].item = s.toString()
-                wishList[position].price = s.toString()
             }
-        }
+        })
+
+        etWishPrice.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                wishList[position].price = Integer.parseInt(s.toString())
+            }
+        })
 
         cbWish.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked) wish.checked = 1
             else wish.checked = 0
         }
 
-        val checkedListner = object : CompoundButton.OnCheckedChangeListener { _, isChecked ->
-            if(isChecked) wish.checked = 1
-            else wish.checked = 0
+        btnWishLink.setOnClickListener {
+            val builder = AlertDialog.Builder(context)
+            val view = LayoutInflater.from(context).inflate(R.layout.dialog_wish_link, null)
+            val etWishLink = view.findViewById<EditText>(R.id.etWishLink)
+            val btnWishLinkOpen = view.findViewById<Button>(R.id.btnWishLInkOpen)
+            val btnWishLinkOk = view.findViewById<Button>(R.id.btnWishLinkOk)
+
+            btnWishLinkOpen.setOnClickListener {
+                var open = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(etWishLink.toString()))
+                startActivity(context, open, null)
+            }
+
+            btnWishLinkOk.setOnClickListener {
+                //링크가 있으면 버튼 bg바꾸기
+                //db 저장 코드
+                //builder 닫기
+            }
+
+            builder.setView(view).show()
         }
 
         return view
