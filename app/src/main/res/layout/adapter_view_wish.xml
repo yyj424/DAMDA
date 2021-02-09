@@ -71,18 +71,6 @@
         app:layout_constraintStart_toEndOf="@+id/imageView12"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <CheckBox
-        android:id="@+id/cbWishLink"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginLeft="6dp"
-        android:background="@drawable/custom_link_checkbox"
-        android:button="@null"
-        app:layout_constraintBottom_toTopOf="@+id/imageView10"
-        app:layout_constraintStart_toEndOf="@+id/imageView13"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
         android:id="@+id/imageView12"
         android:layout_width="0dp"
@@ -92,5 +80,15 @@
         app:layout_constraintStart_toEndOf="@+id/etWishItem"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/vertical_line" />
+
+    <Button
+        android:id="@+id/btnWishLink"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/link_default"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView13"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

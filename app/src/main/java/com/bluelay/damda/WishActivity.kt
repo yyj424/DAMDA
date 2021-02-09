@@ -5,6 +5,9 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.util.Log
+import android.widget.EditText
+import android.widget.ListView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_wish.*
 
@@ -13,21 +16,25 @@ class WishActivity : AppCompatActivity() {
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
     var wid = -1
+    var total = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wish)
-
+        val lvWish = findViewById<ListView>(R.id.lvWish)
+        val tvWishTotal = findViewById<TextView>(R.id.tvWishTotal)
+        val etWishCategory = findViewById<EditText>(R.id.etWishCategory)
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
 
         val wishAdapter = WishAdapter(this, wishList)
 
         //if (wid != -1) {  } else {}
-        getWishList()
-        /*for (i in 1.. 10) {
-            WISketList.add(WISket("", 0))
-        }*/
+        //getWishList()
+        tvWishTotal.setText(total.toString())//total 어찌 해결?
+        for (i in 1.. 10) {
+            wishList.add(Wish("", 0, 0, ""))//price 0 없애기
+        }
         lvWish.adapter = wishAdapter
     }
 
@@ -40,17 +47,17 @@ class WishActivity : AppCompatActivity() {
         wishList.clear()
         for (i in 1.. 10) {
             if (c.moveToNext()) {
-                wishList.add(Wish(c.getString(c.getColumnIndex(DBHelper.WIS_COL_ITEM)), c.getInt(c.getColumnIndex(DBHelper.WIS_COL_PRICE))))
+                wishList.add(Wish(c.getString(c.getColumnIndex(DBHelper.WIS_COL_ITEM)), c.getInt(c.getColumnIndex(DBHelper.WIS_COL_PRICE)), c.getInt(c.getColumnIndex(DBHelper.WIS_COL_CHECKED)), c.getString(c.getColumnIndex(DBHelper.WIS_COL_LINK))))
             }
             else {
-                wishList.add(Wish("", "", 0, 0))
+                wishList.add(Wish("", 0, 0, ""))
             }
         }
     }
 
     override fun onBackPressed() {
         Log.d("yyj", "BackPressed")
-        var contentValues = ContentValues()
+        /*var contentValues = ContentValues()
         contentValues.put(DBHelper.WISL_COL_WDATE , System.currentTimeMillis());
         contentValues.put(DBHelper.WISL_COL_COLOR , 0);
 
@@ -77,6 +84,6 @@ class WishActivity : AppCompatActivity() {
         }
         //dbHelper.close() ondestroy
         //startActivity(Intent(this, MainActivity::class.java))
-        //finish()
+        //finish()*/
     }
 }
