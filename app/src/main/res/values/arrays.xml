@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="titles">
+        <item>All</item>
+        <item>MEMO</item>
+        <item>TODO</item>
+        <item>WISH</item>
+        <item>DIARY</item>
+        <item>RECIPE</item>
+        <item>BUCKET</item>
+        <item>MOVIE</item>
+    </string-array>
+</resources>
