@@ -1,5 +1,8 @@
 package com.bluelay.damda
 
+import android.os.Build
+import android.text.Html
+import androidx.annotation.RequiresApi
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.StringReader
@@ -10,6 +13,7 @@ class MovieXmlParser {
         NONE, TITLE, PUB_DATE, IMAGE
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     fun parse(xml: String?): ArrayList<Movie> {
         val resultList = arrayListOf<Movie>()
         var dto: Movie? = null
@@ -36,7 +40,8 @@ class MovieXmlParser {
                     }
                     XmlPullParser.TEXT -> {
                         when (tagType) {
-                            TagType.TITLE -> dto!!.title = parser.text
+                            TagType.TITLE -> dto!!.title =
+                                Html.fromHtml(parser.text, Html.FROM_HTML_MODE_COMPACT).toString()
                             TagType.PUB_DATE -> dto!!.date = parser.text
                             TagType.IMAGE -> dto!!.image = parser.text
                         }
