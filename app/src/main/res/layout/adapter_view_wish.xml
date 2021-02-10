@@ -64,8 +64,8 @@
         android:fontFamily="@font/nanumsquareroundb"
         android:gravity="center"
         android:inputType="number"
-        android:text="320000"
         android:textColor="#000000"
+        android:textColorHint="#000000"
         android:textSize="17sp"
         app:layout_constraintBottom_toTopOf="@+id/imageView10"
         app:layout_constraintStart_toEndOf="@+id/imageView12"
@@ -83,8 +83,8 @@
 
     <Button
         android:id="@+id/btnWishLink"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
         android:background="@drawable/link_default"
         app:layout_constraintBottom_toBottomOf="@+id/imageView12"
         app:layout_constraintEnd_toEndOf="parent"
