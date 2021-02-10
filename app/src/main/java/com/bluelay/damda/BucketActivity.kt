@@ -51,8 +51,9 @@ class BucketActivity : AppCompatActivity() {
     override fun onBackPressed() {
         Log.d("yyj", "BackPressed")
         var contentValues = ContentValues()
-        contentValues.put(DBHelper.BUCL_COL_WDATE , System.currentTimeMillis());
-        contentValues.put(DBHelper.BUCL_COL_COLOR , 0);
+        contentValues.put(DBHelper.BUCL_COL_WDATE, System.currentTimeMillis())
+        contentValues.put(DBHelper.BUCL_COL_COLOR, 0)
+        contentValues.put(DBHelper.BUCL_COL_LOCK, 0)
 
         if (bid != -1) {
             var whereCluase = "_id=?"
