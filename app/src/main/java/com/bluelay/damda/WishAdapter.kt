@@ -6,6 +6,8 @@ import android.content.Intent
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +26,18 @@ class WishAdapter(val context: Context, val wishList: ArrayList<Wish>) : BaseAda
         val wish = wishList[position]
         cbWish.isChecked = wish.checked == 1
         etWishItem.setText(wish.item)
-        etWishPrice.setText(wish.price.toString())
+        if (wish.price == null) {
+            etWishPrice.setText("")
+        }
+        else {
+            etWishPrice.setText(wish.price.toString())
+        }
+        if (wish.link != "") {
+            btnWishLink.setBackgroundResource(R.drawable.link_checked)
+        }
+        else {
+            btnWishLink.setBackgroundResource(R.drawable.link_default)
+        }
 
         etWishItem.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -46,7 +59,11 @@ class WishAdapter(val context: Context, val wishList: ArrayList<Wish>) : BaseAda
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                wishList[position].price = Integer.parseInt(s.toString())
+                if (s.toString() == "" || s == null) {
+                    wishList[position].price = null
+                } else {
+                    wishList[position].price = Integer.parseInt(s.toString())
+                }
             }
         })
 
@@ -60,22 +77,36 @@ class WishAdapter(val context: Context, val wishList: ArrayList<Wish>) : BaseAda
             val view = LayoutInflater.from(context).inflate(R.layout.dialog_wish_link, null)
             val etWishLink = view.findViewById<EditText>(R.id.etWishLink)
             val btnWishLinkOpen = view.findViewById<Button>(R.id.btnWishLInkOpen)
-            val btnWishLinkOk = view.findViewById<Button>(R.id.btnWishLinkOk)
+
+            etWishLink.setText(wishList[position].link)
 
             btnWishLinkOpen.setOnClickListener {
                 var open = Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse(etWishLink.toString()))
-                startActivity(context, open, null)
+                    Uri.parse(etWishLink.text.toString())
+                )
+
+                fun String.isValidUrl(): Boolean = Patterns.WEB_URL.matcher(this).matches()
+
+                if (!etWishLink.text.toString().isValidUrl()) {
+                    Toast.makeText(context, "올바른 형식이 아닙니다.", Toast.LENGTH_SHORT).show()
+                } else{
+                    startActivity(context, open, null)
+                }
             }
 
-            btnWishLinkOk.setOnClickListener {
-                //링크가 있으면 버튼 bg바꾸기
-                //db 저장 코드
-                //builder 닫기
-            }
-
-            builder.setView(view).show()
+            builder.setView(view)
+                    .setPositiveButton("OK") { dialogInterface, i ->
+                        if (etWishLink.text.toString() != "" && etWishLink != null) {
+                            wishList[position].link = etWishLink.text.toString()
+                            btnWishLink.setBackgroundResource(R.drawable.link_checked)
+                        }
+                        else {
+                            wishList[position].link = etWishLink.text.toString()
+                            btnWishLink.setBackgroundResource(R.drawable.link_default)
+                        }
+                    }
+                    .show()
         }
 
         return view

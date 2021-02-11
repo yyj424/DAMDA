@@ -9,13 +9,15 @@
         android:id="@+id/etWishLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:ems="10"
         android:fontFamily="@font/nanumsquareroundb"
         android:hint="링크 입력"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,23 +25,13 @@
         android:id="@+id/btnWishLInkOpen"
         android:layout_width="34dp"
         android:layout_height="34dp"
-        android:layout_marginTop="43dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginRight="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="30dp"
         android:background="@drawable/link_open"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnWishLinkOk"
-        android:layout_width="80dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="25dp"
-        android:background="@drawable/btn_ok"
-        android:fontFamily="@font/nanumsquareroundb"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etWishLink" />
 </androidx.constraintlayout.widget.ConstraintLayout>
