@@ -72,6 +72,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
         val DIA_TABLE_NAME = "Diary"
         val DIA_COL_ID = "_id"
         val DIA_COL_DID = "did"
+        val DIA_COL_DATE = "date"
         val DIA_COL_CONTENT = "content"
         val DIA_COL_MOODPIC = "moodpic"
         val DIA_COL_WEATHER = "weather"
@@ -187,6 +188,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                 "CREATE TABLE $DIA_TABLE_NAME" +
                         "($DIA_COL_ID Integer PRIMARY KEY," +
                         "$DIA_COL_DID Integer," +
+                        "$DIA_COL_DATE TEXT," +
                         "$DIA_COL_WEATHER TEXT," +
                         "$DIA_COL_MOODPIC TEXT," +
                         "$DIA_COL_CONTENT TEXT," +
