@@ -43,7 +43,7 @@ class WishActivity : AppCompatActivity() {
         var c : Cursor = database.query(DBHelper.WIS_TABLE_NAME, columns, selection, selectArgs, null, null, null)
         wishList.clear()
         for (i in 1.. 10) {
-            if (c.moveToNext()) {
+            if (c.moveToNext()) {//null이면 null값 넣기
                 wishList.add(Wish(c.getString(c.getColumnIndex(DBHelper.WIS_COL_ITEM)), c.getInt(c.getColumnIndex(DBHelper.WIS_COL_PRICE)), c.getInt(c.getColumnIndex(DBHelper.WIS_COL_CHECKED)), c.getString(c.getColumnIndex(DBHelper.WIS_COL_LINK))))
             }
             else {

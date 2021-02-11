@@ -7,10 +7,10 @@ import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.URLUtil
 import android.widget.*
 import androidx.core.content.ContextCompat.startActivity
 
@@ -86,14 +86,13 @@ class WishAdapter(val context: Context, val wishList: ArrayList<Wish>) : BaseAda
                     Uri.parse(etWishLink.text.toString())
                 )
 
-                /*var regex = Regex("/^http[s]?\:\/\//i")
-                if (!regex.containsMatchIn(link)) {
+                fun String.isValidUrl(): Boolean = Patterns.WEB_URL.matcher(this).matches()
+
+                if (!etWishLink.text.toString().isValidUrl()) {
                     Toast.makeText(context, "올바른 형식이 아닙니다.", Toast.LENGTH_SHORT).show()
-                }
-                else {
+                } else{
                     startActivity(context, open, null)
-                }*/
-                startActivity(context, open, null)
+                }
             }
 
             builder.setView(view)
