@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="false"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,7 +12,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivFaceEmoji"
+            android:id="@+id/ivMoodPic"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="30dp"
@@ -33,26 +35,29 @@
                 android:layout_marginRight="40dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/ivWeather"
-                    android:layout_width="48dp"
-                    android:layout_height="24dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
-                    app:srcCompat="@drawable/_21_rainbow_1" />
+                    app:srcCompat="@drawable/select_weather" />
 
                 <EditText
                     android:id="@+id/etDiaryDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
                     android:background="@null"
                     android:drawableLeft="@drawable/calendar"
                     android:drawablePadding="3dp"
+                    android:editable="false"
                     android:ems="10"
+                    android:focusable="false"
                     android:fontFamily="@font/nanumsquareroundr"
                     android:gravity="center_vertical"
                     android:inputType="textPersonName"
@@ -61,7 +66,7 @@
             </LinearLayout>
 
             <EditText
-                android:id="@+id/etSimpleDiaryContent"
+                android:id="@+id/etDiaryContent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="40dp"
@@ -69,8 +74,8 @@
                 android:background="@null"
                 android:ems="10"
                 android:fontFamily="@font/nanumsquareroundr"
+                android:hint="당신의 하루는 어땠나요"
                 android:inputType="textPersonName"
-                android:text="당신의 하루는 어땠나요"
                 android:textColor="#000000"
                 android:textSize="13dp" />
         </LinearLayout>
