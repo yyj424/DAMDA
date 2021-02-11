@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
-        android:id="@+id/lvSimpleDiary"
+        android:id="@+id/lvDiary"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="28dp"
