@@ -1,10 +1,16 @@
 package com.bluelay.damda
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.widget.AdapterView
 import android.widget.SearchView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.activity_search_movie.*
@@ -61,6 +67,14 @@ class MovieSearchActivity : AppCompatActivity() {
                 return false
             }
         })
+
+        lvSearchMovie.setOnItemClickListener { parent, view, position, id ->
+            val resultIntent = Intent()
+            resultIntent.putExtra("title", movieList[position].title)
+            resultIntent.putExtra("image", movieList[position].image)
+            setResult(RESULT_OK, resultIntent)
+            finish()
+        }
     }
 
 
