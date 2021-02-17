@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="230dp">
+    android:layout_height="220dp">
 
     <ImageView
         android:id="@+id/ivSelectFolder"
         android:layout_width="65dp"
         android:layout_height="56dp"
         android:layout_marginTop="32dp"
+        android:onClick="onClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.464"
         app:layout_constraintStart_toEndOf="@+id/ivSelectMemo"
@@ -23,6 +24,7 @@
         android:layout_marginStart="96dp"
         android:layout_marginLeft="96dp"
         android:layout_marginTop="20dp"
+        android:onClick="onClick"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12"
         app:srcCompat="@drawable/icon_memo" />
@@ -40,39 +42,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/btnSelectMorF"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/btn_ok" />
-
     <TextView
         android:id="@+id/tvSelectMemo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="108dp"
         android:layout_marginLeft="108dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="50dp"
         android:fontFamily="@font/nanumsquareroundb"
         android:text="MEMO"
         android:textSize="13dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnSelectMorF"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tvSelectFolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="50dp"
         android:fontFamily="@font/nanumsquareroundb"
         android:text="FOLDER"
         android:textSize="13dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnSelectMorF"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvSelectMemo" />
 
