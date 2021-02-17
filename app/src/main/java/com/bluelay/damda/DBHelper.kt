@@ -143,8 +143,8 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                         "$REC_COL_WDATE Integer," +
                         "$REC_COL_INGREDIENTS TEXT," +
                         "$REC_COL_CONTENT TEXT," +
-                        "$REC_COL_NAME TEXT" +
-                        "$REC_COL_LOCK Integer" +
+                        "$REC_COL_NAME TEXT," +
+                        "$REC_COL_LOCK Integer," +
                         "$REC_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
