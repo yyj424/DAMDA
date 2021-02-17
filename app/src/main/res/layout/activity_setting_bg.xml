@@ -24,7 +24,7 @@
         android:layout_marginTop="15dp"
         android:fontFamily="@font/nanumsquareroundb"
         android:gravity="center"
-        android:text="기본 색상을 선택하세요.\n미선택 시 햐안색으로 설정됩니다."
+        android:text="메모 배경 색상을 선택하세요.\n미선택 시 햐안색으로 설정됩니다."
         android:textColor="#000000" />
 
     <LinearLayout
@@ -35,7 +35,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/ivSetRed"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginStart="23dp"
@@ -44,12 +44,13 @@
             android:layout_marginRight="23dp"
             android:layout_weight="1"
             android:background="@null"
+            android:contentDescription="red"
             android:scaleType="fitXY"
             app:srcCompat="@drawable/color_icon"
             app:tint="@color/pastel_red" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/ivSetYellow"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginStart="23dp"
@@ -57,11 +58,12 @@
             android:layout_marginEnd="23dp"
             android:layout_marginRight="23dp"
             android:layout_weight="1"
-            app:tint="@color/pastel_yellow"
-            app:srcCompat="@drawable/color_icon" />
+            android:contentDescription="yellow"
+            app:srcCompat="@drawable/color_icon"
+            app:tint="@color/pastel_yellow" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/ivSetGreen"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginStart="23dp"
@@ -69,8 +71,9 @@
             android:layout_marginEnd="23dp"
             android:layout_marginRight="23dp"
             android:layout_weight="1"
-            app:tint="@color/pastel_green"
-            app:srcCompat="@drawable/color_icon" />
+            android:contentDescription="green"
+            app:srcCompat="@drawable/color_icon"
+            app:tint="@color/pastel_green" />
 
     </LinearLayout>
 
@@ -82,7 +85,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/ivSetBlue"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginStart="23dp"
@@ -90,12 +93,13 @@
             android:layout_marginEnd="23dp"
             android:layout_marginRight="23dp"
             android:layout_weight="1"
+            android:contentDescription="blue"
             android:scaleType="fitXY"
-            app:tint="@color/pastel_blue"
-            app:srcCompat="@drawable/color_icon" />
+            app:srcCompat="@drawable/color_icon"
+            app:tint="@color/pastel_blue" />
 
         <ImageView
-            android:id="@+id/imageView8"
+            android:id="@+id/ivSetPurple"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginStart="23dp"
@@ -103,11 +107,12 @@
             android:layout_marginEnd="23dp"
             android:layout_marginRight="23dp"
             android:layout_weight="1"
-            app:tint="@color/pastel_purple"
-            app:srcCompat="@drawable/color_icon" />
+            android:contentDescription="purple"
+            app:srcCompat="@drawable/color_icon"
+            app:tint="@color/pastel_purple" />
 
         <ImageView
-            android:id="@+id/imageView9"
+            android:id="@+id/ivSetPink"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginStart="23dp"
@@ -115,8 +120,9 @@
             android:layout_marginEnd="23dp"
             android:layout_marginRight="23dp"
             android:layout_weight="1"
-            app:tint="@color/pastel_pink"
-            app:srcCompat="@drawable/color_icon" />
+            android:contentDescription="pink"
+            app:srcCompat="@drawable/color_icon"
+            app:tint="@color/pastel_pink" />
 
     </LinearLayout>
 
