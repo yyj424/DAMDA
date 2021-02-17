@@ -9,7 +9,7 @@
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:fontFamily="@font/nanumsquareroundeb"
         android:text="SELECT"
         android:textColor="#000000"
@@ -45,6 +45,7 @@
                     android:id="@+id/ivMemoSample"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="onClick"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
@@ -69,6 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:onClick="onClick"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
@@ -93,6 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:onClick="onClick"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
@@ -117,6 +120,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:onClick="onClick"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
@@ -141,6 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:onClick="onClick"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
@@ -165,6 +170,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:onClick="onClick"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
@@ -189,6 +195,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:onClick="onClick"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
@@ -208,8 +215,10 @@
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView">
@@ -221,6 +230,7 @@
             android:layout_marginEnd="30dp"
             android:layout_marginRight="30dp"
             android:layout_weight="1"
+            android:onClick="onClick"
             app:srcCompat="@drawable/color_icon" />
 
         <ImageView
@@ -230,6 +240,7 @@
             android:layout_marginEnd="30dp"
             android:layout_marginRight="30dp"
             android:layout_weight="1"
+            android:onClick="onClick"
             app:srcCompat="@drawable/color_icon"
             app:tint="@color/pastel_red" />
 
@@ -240,6 +251,7 @@
             android:layout_marginEnd="30dp"
             android:layout_marginRight="30dp"
             android:layout_weight="1"
+            android:onClick="onClick"
             app:srcCompat="@drawable/color_icon"
             app:tint="@color/pastel_yellow" />
 
@@ -250,6 +262,7 @@
             android:layout_marginEnd="30dp"
             android:layout_marginRight="30dp"
             android:layout_weight="1"
+            android:onClick="onClick"
             app:srcCompat="@drawable/color_icon"
             app:tint="@color/pastel_green" />
 
@@ -260,6 +273,7 @@
             android:layout_marginEnd="30dp"
             android:layout_marginRight="30dp"
             android:layout_weight="1"
+            android:onClick="onClick"
             app:srcCompat="@drawable/color_icon"
             app:tint="@color/pastel_blue" />
 
@@ -270,6 +284,7 @@
             android:layout_marginEnd="30dp"
             android:layout_marginRight="30dp"
             android:layout_weight="1"
+            android:onClick="onClick"
             app:srcCompat="@drawable/color_icon"
             app:tint="@color/pastel_purple" />
 
@@ -278,22 +293,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="onClick"
             app:srcCompat="@drawable/color_icon"
             app:tint="@color/pastel_pink" />
 
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/btnSelectMemo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:layout_weight="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:srcCompat="@drawable/btn_ok" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
