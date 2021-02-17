@@ -29,46 +29,49 @@
         app:tabMode="scrollable">
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="All" />
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_memo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="MEMO" />
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_todo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TODO" />
 
         <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabItem"
+            android:id="@+id/tab_wish"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="WISH" />
 
         <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabItem2"
+            android:id="@+id/tab_diary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="DIARY" />
 
         <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabItem3"
+            android:id="@+id/tab_recipe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="RECIPE" />
 
         <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabItem4"
+            android:id="@+id/tab_bucket"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="BUCKET" />
 
         <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabItem5"
+            android:id="@+id/tab_movie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="MOVIE" />
