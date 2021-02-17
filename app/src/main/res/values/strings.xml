@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DAMDA</string>
+    <string name="movie_api_url">https://openapi.naver.com/v1/search/movie.xml?display=50&amp;start=1&amp;query=</string>
 </resources>
