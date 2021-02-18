@@ -16,7 +16,7 @@ class SettingBGActivity : AppCompatActivity() {
         setContentView(R.layout.activity_setting_bg)
 
         sharedPref = getSharedPreferences("memoColor", Context.MODE_PRIVATE)
-        selColorView = when(sharedPref.getInt("color", -1)) {
+        selColorView = when(sharedPref.getInt("color", 0)) {
             1 -> ivSetRed
             2 -> ivSetYellow
             3 -> ivSetGreen
@@ -27,12 +27,12 @@ class SettingBGActivity : AppCompatActivity() {
         }
         selColorView?.setBackgroundResource(R.drawable.border)
 
-        ivSetRed!!.setOnClickListener(colorClickListener)
-        ivSetYellow!!.setOnClickListener(colorClickListener)
-        ivSetGreen!!.setOnClickListener(colorClickListener)
-        ivSetBlue!!.setOnClickListener(colorClickListener)
-        ivSetPurple!!.setOnClickListener(colorClickListener)
-        ivSetPink!!.setOnClickListener(colorClickListener)
+        ivSetRed.setOnClickListener(colorClickListener)
+        ivSetYellow.setOnClickListener(colorClickListener)
+        ivSetGreen.setOnClickListener(colorClickListener)
+        ivSetBlue.setOnClickListener(colorClickListener)
+        ivSetPurple.setOnClickListener(colorClickListener)
+        ivSetPink.setOnClickListener(colorClickListener)
     }
 
     private val colorClickListener = View.OnClickListener { v ->
