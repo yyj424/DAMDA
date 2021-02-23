@@ -26,9 +26,6 @@ class BucketAdapter (val context : Context, val bucketList : ArrayList<Bucket>) 
         if(cbBucket.isChecked == true) {
             etBucket.setTextColor(Color.parseColor("#969191"))
         }
-        else {
-            etBucket.setTextColor(Color.parseColor("#000000"))
-        }
         etBucket.setText(bucket.content)
         tvBucket.setText(bucket.date)
 
