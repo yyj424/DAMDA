@@ -3,6 +3,7 @@ package com.bluelay.damda
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,8 +15,13 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat.startActivity
 
-
 class WishAdapter(val context: Context, val wishList: ArrayList<Wish>) : BaseAdapter() {
+    //var v : View = LayoutInflater.from(context).inflate(R.layout.activity_wish, null)
+    //var activityTotal = v.findViewById<TextView>(R.id.tvWishTotal)
+    interface TotalListner {
+        fun passTotal(data: String)
+    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view : View = LayoutInflater.from(context).inflate(R.layout.adapter_view_wish, null)
         val cbWish = view.findViewById<CheckBox>(R.id.cbWish)
@@ -25,7 +31,13 @@ class WishAdapter(val context: Context, val wishList: ArrayList<Wish>) : BaseAda
 
         val wish = wishList[position]
         cbWish.isChecked = wish.checked == 1
+        if(cbWish.isChecked == true) {
+            etWishItem.setTextColor(Color.parseColor("#969191"))
+            etWishPrice.setTextColor(Color.parseColor("#969191"))
+        }
         etWishItem.setText(wish.item)
+        var total = 0
+
         if (wish.price == null) {
             etWishPrice.setText("")
         }
@@ -47,7 +59,7 @@ class WishAdapter(val context: Context, val wishList: ArrayList<Wish>) : BaseAda
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                wishList[position].item = s.toString()
+                wish.item = s.toString()
             }
         })
 
@@ -59,17 +71,32 @@ class WishAdapter(val context: Context, val wishList: ArrayList<Wish>) : BaseAda
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.toString() == "" || s == null) {
-                    wishList[position].price = null
-                } else {
-                    wishList[position].price = Integer.parseInt(s.toString())
+                if (s != "") {
+                    wish.price = Integer.parseInt(s.toString())
                 }
+                total = 0
+                for (w in wishList) {
+                    if (w.price != null) {
+                        total += w.price!!
+                    }
+                }
+                Log.d("yyj", "total : " + total.toString())
+                //activityTotal.setText(total.toString())
+                //passTotal(total.toString())
             }
         })
 
         cbWish.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked) wish.checked = 1
-            else wish.checked = 0
+            if(isChecked) {
+                wish.checked = 1
+                etWishItem.setTextColor(Color.parseColor("#969191"))
+                etWishPrice.setTextColor(Color.parseColor("#969191"))
+            }
+            else {
+                wish.checked = 0
+                etWishItem.setTextColor(Color.parseColor("#000000"))
+                etWishPrice.setTextColor(Color.parseColor("#000000"))
+            }
         }
 
         btnWishLink.setOnClickListener {
@@ -78,7 +105,7 @@ class WishAdapter(val context: Context, val wishList: ArrayList<Wish>) : BaseAda
             val etWishLink = view.findViewById<EditText>(R.id.etWishLink)
             val btnWishLinkOpen = view.findViewById<Button>(R.id.btnWishLInkOpen)
 
-            etWishLink.setText(wishList[position].link)
+            etWishLink.setText(wish.link)
 
             btnWishLinkOpen.setOnClickListener {
                 var open = Intent(
@@ -97,18 +124,17 @@ class WishAdapter(val context: Context, val wishList: ArrayList<Wish>) : BaseAda
 
             builder.setView(view)
                     .setPositiveButton("OK") { dialogInterface, i ->
-                        if (etWishLink.text.toString() != "" && etWishLink != null) {
-                            wishList[position].link = etWishLink.text.toString()
+                        if (!etWishLink.text.toString().replace(" ", "").equals("")) {
                             btnWishLink.setBackgroundResource(R.drawable.link_checked)
+                            wish.link = etWishLink.text.toString()
                         }
                         else {
-                            wishList[position].link = etWishLink.text.toString()
                             btnWishLink.setBackgroundResource(R.drawable.link_default)
+                            wish.link = ""
                         }
                     }
                     .show()
         }
-
         return view
     }
     override fun getCount(): Int {

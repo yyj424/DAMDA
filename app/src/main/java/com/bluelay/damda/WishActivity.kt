@@ -9,6 +9,8 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_wish.*
 
 class WishActivity : AppCompatActivity() {
@@ -16,7 +18,7 @@ class WishActivity : AppCompatActivity() {
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
     var wid = -1
-    var total = 0
+    var total = "0"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,20 +29,38 @@ class WishActivity : AppCompatActivity() {
         val wishAdapter = WishAdapter(this, wishList)
 
         //if (wid != -1) {  } else {}
-        getWishList()
+       // getWishList()
         tvWishTotal.setText(total.toString())
-        /*for (i in 1.. 10) {
+        for (i in 1.. 10) {
             wishList.add(Wish("", null, 0, ""))
-        }*/
+        }
         lvWish.adapter = wishAdapter
     }
 
     fun getWishList() {
         wid = 1
-        var columns = arrayOf(DBHelper.WIS_COL_ID, DBHelper.WIS_COL_ITEM, DBHelper.WIS_COL_PRICE, DBHelper.WIS_COL_CHECKED, DBHelper.WIS_COL_LINK)
-        var selection = "wid=?"
+
+        var columns = arrayOf(DBHelper.WISL_COL_ID, DBHelper.WISL_COL_COLOR, DBHelper.WISL_COL_CATEGORY)
+        var selection = "_id=?"
         var selectArgs = arrayOf(wid.toString())
-        var c : Cursor = database.query(DBHelper.WIS_TABLE_NAME, columns, selection, selectArgs, null, null, null)
+        var c : Cursor = database.query(DBHelper.WISL_TABLE_NAME, columns, selection, selectArgs, null, null, null)
+        c.moveToNext()
+        etWishCategory.setText(c.getString(c.getColumnIndex(DBHelper.WISL_COL_CATEGORY)))
+        var view = findViewById<ConstraintLayout>(R.id.activity_wish)
+        when (c.getInt(c.getColumnIndex(DBHelper.WISL_COL_COLOR))) {
+            0 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            1 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_red))
+            2 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_yellow))
+            3 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_green))
+            4 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_blue))
+            5 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_purple))
+            6 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_pink))
+        }
+
+        columns = arrayOf(DBHelper.WIS_COL_ID, DBHelper.WIS_COL_ITEM, DBHelper.WIS_COL_PRICE, DBHelper.WIS_COL_CHECKED, DBHelper.WIS_COL_LINK)
+        selection = "wid=?"
+        selectArgs = arrayOf(wid.toString())
+        c = database.query(DBHelper.WIS_TABLE_NAME, columns, selection, selectArgs, null, null, null)
         wishList.clear()
         for (i in 1.. 10) {
             if (c.moveToNext()) {//null이면 null값 넣기
@@ -50,21 +70,13 @@ class WishActivity : AppCompatActivity() {
                 wishList.add(Wish("", null, 0, ""))
             }
         }
-
-        columns = arrayOf(DBHelper.WISL_COL_ID, DBHelper.WISL_COL_CATEGORY)
-        selection = "_id=?"
-        selectArgs = arrayOf(wid.toString())
-        c = database.query(DBHelper.WISL_TABLE_NAME, columns, selection, selectArgs, null, null, null)
-        if(c.moveToNext()) {
-            etWishCategory.setText(c.getString(c.getColumnIndex(DBHelper.WISL_COL_CATEGORY)))
-        }
     }
 
     override fun onBackPressed() {
-        Log.d("yyj", "BackPressed")
+        Log.d("yyj", "wish_BackPressed")
         var contentValues = ContentValues()
         contentValues.put(DBHelper.WISL_COL_WDATE, System.currentTimeMillis())
-        contentValues.put(DBHelper.WISL_COL_COLOR, 0)
+        contentValues.put(DBHelper.WISL_COL_COLOR, 6)
         contentValues.put(DBHelper.WISL_COL_CATEGORY, etWishCategory.text.toString())
         contentValues.put(DBHelper.WISL_COL_LOCK, 0)
 
@@ -81,7 +93,7 @@ class WishActivity : AppCompatActivity() {
        }
         for(wish in wishList){
             contentValues.clear()
-            if (wish.item != "") {//null 확인 (어댑터에도)
+            if (!wish.item.replace(" ", "").equals("")) {//null 확인 (어댑터에도)
                 contentValues.put(DBHelper.WIS_COL_WID, wid)
                 contentValues.put(DBHelper.WIS_COL_ITEM, wish.item)
                 contentValues.put(DBHelper.WIS_COL_PRICE, wish.price)
