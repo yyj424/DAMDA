@@ -5,6 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/btnLinkOk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etWishLink"
+        app:srcCompat="@drawable/btn_ok" />
+
     <EditText
         android:id="@+id/etWishLink"
         android:layout_width="250dp"
@@ -12,12 +24,10 @@
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
         android:ems="10"
         android:fontFamily="@font/nanumsquareroundb"
         android:hint="링크 입력"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,12 +35,10 @@
         android:id="@+id/btnWishLInkOpen"
         android:layout_width="34dp"
         android:layout_height="34dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="33dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginBottom="30dp"
         android:background="@drawable/link_open"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
