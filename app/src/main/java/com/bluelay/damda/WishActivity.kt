@@ -106,7 +106,7 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         Log.d("yyj", "wish_BackPressed")
         var contentValues = ContentValues()
         contentValues.put(DBHelper.WISL_COL_WDATE, System.currentTimeMillis() / 1000L)
-        contentValues.put(DBHelper.WISL_COL_COLOR, 3)
+        contentValues.put(DBHelper.WISL_COL_COLOR, 6)
         contentValues.put(DBHelper.WISL_COL_CATEGORY, etWishCategory.text.toString())
         contentValues.put(DBHelper.WISL_COL_LOCK, lock)
         contentValues.put(DBHelper.WISL_COL_BKMR, bkmr)

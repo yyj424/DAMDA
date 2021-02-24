@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.layout_memo_settings.*
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 
-class BucketActivity : AppCompatActivity() {
+class BucketActivity : AppCompatActivity(), SetMemo{
     var bucketList = arrayListOf<Bucket>()
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
@@ -84,15 +84,7 @@ class BucketActivity : AppCompatActivity() {
         var c : Cursor = database.query(DBHelper.BUCL_TABLE_NAME, columns, selection, selectArgs, null, null, null)
         c.moveToNext()
         var view = findViewById<ConstraintLayout>(R.id.activity_bucket)
-        when (c.getInt(c.getColumnIndex(DBHelper.BUCL_COL_COLOR))) {
-            0 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-            1 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_red))
-            2 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_yellow))
-            3 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_green))
-            4 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_blue))
-            5 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_purple))
-            6 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_pink))
-        }
+        setColor(this, c.getInt(c.getColumnIndex(DBHelper.BUCL_COL_COLOR)), view)
         lock = c.getInt(c.getColumnIndex(DBHelper.BUCL_COL_LOCK))
         bkmr = c.getInt(c.getColumnIndex(DBHelper.BUCL_COL_BKMR))
         if (lock == 1) {
