@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-android-extensions'
 }
 
 android {
@@ -44,7 +45,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.github.devlight.navigationtabstrip:navigationtabstrip:1.0.4'    //https://github.com/Devlight/NavigationTabStrip
+    implementation 'com.google.android.material:material:1.0.0-alpha1'  //http://www.theappguruz.com/blog/easy-way-to-create-tab-layout-in-android-without-viewpager
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
 }
