@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_memo.settingLayout
 import kotlinx.android.synthetic.main.activity_wish.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 
-class MemoActivity : AppCompatActivity() {
+class MemoActivity : AppCompatActivity(), SetMemo {
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
     var mid = -1
@@ -38,7 +38,7 @@ class MemoActivity : AppCompatActivity() {
         database = dbHelper.writableDatabase
 
         //if (mid != -1) {  } else {}
-       // getd()
+        getd()
         getMemo()
         etMemo.setFocusAndShowKeyboard()
 
@@ -87,17 +87,18 @@ class MemoActivity : AppCompatActivity() {
         val ivColor4 = view.findViewById<ImageView>(R.id.ivColor4)
         val ivColor5 = view.findViewById<ImageView>(R.id.ivColor5)
         val ivColor6 = view.findViewById<ImageView>(R.id.ivColor6)
+        val btnOk = view.findViewById<ImageView>(R.id.btnOk)
 
         var selMem: View? = null
         var selCol: View? = null
         val memoClickListener = View.OnClickListener { v ->
             when (selMem) {
                 null -> {
-                    v.setBackgroundColor(Color.parseColor("#DFDFDF"))
+                    v.setBackgroundColor(Color.parseColor("#EAE8DD"))
                     selMem = v
                 }
                 else -> {
-                    v.setBackgroundColor(Color.parseColor("#DFDFDF"))
+                    v.setBackgroundColor(Color.parseColor("#EAE8DD"))
                     selMem!!.background = null
                     selMem = v
                 }
@@ -189,12 +190,11 @@ class MemoActivity : AppCompatActivity() {
         Log.d("yyj", "color : " + selectedColor + " // seleMem : " + selMem?.id.toString())
 
         builder.setView(view)
-            .setPositiveButton("OK") { dialogInterface, i ->
-               // intent.putExtra("color", selectedColor)
-                //startActivity(intent)
-                //Log.d("yyj", "color : " + selectedColor + " // seleMem : " + selMem?.id.toString())
-            }
-            .show()
+        val dialog = builder.create()
+        btnOk.setOnClickListener{
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     private fun EditText.setFocusAndShowKeyboard() {
@@ -216,15 +216,7 @@ class MemoActivity : AppCompatActivity() {
         var c : Cursor = database.query(DBHelper.MEM_TABLE_NAME, columns, selection, selectArgs, null, null, null)
         c.moveToNext()
         var view = findViewById<ConstraintLayout>(R.id.activity_memo)
-        when (c.getInt(c.getColumnIndex(DBHelper.MEM_COL_COLOR))) {
-            0 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-            1 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_red))
-            2 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_yellow))
-            3 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_green))
-            4 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_blue))
-            5 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_purple))
-            6 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_pink))
-        }
+        setColor(this, c.getInt(c.getColumnIndex(DBHelper.MEM_COL_COLOR)), view)
         etMemo.setText(c.getString(c.getColumnIndex(DBHelper.MEM_COL_CONTENT)))
         lock = c.getInt(c.getColumnIndex(DBHelper.MEM_COL_LOCK))
         bkmr = c.getInt(c.getColumnIndex(DBHelper.MEM_COL_BKMR))

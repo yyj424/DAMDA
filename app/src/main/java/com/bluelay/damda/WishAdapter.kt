@@ -100,6 +100,7 @@ class WishAdapter(val calTotal: CalTotal, val context: Context, val wishList: Ar
             val view = LayoutInflater.from(context).inflate(R.layout.dialog_wish_link, null)
             val etWishLink = view.findViewById<EditText>(R.id.etWishLink)
             val btnWishLinkOpen = view.findViewById<Button>(R.id.btnWishLInkOpen)
+            val btnLinkOk = view.findViewById<ImageView>(R.id.btnLinkOk)
 
             etWishLink.setText(wish.link)
 
@@ -119,17 +120,19 @@ class WishAdapter(val calTotal: CalTotal, val context: Context, val wishList: Ar
             }
 
             builder.setView(view)
-                    .setPositiveButton("OK") { dialogInterface, i ->
-                        if (!etWishLink.text.toString().replace(" ", "").equals("")) {
-                            btnWishLink.setBackgroundResource(R.drawable.link_checked)
-                            wish.link = etWishLink.text.toString()
-                        }
-                        else {
-                            btnWishLink.setBackgroundResource(R.drawable.link_default)
-                            wish.link = ""
-                        }
-                    }
-                    .show()
+            val dialog = builder.create()
+            btnLinkOk.setOnClickListener{
+                if (!etWishLink.text.toString().replace(" ", "").equals("")) {
+                    btnWishLink.setBackgroundResource(R.drawable.link_checked)
+                    wish.link = etWishLink.text.toString()
+                }
+                else {
+                    btnWishLink.setBackgroundResource(R.drawable.link_default)
+                    wish.link = ""
+                }
+                dialog.dismiss()
+            }
+            dialog.show()
         }
         return view
     }
