@@ -26,6 +26,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
         val TODL_COL_DATE = "date"
         val TODL_COL_COLOR = "color"
         val TODL_COL_LOCK = "lock"
+        val TODL_COL_BKMR = "bkmr"
 
         val TOD_TABLE_NAME = "Todo"
         val TOD_COL_ID = "_id"
@@ -41,6 +42,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
         val REC_COL_COLOR = "color"
         val REC_COL_INGREDIENTS = "ingredients"
         val REC_COL_LOCK = "lock"
+        val REC_COL_BKMR = "bkmr"
 
         val MEM_TABLE_NAME = "Memo"
         val MEM_COL_ID = "_id"
@@ -48,12 +50,14 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
         val MEM_COL_CONTENT = "content"
         val MEM_COL_COLOR = "color"
         val MEM_COL_LOCK = "lock"
+        val MEM_COL_BKMR = "bkmr"
 
         val BUCL_TABLE_NAME = "BucketList"
         val BUCL_COL_ID = "_id"
         val BUCL_COL_WDATE = "wdate"
         val BUCL_COL_COLOR = "color"
         val BUCL_COL_LOCK = "lock"
+        val BUCL_COL_BKMR = "bkmr"
 
         val BUC_TABLE_NAME = "Bucket"
         val BUC_COL_ID = "_id"
@@ -68,11 +72,11 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
         val WEE_COL_DATE = "date"
         val WEE_COL_COLOR = "color"
         val WEE_COL_LOCK = "lock"
+        val WEE_COL_BKMR = "bkmr"
 
         val DIA_TABLE_NAME = "Diary"
         val DIA_COL_ID = "_id"
         val DIA_COL_DID = "did"
-        val DIA_COL_DATE = "date"
         val DIA_COL_CONTENT = "content"
         val DIA_COL_MOODPIC = "moodpic"
         val DIA_COL_WEATHER = "weather"
@@ -83,6 +87,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
         val WISL_COL_CATEGORY = "category"
         val WISL_COL_COLOR = "color"
         val WISL_COL_LOCK = "lock"
+        val WISL_COL_BKMR = "bkmr"
 
         val WIS_TABLE_NAME = "Wish"
         val WIS_COL_ID = "_id"
@@ -102,6 +107,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
         val MOV_COL_POSTERPIC = "posterpic"
         val MOV_COL_COLOR = "color"
         val MOV_COL_LOCK = "lock"
+        val MOV_COL_BKMR = "bkmr"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -125,6 +131,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                         "$TODL_COL_WDATE Integer," +
                         "$TODL_COL_DATE TEXT," +
                         "$TODL_COL_LOCK Integer," +
+                        "$TODL_COL_BKMR Integer," +
                         "$TODL_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
@@ -145,6 +152,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                         "$REC_COL_CONTENT TEXT," +
                         "$REC_COL_NAME TEXT," +
                         "$REC_COL_LOCK Integer," +
+                        "$REC_COL_BKMR Integer," +
                         "$REC_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
@@ -154,6 +162,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                         "$MEM_COL_WDATE Integer," +
                         "$MEM_COL_CONTENT TEXT," +
                         "$MEM_COL_LOCK Integer," +
+                        "$MEM_COL_BKMR Integer," +
                         "$MEM_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
@@ -162,6 +171,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                         "($BUCL_COL_ID Integer PRIMARY KEY," +
                         "$BUCL_COL_WDATE Integer," +
                         "$BUCL_COL_LOCK Integer," +
+                        "$BUCL_COL_BKMR Integer," +
                         "$BUCL_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
@@ -181,6 +191,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                         "$WEE_COL_WDATE Integer," +
                         "$WEE_COL_DATE TEXT," +
                         "$WEE_COL_LOCK Integer," +
+                        "$WEE_COL_BKMR Integer," +
                         "$WEE_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
@@ -188,7 +199,6 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                 "CREATE TABLE $DIA_TABLE_NAME" +
                         "($DIA_COL_ID Integer PRIMARY KEY," +
                         "$DIA_COL_DID Integer," +
-                        "$DIA_COL_DATE TEXT," +
                         "$DIA_COL_WEATHER TEXT," +
                         "$DIA_COL_MOODPIC TEXT," +
                         "$DIA_COL_CONTENT TEXT," +
@@ -201,6 +211,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                         "$WISL_COL_WDATE Integer," +
                         "$WISL_COL_CATEGORY TEXT," +
                         "$WISL_COL_LOCK Integer," +
+                        "$WISL_COL_BKMR Integer," +
                         "$WISL_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
@@ -225,6 +236,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
                         "$MOV_COL_SCORE real," +
                         "$MOV_COL_CONTENT Integer," +
                         "$MOV_COL_LOCK Integer," +
+                        "$MOV_COL_BKMR Integer," +
                         "$MOV_COL_COLOR Integer)"
         db?.execSQL(createTable)
     }
