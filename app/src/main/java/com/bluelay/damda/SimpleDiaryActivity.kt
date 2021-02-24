@@ -1,12 +1,18 @@
 package com.bluelay.damda
 
+import android.app.DatePickerDialog
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_simple_diary.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class SimpleDiaryActivity : AppCompatActivity(){
@@ -14,6 +20,12 @@ class SimpleDiaryActivity : AppCompatActivity(){
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
     var did = -1
+
+    private var date : String = ""
+    private val calendar = Calendar.getInstance()
+    private val dateFormat = "yyyy.MM.dd"
+    private var sdf = SimpleDateFormat(dateFormat, Locale.KOREA)
+    private var diaryId = 1
 
     var diaryList = arrayListOf<SimpleDiary>()
 
@@ -24,14 +36,47 @@ class SimpleDiaryActivity : AppCompatActivity(){
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
 
-        val diaryAdapter = SimpleDiaryAdapter(this, diaryList)
-        lvDiary.adapter = diaryAdapter
 
+        var recordDatePicker = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            etDiaryDate.setText(sdf.format(calendar.time))
+        }
+        etDiaryDate.setOnClickListener {
+            DatePickerDialog(
+                this,
+                R.style.DialogTheme,
+                recordDatePicker,
+                calendar[Calendar.YEAR],
+                calendar[Calendar.MONTH],
+                calendar[Calendar.DAY_OF_MONTH]
+            ).show()
+        }
+
+
+        val diaryAdapter = SimpleDiaryAdapter(this, diaryList)
+
+        var day = "day"
         for (i in 1.. 7) {
-            diaryList.add(
-                SimpleDiary("날짜", "", getURLForResource(R.drawable.select_emoji).toString(),
-                getURLForResource(R.drawable.select_weather).toString())
-            )
+                if(i == 1){
+                    day = "Mon"
+                } else if(i == 2){
+                    day = "Tue"
+                } else if(i == 3){
+                    day = "Wed"
+                }else if(i == 4){
+                    day = "Thu"
+                }else if(i == 5){
+                    day = "Fri"
+                }else if(i == 6){
+                    day = "Sat"
+                }else if(i == 7){
+                    day = "Sun"
+                }
+
+            diaryList.add(SimpleDiary(day, "", getURLForResource(R.drawable.select_emoji).toString(),
+                getURLForResource(R.drawable.select_weather).toString()))
         }
         lvDiary.adapter = diaryAdapter
     }
@@ -57,7 +102,6 @@ class SimpleDiaryActivity : AppCompatActivity(){
             contentValues.clear()
             if (diary.content != "") {
                 contentValues.put(DBHelper.DIA_COL_DID, did)
-                contentValues.put(DBHelper.DIA_COL_DATE, diary.date)
                 contentValues.put(DBHelper.DIA_COL_WEATHER, diary.weather)
                 contentValues.put(DBHelper.DIA_COL_MOODPIC, diary.moodPic)
                 contentValues.put(DBHelper.DIA_COL_CONTENT, diary.content)

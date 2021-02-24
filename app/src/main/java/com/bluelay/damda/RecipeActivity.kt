@@ -15,7 +15,7 @@ class RecipeActivity : AppCompatActivity() {
     lateinit var database : SQLiteDatabase
 
     // TODO: 메인 만든 후에 ID 수정!!!!!! -1 로 초기화, putExtra 있으면 그 값 넣기
-    private var recipeId = 1
+    private var recipeId = -1
     private var color = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +59,7 @@ class RecipeActivity : AppCompatActivity() {
         database = dbHelper.writableDatabase
         var contentValues = ContentValues()
 
-        contentValues.put(DBHelper.REC_COL_WDATE, System.currentTimeMillis())
+        contentValues.put(DBHelper.REC_COL_WDATE, System.currentTimeMillis()/1000L)
         contentValues.put(DBHelper.REC_COL_NAME, etRecipeName.text.toString())
         contentValues.put(DBHelper.REC_COL_INGREDIENTS, etIngredients.text.toString())
         contentValues.put(DBHelper.REC_COL_CONTENT, etRecipeContent.text.toString())
