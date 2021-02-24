@@ -1,42 +1,56 @@
 package com.bluelay.damda
 
+import android.Manifest
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.content.ContentValues
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
+import android.widget.TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.activity_movie.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MovieActivity : AppCompatActivity()  {
+class MovieActivity : AppCompatActivity(), SetMemo  {
 
     private lateinit var dbHelper : DBHelper
     private lateinit var database : SQLiteDatabase
     private val calendar = Calendar.getInstance()
     private val dateFormat = "yyyy.MM.dd"
     private val sdf = SimpleDateFormat(dateFormat, Locale.KOREA)
-    private val networkManager = NetworkManager(this)
 
-    // TODO: 2021-02-09  메인 만든 후에 ID 수정!!!!!! 작성 시 -1, 수정 시 1 이상
+        // TODO: 2021-02-09  메인 만든 후에 ID 수정!!!!!! 작성 시 -1, 수정 시 1 이상
     private var movieId = 1
-    private var color = 0
+    private var color = 5
     private var score = 0.0F
     private var date = ""
     private var title = ""
     private var image = ""
     private var content = ""
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
+
+        setColor(this, color, clMovie)
 
         etMovieDate.hideKeyboard()
         dbHelper = DBHelper(this)
@@ -48,7 +62,14 @@ class MovieActivity : AppCompatActivity()  {
             etMovieDate.setText(sdf.format(calendar.time))
         }
         etMovieDate.setOnClickListener {
-            DatePickerDialog(this, R.style.DialogTheme, datePicker, calendar[Calendar.YEAR], calendar[Calendar.MONTH], calendar[Calendar.DAY_OF_MONTH]).show()
+            DatePickerDialog(
+                this,
+                R.style.DialogTheme,
+                datePicker,
+                calendar[Calendar.YEAR],
+                calendar[Calendar.MONTH],
+                calendar[Calendar.DAY_OF_MONTH]
+            ).show()
         }
 
         if (movieId != -1) {
@@ -58,16 +79,51 @@ class MovieActivity : AppCompatActivity()  {
             etMovieTitle.setText(title)
             etMovieReview.setText(content)
             if (image != "") {
+
+                //ivMoviePoster.setImageURI(data?.data)
                 Glide.with(this)
                     .load(image)
-                    .apply(RequestOptions.fitCenterTransform())
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .dontAnimate()
                     .into(ivMoviePoster)
             }
         }
 
         ivMoviePoster.setOnClickListener {
-            val intent = Intent(this, MovieSearchActivity::class.java)
-            startActivityForResult(intent, 100)
+            val builder = AlertDialog.Builder(this)
+            val view = LayoutInflater.from(this).inflate(R.layout.dialog_select_movie_poster, null)
+            val tvSelSearchMovie : TextView = view.findViewById(R.id.tvSelSearchMovie)
+            val tvSelGallery : TextView = view.findViewById(R.id.tvSelGallery)
+
+            builder.setView(view)
+            val alertDialog = builder.create()
+            alertDialog.show()
+
+            tvSelSearchMovie.setOnClickListener {
+                val intent = Intent(this, MovieSearchActivity::class.java)
+                startActivityForResult(intent, 100)
+                alertDialog.dismiss()
+            }
+            tvSelGallery.setOnClickListener {
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_DENIED) {
+                    ActivityCompat.requestPermissions(
+                        this, arrayOf(
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE
+                        ), 300
+                    )
+                } else {
+                    val intent = Intent(Intent.ACTION_PICK)
+                    intent.type = "image/*"
+                    startActivityForResult(intent, 200)
+                }
+                alertDialog.dismiss()
+            }
         }
     }
 
@@ -81,9 +137,37 @@ class MovieActivity : AppCompatActivity()  {
                 if (image != "") {
                     Glide.with(this)
                             .load(image)
-                            .apply(RequestOptions.fitCenterTransform())
+                            .centerCrop()
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true)
+                            .dontAnimate()
                             .into(ivMoviePoster)
                 }
+            }
+        }
+        else if (requestCode == 200) {
+            if (resultCode == RESULT_OK) {
+                val photoUri : Uri = data?.data!!
+                var cursor: Cursor? = null
+                try {
+                    cursor = contentResolver.query(photoUri, null, null, null, null)
+                    if (cursor != null) {
+                        if (cursor.moveToFirst()) {
+                            image = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
+                        }
+                        cursor.close()
+                    }
+                } finally {
+                    cursor?.close()
+                }
+
+                Glide.with(this)
+                    .load(image)
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .dontAnimate()
+                    .into(ivMoviePoster)
             }
         }
     }
@@ -116,7 +200,11 @@ class MovieActivity : AppCompatActivity()  {
     private fun selectMovie() {
         database = dbHelper.readableDatabase
 
-        var cursor: Cursor = database.rawQuery("SELECT * FROM ${DBHelper.MOV_TABLE_NAME} WHERE ${DBHelper.MOV_COL_ID}=?", arrayOf(movieId.toString()))
+        var cursor: Cursor = database.rawQuery(
+            "SELECT * FROM ${DBHelper.MOV_TABLE_NAME} WHERE ${DBHelper.MOV_COL_ID}=?", arrayOf(
+                movieId.toString()
+            )
+        )
         cursor.moveToNext()
         date = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_DATE))
         color = cursor.getInt(cursor.getColumnIndex(DBHelper.MOV_COL_COLOR))
@@ -137,7 +225,12 @@ class MovieActivity : AppCompatActivity()  {
         value.put(DBHelper.MOV_COL_TITLE, etMovieTitle.text.toString())
         value.put(DBHelper.MOV_COL_POSTERPIC, image)
         value.put(DBHelper.MOV_COL_SCORE, rbMovieScore.rating)
-        database.update(DBHelper.MOV_TABLE_NAME, value, "${DBHelper.MOV_COL_ID}=?", arrayOf(movieId.toString()))
+        database.update(
+            DBHelper.MOV_TABLE_NAME,
+            value,
+            "${DBHelper.MOV_COL_ID}=?",
+            arrayOf(movieId.toString())
+        )
     }
 
     private fun View.hideKeyboard() {
