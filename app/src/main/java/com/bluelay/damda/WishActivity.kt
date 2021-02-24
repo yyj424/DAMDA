@@ -33,10 +33,10 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         val wishAdapter = WishAdapter(this, this, wishList)
 
         //if (wid != -1) {  } else {}
-        getWishList()
-        /*for (i in 1.. 10) {
+        //getWishList()
+        for (i in 1.. 10) {
             wishList.add(Wish("", null, 0, ""))
-        }*/
+        }
         lvWish.adapter = wishAdapter
 
         settingLayout.visibility = View.INVISIBLE
