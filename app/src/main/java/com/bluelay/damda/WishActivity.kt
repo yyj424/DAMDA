@@ -1,6 +1,7 @@
 package com.bluelay.damda
 
 import android.content.ContentValues
+import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Color
@@ -16,7 +17,7 @@ import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_wish.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 
-class WishActivity : AppCompatActivity(), CalTotal {
+class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
     var wishList = arrayListOf<Wish>()
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
@@ -76,15 +77,7 @@ class WishActivity : AppCompatActivity(), CalTotal {
         c.moveToNext()
         etWishCategory.setText(c.getString(c.getColumnIndex(DBHelper.WISL_COL_CATEGORY)))
         var view = findViewById<ConstraintLayout>(R.id.activity_wish)
-        when (c.getInt(c.getColumnIndex(DBHelper.WISL_COL_COLOR))) {
-            0 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-            1 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_red))
-            2 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_yellow))
-            3 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_green))
-            4 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_blue))
-            5 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_purple))
-            6 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_pink))
-        }
+        setColor(this, c.getInt(c.getColumnIndex(DBHelper.WISL_COL_COLOR)), view)
         lock = c.getInt(c.getColumnIndex(DBHelper.WISL_COL_LOCK))
         bkmr = c.getInt(c.getColumnIndex(DBHelper.WISL_COL_BKMR))
         if (lock == 1) {
@@ -100,7 +93,7 @@ class WishActivity : AppCompatActivity(), CalTotal {
         c = database.query(DBHelper.WIS_TABLE_NAME, columns, selection, selectArgs, null, null, null)
         wishList.clear()
         for (i in 1.. 10) {
-            if (c.moveToNext()) {//null이면 null값 넣기
+            if (c.moveToNext()) {
                 wishList.add(Wish(c.getString(c.getColumnIndex(DBHelper.WIS_COL_ITEM)), c.getInt(c.getColumnIndex(DBHelper.WIS_COL_PRICE)), c.getInt(c.getColumnIndex(DBHelper.WIS_COL_CHECKED)), c.getString(c.getColumnIndex(DBHelper.WIS_COL_LINK))))
             }
             else {
@@ -113,7 +106,7 @@ class WishActivity : AppCompatActivity(), CalTotal {
         Log.d("yyj", "wish_BackPressed")
         var contentValues = ContentValues()
         contentValues.put(DBHelper.WISL_COL_WDATE, System.currentTimeMillis() / 1000L)
-        contentValues.put(DBHelper.WISL_COL_COLOR, 6)
+        contentValues.put(DBHelper.WISL_COL_COLOR, 3)
         contentValues.put(DBHelper.WISL_COL_CATEGORY, etWishCategory.text.toString())
         contentValues.put(DBHelper.WISL_COL_LOCK, lock)
         contentValues.put(DBHelper.WISL_COL_BKMR, bkmr)
