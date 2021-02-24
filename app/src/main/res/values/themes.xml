@@ -1,15 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.DAMDA" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">#97B1C8</item>
+        <item name="colorPrimaryDark">#97B1C8</item>
+        <item name="colorPrimary">#97B1C8</item>
+        <item name="colorControlNormal">#97B1C8</item>
+        <item name="colorControlHighlight">#97B1C8</item>
+        <item name="colorPrimaryVariant">#97B1C8</item>
+        <item name="colorOnPrimary">#97B1C8</item>
     </style>
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:fontFamily">@font/nanumsquareroundb</item>
-        <item name="colorAccent">#6593f5</item>
+        <item name="colorAccent">#97B1C8</item>
     </style>
 
     <style name="EditTextPasswordStyle" parent="Widget.AppCompat.EditText">
-        <item name="colorControlActivated">#6593f5</item>
+        <item name="colorControlActivated">#97B1C8</item>
         <item name="colorControlNormal">#000000</item>
     </style>
 
