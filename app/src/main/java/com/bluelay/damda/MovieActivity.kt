@@ -37,7 +37,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     private val sdf = SimpleDateFormat(dateFormat, Locale.KOREA)
 
         // TODO: 2021-02-09  메인 만든 후에 ID 수정!!!!!! 작성 시 -1, 수정 시 1 이상
-    private var movieId = 1
+    private var movieId = -1
     private var color = 5
     private var score = 0.0F
     private var date = ""
@@ -45,7 +45,6 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     private var image = ""
     private var content = ""
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
@@ -205,13 +204,14 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
                 movieId.toString()
             )
         )
-        cursor.moveToNext()
-        date = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_DATE))
-        color = cursor.getInt(cursor.getColumnIndex(DBHelper.MOV_COL_COLOR))
-        score = cursor.getFloat(cursor.getColumnIndex(DBHelper.MOV_COL_SCORE))
-        title = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_TITLE))
-        image = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_POSTERPIC))
-        content = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_CONTENT))
+        if (cursor.moveToNext()) {
+            date = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_DATE))
+            color = cursor.getInt(cursor.getColumnIndex(DBHelper.MOV_COL_COLOR))
+            score = cursor.getFloat(cursor.getColumnIndex(DBHelper.MOV_COL_SCORE))
+            title = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_TITLE))
+            image = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_POSTERPIC))
+            content = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_CONTENT))
+        }
     }
 
     private fun updateMovie() {

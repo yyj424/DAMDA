@@ -1,5 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.DAMDA" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">#97B1C8</item>
+        <item name="colorPrimaryDark">#97B1C8</item>
+        <item name="colorPrimary">#97B1C8</item>
+        <item name="colorControlNormal">#97B1C8</item>
+        <item name="colorControlHighlight">#97B1C8</item>
     </style>
 </resources>
