@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clMovie"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -23,7 +23,10 @@
         android:layout_width="159dp"
         android:layout_height="227dp"
         android:layout_marginTop="40dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView16"
         app:srcCompat="@drawable/ic_baseline_movie_24" />
@@ -36,11 +39,16 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/ivMoviePoster"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="@+id/ivMoviePoster">
 
@@ -49,7 +57,8 @@
             style="@style/RatingBar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_weight="1" />
 
         <EditText
             android:id="@+id/etMovieTitle"
@@ -57,13 +66,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
+            android:layout_weight="2"
             android:background="@null"
             android:ems="10"
             android:fontFamily="@font/nanumsquareroundb"
             android:gravity="center"
             android:hint="영화 제목"
             android:inputType="textMultiLine|text"
-            android:textColor="#000000" />
+            android:textColor="#000000"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/etMovieDate"
@@ -71,6 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
+            android:layout_weight="1"
             android:background="@null"
             android:clickable="false"
             android:ems="10"
@@ -78,12 +90,13 @@
             android:focusableInTouchMode="false"
             android:fontFamily="@font/nanumsquareroundb"
             android:gravity="center"
+            android:hint="날짜"
+            android:inputType="date"
             android:textColor="#000000"
             android:textColorHighlight="#00FFFFFF"
             android:textColorLink="#00FFFFFF"
             android:textCursorDrawable="@android:color/transparent"
-            android:hint="날짜"
-            android:inputType="date" />
+            android:textSize="18sp" />
     </LinearLayout>
 
     <EditText
