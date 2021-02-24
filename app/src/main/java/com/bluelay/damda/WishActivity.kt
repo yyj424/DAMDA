@@ -3,8 +3,10 @@ package com.bluelay.damda
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
@@ -12,35 +14,62 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_wish.*
+import kotlinx.android.synthetic.main.layout_memo_settings.*
 
-class WishActivity : AppCompatActivity() {
+class WishActivity : AppCompatActivity(), CalTotal {
     var wishList = arrayListOf<Wish>()
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
     var wid = -1
-    var total = "0"
+    var lock = -1
+    var bkmr = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wish)
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
-
-        val wishAdapter = WishAdapter(this, wishList)
+        val wishAdapter = WishAdapter(this, this, wishList)
 
         //if (wid != -1) {  } else {}
-       // getWishList()
-        tvWishTotal.setText(total.toString())
-        for (i in 1.. 10) {
+        getWishList()
+        /*for (i in 1.. 10) {
             wishList.add(Wish("", null, 0, ""))
-        }
+        }*/
         lvWish.adapter = wishAdapter
+
+        settingLayout.visibility = View.INVISIBLE
+        btnSettings.setOnClickListener {
+            if (settingLayout.visibility == View.INVISIBLE) {
+                settingLayout.visibility = View.VISIBLE
+            }
+            else {
+                settingLayout.visibility = View.INVISIBLE
+            }
+        }
+
+        cbLock.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked) {
+                lock = 1
+            }
+            else {
+                lock = 0
+            }
+        }
+        cbBkmr.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked) {
+                bkmr = 1
+            }
+            else {
+                bkmr = 0
+            }
+        }
     }
 
     fun getWishList() {
         wid = 1
 
-        var columns = arrayOf(DBHelper.WISL_COL_ID, DBHelper.WISL_COL_COLOR, DBHelper.WISL_COL_CATEGORY)
+        var columns = arrayOf(DBHelper.WISL_COL_ID, DBHelper.WISL_COL_COLOR, DBHelper.WISL_COL_CATEGORY, DBHelper.WISL_COL_BKMR, DBHelper.WISL_COL_LOCK)
         var selection = "_id=?"
         var selectArgs = arrayOf(wid.toString())
         var c : Cursor = database.query(DBHelper.WISL_TABLE_NAME, columns, selection, selectArgs, null, null, null)
@@ -55,6 +84,14 @@ class WishActivity : AppCompatActivity() {
             4 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_blue))
             5 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_purple))
             6 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_pink))
+        }
+        lock = c.getInt(c.getColumnIndex(DBHelper.WISL_COL_LOCK))
+        bkmr = c.getInt(c.getColumnIndex(DBHelper.WISL_COL_BKMR))
+        if (lock == 1) {
+            cbLock.isChecked = true
+        }
+        if (bkmr == 1) {
+            cbBkmr.isChecked = true
         }
 
         columns = arrayOf(DBHelper.WIS_COL_ID, DBHelper.WIS_COL_ITEM, DBHelper.WIS_COL_PRICE, DBHelper.WIS_COL_CHECKED, DBHelper.WIS_COL_LINK)
@@ -75,10 +112,11 @@ class WishActivity : AppCompatActivity() {
     override fun onBackPressed() {
         Log.d("yyj", "wish_BackPressed")
         var contentValues = ContentValues()
-        contentValues.put(DBHelper.WISL_COL_WDATE, System.currentTimeMillis())
+        contentValues.put(DBHelper.WISL_COL_WDATE, System.currentTimeMillis() / 1000L)
         contentValues.put(DBHelper.WISL_COL_COLOR, 6)
         contentValues.put(DBHelper.WISL_COL_CATEGORY, etWishCategory.text.toString())
-        contentValues.put(DBHelper.WISL_COL_LOCK, 0)
+        contentValues.put(DBHelper.WISL_COL_LOCK, lock)
+        contentValues.put(DBHelper.WISL_COL_BKMR, bkmr)
 
        if (wid != -1) {
             var whereCluase = "_id=?"
@@ -105,5 +143,9 @@ class WishActivity : AppCompatActivity() {
         //dbHelper.close() ondestroy
         //startActivity(Intent(this, MainActivity::class.java))
         //finish()
+    }
+
+    override fun cal(total: String) {
+        tvWishTotal.text = total
     }
 }

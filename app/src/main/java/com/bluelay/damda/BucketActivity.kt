@@ -13,7 +13,11 @@ import kotlinx.android.synthetic.main.activity_bucket.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import kotlinx.android.synthetic.main.activity_bucket.btnSettings
+import kotlinx.android.synthetic.main.activity_bucket.settingLayout
+import kotlinx.android.synthetic.main.activity_wish.*
 import kotlinx.android.synthetic.main.adapter_view_bucket.*
+import kotlinx.android.synthetic.main.layout_memo_settings.*
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 
@@ -23,6 +27,8 @@ class BucketActivity : AppCompatActivity() {
     lateinit var database : SQLiteDatabase
     var bid = -1
     var color = -1
+    var lock = -1
+    var bkmr = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,12 +46,39 @@ class BucketActivity : AppCompatActivity() {
             bucketList.add(Bucket("", 0, ""))
         }*/
         lvBucket.adapter = bucketAdapter
+
+        settingLayout.visibility = View.INVISIBLE
+        btnSettings.setOnClickListener {
+            if (settingLayout.visibility == View.INVISIBLE) {
+                settingLayout.visibility = View.VISIBLE
+            }
+            else {
+                settingLayout.visibility = View.INVISIBLE
+            }
+        }
+
+        cbLock.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked) {
+                lock = 1
+            }
+            else {
+                lock = 0
+            }
+        }
+        cbBkmr.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked) {
+                bkmr = 1
+            }
+            else {
+                bkmr = 0
+            }
+        }
     }
 
     fun getBucketList() {
         bid = 1 //임시 bid
 
-        var columns = arrayOf(DBHelper.BUCL_COL_ID, DBHelper.BUCL_COL_COLOR)
+        var columns = arrayOf(DBHelper.BUCL_COL_ID, DBHelper.BUCL_COL_COLOR, DBHelper.BUCL_COL_LOCK, DBHelper.BUCL_COL_BKMR)
         var selection = "_id=?"
         var selectArgs = arrayOf(bid.toString())
         var c : Cursor = database.query(DBHelper.BUCL_TABLE_NAME, columns, selection, selectArgs, null, null, null)
@@ -59,6 +92,14 @@ class BucketActivity : AppCompatActivity() {
             4 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_blue))
             5 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_purple))
             6 -> view.setBackgroundColor(ContextCompat.getColor(this, R.color.pastel_pink))
+        }
+        lock = c.getInt(c.getColumnIndex(DBHelper.BUCL_COL_LOCK))
+        bkmr = c.getInt(c.getColumnIndex(DBHelper.BUCL_COL_BKMR))
+        if (lock == 1) {
+            cbLock.isChecked = true
+        }
+        if (bkmr == 1) {
+            cbBkmr.isChecked = true
         }
 
         columns = arrayOf(DBHelper.BUC_COL_ID, DBHelper.BUC_COL_DATE, DBHelper.BUC_COL_CHECKED, DBHelper.BUC_COL_CONTENT)
@@ -79,9 +120,10 @@ class BucketActivity : AppCompatActivity() {
     override fun onBackPressed() {
         Log.d("yyj", "BackPressed")
         var contentValues = ContentValues()
-        contentValues.put(DBHelper.BUCL_COL_WDATE, System.currentTimeMillis())
-        //contentValues.put(DBHelper.BUCL_COL_COLOR, 4)
-        contentValues.put(DBHelper.BUCL_COL_LOCK, 0)
+        contentValues.put(DBHelper.BUCL_COL_WDATE, System.currentTimeMillis() / 1000L)
+        contentValues.put(DBHelper.BUCL_COL_COLOR, 4)
+        contentValues.put(DBHelper.BUCL_COL_LOCK, lock)
+        contentValues.put(DBHelper.BUCL_COL_BKMR, bkmr)
 
         if (bid != -1) {
             var whereCluase = "_id=?"

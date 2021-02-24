@@ -14,13 +14,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat.startActivity
+import kotlinx.android.synthetic.main.activity_wish.view.*
 
-class WishAdapter(val context: Context, val wishList: ArrayList<Wish>) : BaseAdapter() {
-    //var v : View = LayoutInflater.from(context).inflate(R.layout.activity_wish, null)
-    //var activityTotal = v.findViewById<TextView>(R.id.tvWishTotal)
-    interface TotalListner {
-        fun passTotal(data: String)
-    }
+class WishAdapter(val calTotal: CalTotal, val context: Context, val wishList: ArrayList<Wish>) : BaseAdapter() {
+    var total = 0
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view : View = LayoutInflater.from(context).inflate(R.layout.adapter_view_wish, null)
@@ -36,13 +33,14 @@ class WishAdapter(val context: Context, val wishList: ArrayList<Wish>) : BaseAda
             etWishPrice.setTextColor(Color.parseColor("#969191"))
         }
         etWishItem.setText(wish.item)
-        var total = 0
 
         if (wish.price == null) {
             etWishPrice.setText("")
         }
         else {
             etWishPrice.setText(wish.price.toString())
+            total += wish.price!!
+            calTotal.cal(total.toString())
         }
         if (wish.link != "") {
             btnWishLink.setBackgroundResource(R.drawable.link_checked)
@@ -80,9 +78,7 @@ class WishAdapter(val context: Context, val wishList: ArrayList<Wish>) : BaseAda
                         total += w.price!!
                     }
                 }
-                Log.d("yyj", "total : " + total.toString())
-                //activityTotal.setText(total.toString())
-                //passTotal(total.toString())
+                calTotal.cal(total.toString())
             }
         })
 
