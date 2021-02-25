@@ -125,11 +125,11 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
             database.delete(DBHelper.WIS_TABLE_NAME, whereCluase, whereArgs)
         }
        else {
-           wid = database.insert(DBHelper.WISL_TABLE_NAME, null, contentValues).toInt() //int 변환???
+           wid = database.insert(DBHelper.WISL_TABLE_NAME, null, contentValues).toInt()
        }
         for(wish in wishList){
             contentValues.clear()
-            if (!wish.item.replace(" ", "").equals("")) {//null 확인 (어댑터에도)
+            if (!wish.item.replace(" ", "").equals("")) {
                 contentValues.put(DBHelper.WIS_COL_WID, wid)
                 contentValues.put(DBHelper.WIS_COL_ITEM, wish.item)
                 contentValues.put(DBHelper.WIS_COL_PRICE, wish.price)

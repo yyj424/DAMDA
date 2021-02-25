@@ -133,7 +133,7 @@ class BucketActivity : AppCompatActivity(), SetMemo{
 
         for(bucket in bucketList){
             contentValues.clear()
-            if (bucket.content != "") {
+            if (!bucket.content.replace(" ", "").equals("")) {
                 contentValues.put(DBHelper.BUC_COL_BID, bid)
                 contentValues.put(DBHelper.BUC_COL_DATE, bucket.date)
                 contentValues.put(DBHelper.BUC_COL_CHECKED, bucket.checked)
