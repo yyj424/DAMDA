@@ -22,15 +22,21 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
     var wid = -1
-    var lock = -1
-    var bkmr = -1
+    var lock = 0
+    var bkmr = 0
+    var color = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wish)
+
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
         val wishAdapter = WishAdapter(this, this, wishList)
+
+        var intent = getIntent()
+        color = intent.getIntExtra("color", 0)
+        setColor(this, color, activity_wish)
 
         //if (wid != -1) {  } else {}
         //getWishList()
@@ -76,8 +82,7 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         var c : Cursor = database.query(DBHelper.WISL_TABLE_NAME, columns, selection, selectArgs, null, null, null)
         c.moveToNext()
         etWishCategory.setText(c.getString(c.getColumnIndex(DBHelper.WISL_COL_CATEGORY)))
-        var view = findViewById<ConstraintLayout>(R.id.activity_wish)
-        setColor(this, c.getInt(c.getColumnIndex(DBHelper.WISL_COL_COLOR)), view)
+        setColor(this, c.getInt(c.getColumnIndex(DBHelper.WISL_COL_COLOR)), activity_wish)
         lock = c.getInt(c.getColumnIndex(DBHelper.WISL_COL_LOCK))
         bkmr = c.getInt(c.getColumnIndex(DBHelper.WISL_COL_BKMR))
         if (lock == 1) {
@@ -106,7 +111,7 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         Log.d("yyj", "wish_BackPressed")
         var contentValues = ContentValues()
         contentValues.put(DBHelper.WISL_COL_WDATE, System.currentTimeMillis() / 1000L)
-        contentValues.put(DBHelper.WISL_COL_COLOR, 6)
+        contentValues.put(DBHelper.WISL_COL_COLOR, color)
         contentValues.put(DBHelper.WISL_COL_CATEGORY, etWishCategory.text.toString())
         contentValues.put(DBHelper.WISL_COL_LOCK, lock)
         contentValues.put(DBHelper.WISL_COL_BKMR, bkmr)
@@ -134,7 +139,6 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
             }
         }
         //dbHelper.close() ondestroy
-        //startActivity(Intent(this, MainActivity::class.java))
         //finish()
     }
 

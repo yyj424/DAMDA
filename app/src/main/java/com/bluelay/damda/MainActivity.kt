@@ -132,63 +132,61 @@ class MainActivity : AppCompatActivity() {
         ivColor5!!.setOnClickListener(colorClickListener)
         ivColor6!!.setOnClickListener(colorClickListener)
 
-        var sharedPref = this.getSharedPreferences("color", Context.MODE_PRIVATE)
-        var intent : Intent? = null
-        var selectedColor = 0
-        when (selMem?.id) {
-            R.id.llMemo -> {
-                intent = Intent(this, MemoActivity::class.java)
-            }
-            R.id.llTodo -> {
-                intent = Intent(this, ToDoActivity::class.java)
-            }
-            R.id.llDiary -> {
-                intent = Intent(this, SimpleDiaryActivity::class.java)
-            }
-            R.id.llBucket -> {
-                intent = Intent(this, BucketActivity::class.java)
-            }
-            R.id.llWish -> {
-                intent = Intent(this, WishActivity::class.java)
-            }
-            R.id.llRecipe -> {
-                intent = Intent(this, RecipeActivity::class.java)
-            }
-            R.id.llMovie -> {
-                intent = Intent(this, MovieActivity::class.java)
-            }
-        }
-        when (selCol) {
-            null -> {
-                selectedColor = sharedPref.getInt("color", 0)
-            }
-            ivColor0 -> {
-                selectedColor = 0
-            }
-            ivColor1 -> {
-                selectedColor = 1
-            }
-            ivColor2 -> {
-                selectedColor = 2
-            }
-            ivColor3 -> {
-                selectedColor = 3
-            }
-            ivColor4 -> {
-                selectedColor = 4
-            }
-            ivColor5 -> {
-                selectedColor = 5
-            }
-            ivColor6 -> {
-                selectedColor = 6
-            }
-        }
-
         builder.setView(view)
         val dialog = builder.create()
         btnOk.setOnClickListener{
-            Log.d("yyj", intent.toString())
+            var sharedPref = this.getSharedPreferences("color", Context.MODE_PRIVATE)
+            var intent : Intent? = null
+            var selectedColor = 0
+            when (selMem?.id) {
+                R.id.llMemo -> {
+                    intent = Intent(this, MemoActivity::class.java)
+                }
+                R.id.llTodo -> {
+                    intent = Intent(this, ToDoActivity::class.java)
+                }
+                R.id.llDiary -> {
+                    intent = Intent(this, SimpleDiaryActivity::class.java)
+                }
+                R.id.llBucket -> {
+                    intent = Intent(this, BucketActivity::class.java)
+                }
+                R.id.llWish -> {
+                    intent = Intent(this, WishActivity::class.java)
+                }
+                R.id.llRecipe -> {
+                    intent = Intent(this, RecipeActivity::class.java)
+                }
+                R.id.llMovie -> {
+                    intent = Intent(this, MovieActivity::class.java)
+                }
+            }
+            when (selCol) {
+                null -> {
+                    selectedColor = sharedPref.getInt("color", 0)
+                }
+                ivColor0 -> {
+                    selectedColor = 0
+                }
+                ivColor1 -> {
+                    selectedColor = 1
+                }
+                ivColor2 -> {
+                    selectedColor = 2
+                }
+                ivColor3 -> {
+                    selectedColor = 3
+                }
+                ivColor4 -> {
+                    selectedColor = 4
+                }
+                ivColor5 -> {
+                    selectedColor = 5
+                }
+                ivColor6 -> {
+                    selectedColor = 6
+                }
+            }
             if (intent != null) {
                 intent.putExtra("color", selectedColor)
                 startActivity(intent)
