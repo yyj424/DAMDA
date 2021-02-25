@@ -38,6 +38,7 @@ class MemoActivity : AppCompatActivity(), SetMemo {
         database = dbHelper.writableDatabase
 
         //if (mid != -1) {  } else {}
+
         getd()
         getMemo()
         etMemo.setFocusAndShowKeyboard()
@@ -196,6 +197,7 @@ class MemoActivity : AppCompatActivity(), SetMemo {
         }
         dialog.show()
     }
+
 
     private fun EditText.setFocusAndShowKeyboard() {
         setSelection(this.text.length)

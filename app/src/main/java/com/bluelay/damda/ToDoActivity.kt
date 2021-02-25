@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_movie.*
 import kotlinx.android.synthetic.main.activity_todo.*
 import java.text.SimpleDateFormat
 import java.util.*

@@ -98,7 +98,6 @@ class MovieSearchActivity : AppCompatActivity() {
             api = retrofit.create(Api::class.java)
         }
 
-        // add method
         fun getSearchMovies(api_key : String, page: Int = 1, query : String, onSuccess: (movies: List<Movie>) -> Unit) {
             api.getSearchMovies(api_key = api_key, page = page, query = query)
                 .enqueue(object : Callback<GetMoviesResponse> {
