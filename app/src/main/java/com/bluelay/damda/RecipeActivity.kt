@@ -5,18 +5,22 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_recipe.*
-import kotlinx.android.synthetic.main.activity_todo.*
+import kotlinx.android.synthetic.main.layout_memo_settings.*
 
-class RecipeActivity : AppCompatActivity() {
+class RecipeActivity : AppCompatActivity(), SetMemo{
 
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
 
     // TODO: 메인 만든 후에 ID 수정!!!!!! -1 로 초기화, putExtra 있으면 그 값 넣기
     private var recipeId = -1
-    private var color = 0
+
+    var lock = 0
+    var bkmr = 0
+    var color = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,10 +28,25 @@ class RecipeActivity : AppCompatActivity() {
 
         dbHelper = DBHelper(this)
 
+        var intent = getIntent()
+        color = intent.getIntExtra("color", 0)
+        setColor(this, color, activity_recipe)
+
         if (recipeId != -1) {
             selectRecipe()
         }
 
+        settingLayout.visibility = View.INVISIBLE
+        btnSettings.setOnClickListener {
+            settingLayout.visibility = if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE  else View.INVISIBLE
+        }
+
+        cbLock.setOnCheckedChangeListener { _, isChecked ->
+            lock =  if(isChecked) 1 else 0
+        }
+        cbBkmr.setOnCheckedChangeListener { _, isChecked ->
+            bkmr = if(isChecked) 1 else 0
+        }
     }
 
     override fun onBackPressed() {
@@ -44,15 +63,15 @@ class RecipeActivity : AppCompatActivity() {
     }
 
     private fun selectRecipe() {
+        Log.d("RecipeActivity", "recipeSelect")
         database = dbHelper.readableDatabase
 
-       var c : Cursor = database.query(DBHelper.REC_TABLE_NAME, null, null, null, null, null, null)
+        var c : Cursor = database.rawQuery("SELECT * FROM ${DBHelper.REC_TABLE_NAME} WHERE ${DBHelper.REC_COL_ID} = ?", arrayOf(recipeId.toString()))
         while(c.moveToNext()){
             etRecipeName.setText(c.getString(c.getColumnIndex(DBHelper.REC_COL_NAME)))
             etIngredients.setText(c.getString(c.getColumnIndex(DBHelper.REC_COL_INGREDIENTS)))
             etRecipeContent.setText(c.getString(c.getColumnIndex(DBHelper.REC_COL_CONTENT)))
         }
-        Log.d("aty", "recipeSelect")
     }
 
     private fun insertRecipe() {
@@ -67,7 +86,7 @@ class RecipeActivity : AppCompatActivity() {
 
         database.insert(DBHelper.REC_TABLE_NAME, null, contentValues)
 
-        Log.d("aty", "recipeInsert")
+        Log.d("RecipeActivity", "recipeInsert")
     }
 
     private fun updateRecipe() {
@@ -82,7 +101,7 @@ class RecipeActivity : AppCompatActivity() {
 
         database.update(DBHelper.REC_TABLE_NAME, contentValues, "${DBHelper.REC_COL_ID}=?", arrayOf(recipeId.toString()))
 
-        Log.d("aty", "recipeUpdate")
+        Log.d("RecipeActivity", "recipeUpdate")
     }
 
 
