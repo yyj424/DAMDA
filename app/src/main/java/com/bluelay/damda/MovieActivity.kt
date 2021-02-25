@@ -25,6 +25,10 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.activity_movie.*
+import kotlinx.android.synthetic.main.activity_movie.btnSettings
+import kotlinx.android.synthetic.main.activity_movie.settingLayout
+import kotlinx.android.synthetic.main.activity_todo.*
+import kotlinx.android.synthetic.main.layout_memo_settings.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -37,13 +41,15 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     private val sdf = SimpleDateFormat(dateFormat, Locale.KOREA)
 
         // TODO: 2021-02-09  메인 만든 후에 ID 수정!!!!!! 작성 시 -1, 수정 시 1 이상
-    private var movieId = -1
+    private var movieId = 1
     private var color = 5
     private var score = 0.0F
     private var date = ""
     private var title = ""
     private var image = ""
     private var content = ""
+    private var lock = 0
+    private var bkmr = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,15 +76,27 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
             ).show()
         }
 
+        settingLayout.visibility = View.INVISIBLE
+        btnSettings.setOnClickListener {
+            settingLayout.visibility = if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE  else View.INVISIBLE
+        }
+
+        cbLock.setOnCheckedChangeListener { _, isChecked ->
+            lock = if(isChecked) 1 else 0
+        }
+        cbBkmr.setOnCheckedChangeListener { _, isChecked ->
+            bkmr = if(isChecked) 1 else 0
+        }
+
         if (movieId != -1) {
             selectMovie()
             rbMovieScore.rating = score
             etMovieDate.setText(date)
             etMovieTitle.setText(title)
             etMovieReview.setText(content)
+            if (lock == 1) cbLock.isChecked = true
+            if (bkmr == 1) cbBkmr.isChecked = true
             if (image != "") {
-
-                //ivMoviePoster.setImageURI(data?.data)
                 Glide.with(this)
                     .load(image)
                     .centerCrop()
@@ -171,27 +189,28 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     }
 
     override fun onBackPressed() {
-        // TODO: 2021-01-29 main 만들고 finish
-        // TODO: 2021-01-30 아무것도 안썼을 경우 체크하기
         if (movieId == -1) {
             insertMovie()
         }
         else {
             updateMovie()
         }
+        finish()
     }
 
     private fun insertMovie() {
         database = dbHelper.writableDatabase
 
         val value = ContentValues()
-        value.put(DBHelper.MOV_COL_WDATE, System.currentTimeMillis())
+        value.put(DBHelper.MOV_COL_WDATE, System.currentTimeMillis() / 1000L)
         value.put(DBHelper.MOV_COL_DATE, etMovieDate.text.toString())
         value.put(DBHelper.MOV_COL_COLOR, color)
         value.put(DBHelper.MOV_COL_CONTENT, etMovieReview.text.toString())
         value.put(DBHelper.MOV_COL_TITLE, etMovieTitle.text.toString())
         value.put(DBHelper.MOV_COL_POSTERPIC, image)
         value.put(DBHelper.MOV_COL_SCORE, rbMovieScore.rating)
+        value.put(DBHelper.MOV_COL_LOCK, lock)
+        value.put(DBHelper.MOV_COL_BKMR, bkmr)
         database.insert(DBHelper.MOV_TABLE_NAME, null, value)
     }
 
@@ -210,6 +229,8 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
             title = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_TITLE))
             image = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_POSTERPIC))
             content = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_CONTENT))
+            lock = cursor.getInt(cursor.getColumnIndex(DBHelper.MOV_COL_LOCK))
+            bkmr = cursor.getInt(cursor.getColumnIndex(DBHelper.MOV_COL_BKMR))
         }
     }
 
@@ -217,13 +238,15 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
         database = dbHelper.writableDatabase
 
         val value = ContentValues()
-        value.put(DBHelper.MOV_COL_WDATE, System.currentTimeMillis())
+        value.put(DBHelper.MOV_COL_WDATE, System.currentTimeMillis() / 1000L)
         value.put(DBHelper.MOV_COL_DATE, etMovieDate.text.toString())
         value.put(DBHelper.MOV_COL_COLOR, color)
         value.put(DBHelper.MOV_COL_CONTENT, etMovieReview.text.toString())
         value.put(DBHelper.MOV_COL_TITLE, etMovieTitle.text.toString())
         value.put(DBHelper.MOV_COL_POSTERPIC, image)
         value.put(DBHelper.MOV_COL_SCORE, rbMovieScore.rating)
+        value.put(DBHelper.MOV_COL_LOCK, lock)
+        value.put(DBHelper.MOV_COL_BKMR, bkmr)
         database.update(
             DBHelper.MOV_TABLE_NAME,
             value,
