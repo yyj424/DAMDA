@@ -18,6 +18,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import kotlinx.android.synthetic.main.activity_bucket.*
 import kotlinx.android.synthetic.main.activity_memo.*
 import kotlinx.android.synthetic.main.activity_memo.btnSettings
 import kotlinx.android.synthetic.main.activity_memo.settingLayout
@@ -28,8 +29,9 @@ class MemoActivity : AppCompatActivity(), SetMemo {
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
     var mid = -1
-    var lock = -1
-    var bkmr = -1
+    var lock = 0
+    var bkmr = 0
+    var color = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,9 +39,11 @@ class MemoActivity : AppCompatActivity(), SetMemo {
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
 
+        var intent = getIntent()
+        color = intent.getIntExtra("color", 0)
+        setColor(this, color, activity_memo)
         //if (mid != -1) {  } else {}
 
-        getd()
         getMemo()
         etMemo.setFocusAndShowKeyboard()
 
@@ -71,134 +75,6 @@ class MemoActivity : AppCompatActivity(), SetMemo {
         }
     }
 
-    fun getd() {
-        val builder = AlertDialog.Builder(this)
-        val view = LayoutInflater.from(this).inflate(R.layout.dialog_select_memo, null)
-        val llMemo = view.findViewById<LinearLayout>(R.id.llMemo)
-        val llTodo = view.findViewById<LinearLayout>(R.id.llTodo)
-        val llDiary = view.findViewById<LinearLayout>(R.id.llDiary)
-        val llBucket = view.findViewById<LinearLayout>(R.id.llBucket)
-        val llWish = view.findViewById<LinearLayout>(R.id.llWish)
-        val llRecipe = view.findViewById<LinearLayout>(R.id.llRecipe)
-        val llMovie = view.findViewById<LinearLayout>(R.id.llMovie)
-        val ivColor0 = view.findViewById<ImageView>(R.id.ivColor0)
-        val ivColor1 = view.findViewById<ImageView>(R.id.ivColor1)
-        val ivColor2 = view.findViewById<ImageView>(R.id.ivColor2)
-        val ivColor3 = view.findViewById<ImageView>(R.id.ivColor3)
-        val ivColor4 = view.findViewById<ImageView>(R.id.ivColor4)
-        val ivColor5 = view.findViewById<ImageView>(R.id.ivColor5)
-        val ivColor6 = view.findViewById<ImageView>(R.id.ivColor6)
-        val btnOk = view.findViewById<ImageView>(R.id.btnOk)
-
-        var selMem: View? = null
-        var selCol: View? = null
-        val memoClickListener = View.OnClickListener { v ->
-            when (selMem) {
-                null -> {
-                    v.setBackgroundColor(Color.parseColor("#EAE8DD"))
-                    selMem = v
-                }
-                else -> {
-                    v.setBackgroundColor(Color.parseColor("#EAE8DD"))
-                    selMem!!.background = null
-                    selMem = v
-                }
-            }
-            Log.d("yyj", " // seleMem : " + selMem?.toString())
-        }
-        val colorClickListener = View.OnClickListener { v ->
-            when (selCol) {
-                null -> {
-                    v.setBackgroundResource(R.drawable.border)
-                    selCol = v
-                }
-                v -> {
-                    selCol!!.background = null
-                    selCol = null
-                }
-                else -> {
-                    v.setBackgroundResource(R.drawable.border)
-                    selCol!!.background = null
-                    selCol = v
-                }
-            }
-        }
-
-        llMemo!!.setOnClickListener(memoClickListener)
-        llTodo!!.setOnClickListener(memoClickListener)
-        llDiary!!.setOnClickListener(memoClickListener)
-        llBucket!!.setOnClickListener(memoClickListener)
-        llWish!!.setOnClickListener(memoClickListener)
-        llRecipe!!.setOnClickListener(memoClickListener)
-        llMovie!!.setOnClickListener(memoClickListener)
-
-        ivColor0!!.setOnClickListener(colorClickListener)
-        ivColor1!!.setOnClickListener(colorClickListener)
-        ivColor2!!.setOnClickListener(colorClickListener)
-        ivColor3!!.setOnClickListener(colorClickListener)
-        ivColor4!!.setOnClickListener(colorClickListener)
-        ivColor5!!.setOnClickListener(colorClickListener)
-        ivColor6!!.setOnClickListener(colorClickListener)
-
-        var intent = null
-        var selectedColor = 0
-        when (selMem) {
-            llMemo -> {
-                //intent = Intent(this, MemoActivity::class.java)
-            }
-            llTodo -> {
-                //  intent = Intent(this, ToDoActivity::class.java)
-            }
-            llDiary -> {
-                // intent = Intent(this, SimpleDiaryActivity::class.java)
-            }
-            llBucket -> {
-                //  intent = Intent(this, BucketActivity::class.java)
-            }
-            llWish -> {
-                // intent = Intent(this, WishActivity::class.java)
-            }
-            llRecipe -> {
-                //intent = Intent(this, RecipeActivity::class.java)
-            }
-            llMovie -> {
-                //   intent = Intent(this, MovieActivity::class.java)
-            }
-        }
-        when (selCol) {
-            ivColor0 -> {
-                selectedColor = 0
-            }
-            ivColor1 -> {
-                selectedColor = 1
-            }
-            ivColor2 -> {
-                selectedColor = 2
-            }
-            ivColor3 -> {
-                selectedColor = 3
-            }
-            ivColor4 -> {
-                selectedColor = 4
-            }
-            ivColor5 -> {
-                selectedColor = 5
-            }
-            ivColor6 -> {
-                selectedColor = 6
-            }
-        }
-        Log.d("yyj", "color : " + selectedColor + " // seleMem : " + selMem?.id.toString())
-
-        builder.setView(view)
-        val dialog = builder.create()
-        btnOk.setOnClickListener{
-            dialog.dismiss()
-        }
-        dialog.show()
-    }
-
-
     private fun EditText.setFocusAndShowKeyboard() {
         setSelection(this.text.length)
         this.requestFocus()
@@ -217,8 +93,7 @@ class MemoActivity : AppCompatActivity(), SetMemo {
         var selectArgs = arrayOf(mid.toString())
         var c : Cursor = database.query(DBHelper.MEM_TABLE_NAME, columns, selection, selectArgs, null, null, null)
         c.moveToNext()
-        var view = findViewById<ConstraintLayout>(R.id.activity_memo)
-        setColor(this, c.getInt(c.getColumnIndex(DBHelper.MEM_COL_COLOR)), view)
+        setColor(this, c.getInt(c.getColumnIndex(DBHelper.MEM_COL_COLOR)), activity_memo)
         etMemo.setText(c.getString(c.getColumnIndex(DBHelper.MEM_COL_CONTENT)))
         lock = c.getInt(c.getColumnIndex(DBHelper.MEM_COL_LOCK))
         bkmr = c.getInt(c.getColumnIndex(DBHelper.MEM_COL_BKMR))

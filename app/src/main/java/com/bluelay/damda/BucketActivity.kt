@@ -27,8 +27,8 @@ class BucketActivity : AppCompatActivity(), SetMemo{
     lateinit var database : SQLiteDatabase
     var bid = -1
     var color = -1
-    var lock = -1
-    var bkmr = -1
+    var lock = 0
+    var bkmr = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +36,11 @@ class BucketActivity : AppCompatActivity(), SetMemo{
 
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
-
         val bucketAdapter = BucketAdapter(this, bucketList)
+
+        var intent = getIntent()
+        color = intent.getIntExtra("color", 0)
+        setColor(this, color, activity_bucket)
 
         //if (bid != -1) {  } else {}
         //color =
@@ -83,8 +86,7 @@ class BucketActivity : AppCompatActivity(), SetMemo{
         var selectArgs = arrayOf(bid.toString())
         var c : Cursor = database.query(DBHelper.BUCL_TABLE_NAME, columns, selection, selectArgs, null, null, null)
         c.moveToNext()
-        var view = findViewById<ConstraintLayout>(R.id.activity_bucket)
-        setColor(this, c.getInt(c.getColumnIndex(DBHelper.BUCL_COL_COLOR)), view)
+        setColor(this, c.getInt(c.getColumnIndex(DBHelper.BUCL_COL_COLOR)), activity_bucket)
         lock = c.getInt(c.getColumnIndex(DBHelper.BUCL_COL_LOCK))
         bkmr = c.getInt(c.getColumnIndex(DBHelper.BUCL_COL_BKMR))
         if (lock == 1) {
@@ -131,7 +133,7 @@ class BucketActivity : AppCompatActivity(), SetMemo{
 
         for(bucket in bucketList){
             contentValues.clear()
-            if (bucket.content != "") {
+            if (!bucket.content.replace(" ", "").equals("")) {
                 contentValues.put(DBHelper.BUC_COL_BID, bid)
                 contentValues.put(DBHelper.BUC_COL_DATE, bucket.date)
                 contentValues.put(DBHelper.BUC_COL_CHECKED, bucket.checked)
