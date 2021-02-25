@@ -37,6 +37,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var bkmrMemoAdapter : BkmrMemoAdapter
     val bmList = arrayListOf<BkmrMemo>()
 
+    val formatWdate = SimpleDateFormat("yyyy-MM-dd HH:mm")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -208,7 +210,6 @@ class MainActivity : AppCompatActivity() {
                     "FROM $t " +
                     "WHERE bkmr = 0"
             val cursor = database.rawQuery(query, null)
-            val formatWdate = SimpleDateFormat("yyyy-MM-dd HH:mm")
 
             while(cursor.moveToNext()){
                 val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate"))*1000L)
@@ -225,13 +226,12 @@ class MainActivity : AppCompatActivity() {
                     "FROM $t " +
                     "WHERE bkmr = 1"
             val cursor = database.rawQuery(query2, null)
-            val formatWdate = SimpleDateFormat("yyyy-MM-dd HH:mm")
 
             while(cursor.moveToNext()){
                 val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate"))*1000L)
                 val color = cursor.getInt(cursor.getColumnIndex("color"))
 
-                mmList.add(MainMemo(t, wdate, color))
+                bmList.add(BkmrMemo(t, wdate, color))
             }
         }
 
@@ -249,7 +249,6 @@ class MainActivity : AppCompatActivity() {
         val query1 = "Select * From $tabTableName WHERE bkmr = 0"  //일반 메모
         Log.d("aty", "getMainMemo query: " + query1)
         val cursor = database.rawQuery(query1, null)
-        val formatWdate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 
         while(cursor.moveToNext()){
             val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate"))*1000L)
