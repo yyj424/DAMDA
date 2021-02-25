@@ -206,7 +206,6 @@
 
         </LinearLayout>
     </ScrollView>
-
     <ImageView
         android:id="@+id/btnAddMemo"
         android:layout_width="wrap_content"
@@ -217,5 +216,6 @@
         app:layout_constraintEnd_toStartOf="@+id/imageView4"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_add" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

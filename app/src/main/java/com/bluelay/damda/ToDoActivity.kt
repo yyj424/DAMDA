@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_todo.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ToDoActivity : AppCompatActivity()  {
+class ToDoActivity : AppCompatActivity(), SetMemo  {
 
     private lateinit var dbHelper : DBHelper
     private lateinit var database : SQLiteDatabase
@@ -30,6 +30,7 @@ class ToDoActivity : AppCompatActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_todo)
+        setColor(this, color, clToDo)
 
         etTodoDate.hideKeyboard()
         dbHelper = DBHelper(this)

@@ -48,7 +48,6 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
-
         setColor(this, color, clMovie)
 
         etMovieDate.hideKeyboard()

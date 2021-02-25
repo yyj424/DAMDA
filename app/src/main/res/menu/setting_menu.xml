@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <item android:title="편집하기" />
     <item android:title="배경 색상 설정" />
     <item android:title="비밀번호 설정" />
 </menu>

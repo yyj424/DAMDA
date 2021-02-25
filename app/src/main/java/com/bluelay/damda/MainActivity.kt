@@ -11,6 +11,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.database.sqlite.SQLiteDatabase
+import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bluelay.damda.DBHelper.Companion.BUCL_TABLE_NAME
@@ -196,6 +199,87 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    private fun getAllMemo(){
+        mmList.clear()
+        bmList.clear()
+        val tableList : ArrayList<String> = arrayListOf(MEM_TABLE_NAME, TODL_TABLE_NAME, WISL_TABLE_NAME, WEE_TABLE_NAME, REC_TABLE_NAME, BUCL_TABLE_NAME, MOV_TABLE_NAME)
+
+        //일반 메모
+        var query : String?
+        for (t in tableList) {
+            query = "SELECT wdate, color " +
+                    "FROM $t " +
+                    "WHERE bkmr = 0"
+            val cursor = database.rawQuery(query, null)
+            val formatWdate = SimpleDateFormat("yyyy-MM-dd HH:mm")
+
+            while(cursor.moveToNext()){
+                val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate"))*1000L)
+                val color = cursor.getInt(cursor.getColumnIndex("color"))
+
+                mmList.add(MainMemo(t, wdate, color))
+            }
+        }
+
+        //BKMR 메모
+        var query2 : String?
+        for (t in tableList) {
+            query2 = "SELECT wdate, color " +
+                    "FROM $t " +
+                    "WHERE bkmr = 1"
+            val cursor = database.rawQuery(query2, null)
+            val formatWdate = SimpleDateFormat("yyyy-MM-dd HH:mm")
+
+            while(cursor.moveToNext()){
+                val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate"))*1000L)
+                val color = cursor.getInt(cursor.getColumnIndex("color"))
+
+                mmList.add(MainMemo(t, wdate, color))
+            }
+        }
+
+        // cursor.close()
+//        database.close()
+
+        mainMemoAdapter.notifyDataSetChanged()
+        bkmrMemoAdapter.notifyDataSetChanged()
+    }
+
+    private fun getTypeMemo(tabTableName: String){
+        mmList.clear()
+        bmList.clear()
+
+        val query1 = "Select wdate From $tabTableName"  //일반 메모
+        Log.d("aty", "getMainMemo query: " + query1)
+        val cursor = database.rawQuery(query1, null)
+        val formatWdate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+
+        while(cursor.moveToNext()){
+            val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate"))*1000L)
+            Log.d("aty", "wdate: " + wdate)
+            val color = cursor.getInt(cursor.getColumnIndex("color"))
+            Log.d("aty", "color: " + color)
+            mmList.add(MainMemo(tabTableName, wdate, color))
+        }
+        Log.d("aty", mmList.size.toString())
+
+        val query2 = "Select wdate From $tabTableName WHERE bkmr = 1"   //BKMR 메모
+        val cursor2 = database.rawQuery(query2, null)
+        while(cursor2.moveToNext()){
+            val wdate = formatWdate.format(cursor2.getInt(cursor2.getColumnIndex("wdate"))*1000L)
+            val color = cursor2.getInt(cursor2.getColumnIndex("color"))
+            bmList.add(BkmrMemo(tabTableName, wdate, color))
+        }
+
+        // cursor.close()
+//        database.close()
+
+        mainMemoAdapter.notifyDataSetChanged()
+        bkmrMemoAdapter.notifyDataSetChanged()
+    }
+
     }
 
     private fun getAllMemo(){

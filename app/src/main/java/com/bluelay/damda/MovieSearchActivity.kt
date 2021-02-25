@@ -41,7 +41,7 @@ class MovieSearchActivity : AppCompatActivity() {
         svMovie.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
-                    MoviesDB.getSearchMovies(1, query, ::onSearchMoviesFetched)
+                    MoviesDB.getSearchMovies(getString(R.string.api_key),1, query, ::onSearchMoviesFetched)
                 }
                 return false
             }
@@ -76,19 +76,16 @@ class MovieSearchActivity : AppCompatActivity() {
         @SerializedName("total_pages") val pages: Int
     )
 
-
-    // interface API
     interface Api {
         @GET("search/movie")
         fun getSearchMovies(
-            @Query("api_key") apiKey: String = "407931f34a3bdd3d9b53426058d5049e",
+            @Query("api_key") api_key: String,
             @Query("page") page: Int,
             @Query("language") language: String = "ko-KR",
             @Query("query") query: String
         ): Call<GetMoviesResponse>
     }
 
-    // create object
     object MoviesDB {
         private val api: Api //인터페이스 구현
 
@@ -101,9 +98,8 @@ class MovieSearchActivity : AppCompatActivity() {
             api = retrofit.create(Api::class.java)
         }
 
-        // add method
-        fun getSearchMovies(page: Int = 1, query : String, onSuccess: (movies: List<Movie>) -> Unit) {
-            api.getSearchMovies(page = page, query = query)
+        fun getSearchMovies(api_key : String, page: Int = 1, query : String, onSuccess: (movies: List<Movie>) -> Unit) {
+            api.getSearchMovies(api_key = api_key, page = page, query = query)
                 .enqueue(object : Callback<GetMoviesResponse> {
                     override fun onResponse(
                         call: Call<GetMoviesResponse>,
