@@ -26,6 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4"
+        app:tabIndicatorColor="#97B1C8"
         app:tabMode="scrollable">
 
         <com.google.android.material.tabs.TabItem
