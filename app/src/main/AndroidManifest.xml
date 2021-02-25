@@ -20,31 +20,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MovieSearchActivity">
-        </activity>
-        <activity android:name=".MovieActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".WishActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".SettingBGActivity">
-
-        </activity>
-        <activity android:name=".SettingPWActivity">
-
-        </activity>
+        <activity android:name=".MovieSearchActivity"/>
+        <activity android:name=".MovieActivity"/>
+        <activity android:name=".WishActivity" />
+        <activity android:name=".SimpleDiaryActivity" />
+        <activity android:name=".SettingBGActivity" />
+        <activity android:name=".SettingPWActivity" />
         <activity android:name=".ToDoActivity"
             android:windowSoftInputMode="adjustPan">
         </activity>
+        <activity android:name=".BucketActivity"/>
+        <activity android:name=".MemoActivity"/>
+        <activity android:name=".RecipeActivity"/>
+        <activity android:name=".UnlockPWActivity"/>
     </application>
 
 </manifest>

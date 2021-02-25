@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_simpe_diary"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="7dp">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/textView6"

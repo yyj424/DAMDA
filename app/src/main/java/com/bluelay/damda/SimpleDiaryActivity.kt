@@ -20,7 +20,7 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
 
-    var did = 2
+    var did = -1
     var lock = 0
     var bkmr = 0
     var color = -1
@@ -104,8 +104,11 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
     override fun onBackPressed() {
         Log.d("SimpleDiaryActivity", "onBackPressed")
         var contentValues = ContentValues()
-        contentValues.put(DBHelper.WEE_COL_WDATE , System.currentTimeMillis()/1000L);
-        contentValues.put(DBHelper.WEE_COL_COLOR , 0);
+        contentValues.put(DBHelper.WEE_COL_WDATE , System.currentTimeMillis()/1000L)
+        contentValues.put(DBHelper.WEE_COL_COLOR , color)
+        contentValues.put(DBHelper.WEE_COL_BKMR, bkmr)
+        contentValues.put(DBHelper.WEE_COL_LOCK, lock)
+        contentValues.put(DBHelper.WEE_COL_DATE, etDiaryDate.text.toString())
 
         if (did != -1) {
             var whereCluase = "_id=?"
@@ -130,7 +133,7 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
         }
         //dbHelper.close() ondestroy
         //startActivity(Intent(this, MainActivity::class.java))
-        //finish()
+        finish()
     }
 
     private fun selectDiary() {

@@ -128,6 +128,6 @@ class BucketActivity : AppCompatActivity(), SetMemo {
         }
         //dbHelper.close() ondestroy
         //startActivity(Intent(this, MainActivity::class.java))
-        //finish()
+        finish()
     }
 }
