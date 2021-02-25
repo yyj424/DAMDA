@@ -41,9 +41,11 @@
                 android:layout_marginRight="80dp"
                 android:background="@null"
                 android:ems="10"
+                android:fontFamily="@font/nanumsquareroundr"
                 android:gravity="center"
                 android:hint="food Name"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textColor="#000000" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -60,8 +62,10 @@
                     android:layout_marginEnd="30dp"
                     android:layout_marginRight="30dp"
                     android:ems="10"
+                    android:fontFamily="@font/nanumsquareroundr"
                     android:hint="재료"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:textColor="#000000" />
 
                 <ImageView
                     android:id="@+id/imageView1"
@@ -88,8 +92,14 @@
                 android:layout_marginRight="30dp"
                 android:layout_marginBottom="60dp"
                 android:background="@drawable/box"
+                android:fontFamily="@font/nanumsquareroundr"
                 android:gravity="top"
-                android:hint="요리 과정" />
+                android:hint="요리 과정"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+                android:textColor="#000000" />
 
         </LinearLayout>
     </ScrollView>
