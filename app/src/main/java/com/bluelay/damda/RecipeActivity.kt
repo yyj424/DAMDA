@@ -59,7 +59,7 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
         }
 
         //startActivity(Intent(this, MainActivity::class.java))
-        //finish()
+        finish()
     }
 
     private fun selectRecipe() {
@@ -83,6 +83,8 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
         contentValues.put(DBHelper.REC_COL_INGREDIENTS, etIngredients.text.toString())
         contentValues.put(DBHelper.REC_COL_CONTENT, etRecipeContent.text.toString())
         contentValues.put(DBHelper.REC_COL_COLOR, color)
+        contentValues.put(DBHelper.REC_COL_BKMR, bkmr)
+        contentValues.put(DBHelper.REC_COL_LOCK, lock)
 
         database.insert(DBHelper.REC_TABLE_NAME, null, contentValues)
 
