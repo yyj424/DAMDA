@@ -47,29 +47,14 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
 
         settingLayout.visibility = View.INVISIBLE
         btnSettings.setOnClickListener {
-            if (settingLayout.visibility == View.INVISIBLE) {
-                settingLayout.visibility = View.VISIBLE
-            }
-            else {
-                settingLayout.visibility = View.INVISIBLE
-            }
+            settingLayout.visibility = if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE else View.INVISIBLE
         }
 
         cbLock.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked) {
-                lock = 1
-            }
-            else {
-                lock = 0
-            }
+            lock = if(isChecked) 1 else 0
         }
         cbBkmr.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked) {
-                bkmr = 1
-            }
-            else {
-                bkmr = 0
-            }
+            bkmr = if(isChecked) 1 else 0
         }
     }
 
@@ -139,7 +124,7 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
             }
         }
         //dbHelper.close() ondestroy
-        //finish()
+        finish()
     }
 
     override fun cal(total: String) {

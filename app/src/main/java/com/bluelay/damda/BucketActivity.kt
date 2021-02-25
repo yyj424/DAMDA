@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.layout_memo_settings.*
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 
-class BucketActivity : AppCompatActivity(), SetMemo{
+class BucketActivity : AppCompatActivity(), SetMemo {
     var bucketList = arrayListOf<Bucket>()
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
@@ -52,29 +52,14 @@ class BucketActivity : AppCompatActivity(), SetMemo{
 
         settingLayout.visibility = View.INVISIBLE
         btnSettings.setOnClickListener {
-            if (settingLayout.visibility == View.INVISIBLE) {
-                settingLayout.visibility = View.VISIBLE
-            }
-            else {
-                settingLayout.visibility = View.INVISIBLE
-            }
+            settingLayout.visibility = if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE else View.INVISIBLE
         }
 
         cbLock.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked) {
-                lock = 1
-            }
-            else {
-                lock = 0
-            }
+            lock = if(isChecked) 1 else 0
         }
         cbBkmr.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked) {
-                bkmr = 1
-            }
-            else {
-                bkmr = 0
-            }
+            bkmr = if(isChecked) 1 else 0
         }
     }
 
@@ -115,7 +100,7 @@ class BucketActivity : AppCompatActivity(), SetMemo{
         Log.d("yyj", "BackPressed")
         var contentValues = ContentValues()
         contentValues.put(DBHelper.BUCL_COL_WDATE, System.currentTimeMillis() / 1000L)
-        contentValues.put(DBHelper.BUCL_COL_COLOR, 4)
+        contentValues.put(DBHelper.BUCL_COL_COLOR, color)
         contentValues.put(DBHelper.BUCL_COL_LOCK, lock)
         contentValues.put(DBHelper.BUCL_COL_BKMR, bkmr)
 

@@ -49,29 +49,14 @@ class MemoActivity : AppCompatActivity(), SetMemo {
 
         settingLayout.visibility = View.INVISIBLE
         btnSettings.setOnClickListener {
-            if (settingLayout.visibility == View.INVISIBLE) {
-                settingLayout.visibility = View.VISIBLE
-            }
-            else {
-                settingLayout.visibility = View.INVISIBLE
-            }
+            settingLayout.visibility = if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE else View.INVISIBLE
         }
 
         cbLock.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked) {
-                lock = 1
-            }
-            else {
-                lock = 0
-            }
+            lock = if(isChecked) 1 else 0
         }
         cbBkmr.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked) {
-                bkmr = 1
-            }
-            else {
-                bkmr = 0
-            }
+            bkmr = if(isChecked) 1 else 0
         }
     }
 
@@ -109,7 +94,7 @@ class MemoActivity : AppCompatActivity(), SetMemo {
         Log.d("yyj", "mem_BackPressed")
         var contentValues = ContentValues()
         contentValues.put(DBHelper.MEM_COL_WDATE, System.currentTimeMillis() / 1000L)
-        contentValues.put(DBHelper.MEM_COL_COLOR, 0)
+        contentValues.put(DBHelper.MEM_COL_COLOR, color)
         contentValues.put(DBHelper.MEM_COL_CONTENT, etMemo.text.toString())
         contentValues.put(DBHelper.MEM_COL_LOCK, lock)
         contentValues.put(DBHelper.MEM_COL_BKMR, bkmr)
