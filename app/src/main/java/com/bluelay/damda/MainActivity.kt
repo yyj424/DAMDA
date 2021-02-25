@@ -246,7 +246,7 @@ class MainActivity : AppCompatActivity() {
         mmList.clear()
         bmList.clear()
 
-        val query1 = "Select wdate From $tabTableName"  //일반 메모
+        val query1 = "Select * From $tabTableName WHERE bkmr = 0"  //일반 메모
         Log.d("aty", "getMainMemo query: " + query1)
         val cursor = database.rawQuery(query1, null)
         val formatWdate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -260,7 +260,7 @@ class MainActivity : AppCompatActivity() {
         }
         Log.d("aty", mmList.size.toString())
 
-        val query2 = "Select wdate From $tabTableName WHERE bkmr = 1"   //BKMR 메모
+        val query2 = "Select * From $tabTableName WHERE bkmr = 1"   //BKMR 메모
         val cursor2 = database.rawQuery(query2, null)
         while(cursor2.moveToNext()){
             val wdate = formatWdate.format(cursor2.getInt(cursor2.getColumnIndex("wdate"))*1000L)
