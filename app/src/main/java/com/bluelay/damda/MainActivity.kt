@@ -246,7 +246,7 @@ class MainActivity : AppCompatActivity() {
         mmList.clear()
         bmList.clear()
 
-        val query1 = "Select * From $tabTableName"  //일반 메모
+        val query1 = "Select * From $tabTableName WHERE bkmr = 0"  //일반 메모
         Log.d("aty", "getMainMemo query: " + query1)
         val cursor = database.rawQuery(query1, null)
         val formatWdate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
