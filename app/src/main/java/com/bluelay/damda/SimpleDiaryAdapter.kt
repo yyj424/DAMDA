@@ -45,7 +45,6 @@ class SimpleDiaryAdapter(val context: Context, val diaryList: ArrayList<SimpleDi
 
         val ivMoodPic = view.findViewById<ImageView>(R.id.ivMoodPic)
         val ivWeather = view.findViewById<ImageView>(R.id.ivWeather)
-//        val etDiaryDate = view.findViewById<TextView>(R.id.etDiaryDate)
         val tvDay = view.findViewById<TextView>(R.id.tvDay)
         val etDiaryContent = view.findViewById<TextView>(R.id.etDiaryContent)
 
@@ -53,38 +52,8 @@ class SimpleDiaryAdapter(val context: Context, val diaryList: ArrayList<SimpleDi
 
         ivMoodPic.setImageURI(diary.moodPic.toUri())
         ivWeather.setImageURI(diary.weather.toUri())
+        tvDay.setText(diary.day)
 
-//        etDiaryDate.text = diary.date
-//        var recordDatePicker = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-//            calendar.set(Calendar.YEAR, year)
-//            calendar.set(Calendar.MONTH, month)
-//            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-//            etDiaryDate.setText(sdf.format(calendar.time))
-//        }
-//        etDiaryDate.setOnClickListener {
-//            DatePickerDialog(
-//                context,
-//                R.style.DialogTheme,
-//                recordDatePicker,
-//                calendar[Calendar.YEAR],
-//                calendar[Calendar.MONTH],
-//                calendar[Calendar.DAY_OF_MONTH]
-//            ).show()
-//        }
-//        val textWatcher1 = object : TextWatcher {
-//            override fun afterTextChanged(s: Editable?) {
-//            }
-//
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//            }
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                diaryList[position].date = s.toString()
-//            }
-//        }
-//        etDiaryDate.addTextChangedListener(textWatcher1)
-
-        tvDay.text = diary.day
         etDiaryContent.text = diary.content
         val textWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -136,9 +105,6 @@ class SimpleDiaryAdapter(val context: Context, val diaryList: ArrayList<SimpleDi
 
         ivWeather.setOnClickListener {
             val builder = AlertDialog.Builder(context)
-            builder.setPositiveButton(
-                "YES"
-            ) { dialog, which -> }
 
             val view = LayoutInflater.from(context).inflate(R.layout.dialog_select_weather, null)
             val iv_sun = view.findViewById<ImageView>(R.id.iv_sun)
