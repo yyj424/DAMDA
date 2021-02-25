@@ -6,26 +6,24 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import kotlinx.android.synthetic.main.activity_simple_diary.*
-import kotlinx.android.synthetic.main.adapter_view_simple_diary.*
+import kotlinx.android.synthetic.main.layout_memo_settings.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class SimpleDiaryActivity : AppCompatActivity(){
+class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
 
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
 
     var did = 2
+    var lock = 0
+    var bkmr = 0
+    var color = -1
 
     private val calendar = Calendar.getInstance()
     private val dateFormat = "yyyy.MM.dd"
@@ -39,6 +37,10 @@ class SimpleDiaryActivity : AppCompatActivity(){
 
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
+
+        var intent = getIntent()
+        color = intent.getIntExtra("color", 0)
+        setColor(this, color, activity_simpe_diary)
 
         var recordDatePicker = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
@@ -56,7 +58,6 @@ class SimpleDiaryActivity : AppCompatActivity(){
                 calendar[Calendar.DAY_OF_MONTH]
             ).show()
         }
-
 
         val diaryAdapter = SimpleDiaryAdapter(this, diaryList)
 
@@ -86,10 +87,22 @@ class SimpleDiaryActivity : AppCompatActivity(){
             }
         }
         lvDiary.adapter = diaryAdapter
+
+        settingLayout.visibility = View.INVISIBLE
+        btnSettings.setOnClickListener {
+            settingLayout.visibility = if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE  else View.INVISIBLE
+        }
+
+        cbLock.setOnCheckedChangeListener { _, isChecked ->
+            lock =  if(isChecked) 1 else 0
+        }
+        cbBkmr.setOnCheckedChangeListener { _, isChecked ->
+            bkmr = if(isChecked) 1 else 0
+        }
     }
 
     override fun onBackPressed() {
-        Log.d("aty", "onBackPressed")
+        Log.d("SimpleDiaryActivity", "onBackPressed")
         var contentValues = ContentValues()
         contentValues.put(DBHelper.WEE_COL_WDATE , System.currentTimeMillis()/1000L);
         contentValues.put(DBHelper.WEE_COL_COLOR , 0);
@@ -121,7 +134,7 @@ class SimpleDiaryActivity : AppCompatActivity(){
     }
 
     private fun selectDiary() {
-        Log.d("aty", "diarySelect")
+        Log.d("SimpleDiaryActivity", "diarySelect")
         database = dbHelper.readableDatabase
 
         var c : Cursor = database.rawQuery("SELECT * FROM ${DBHelper.DIA_TABLE_NAME} WHERE ${DBHelper.DIA_COL_DID} = ?", arrayOf(did.toString()))
