@@ -55,10 +55,10 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
-        setColor(this, color, clMovie)
 
         color = intent.getIntExtra("color", 0)
         movieId = intent.getIntExtra("id", -1)
+        setColor(this, color, clMovie)
 
         etMovieDate.hideKeyboard()
         dbHelper = DBHelper(this)
