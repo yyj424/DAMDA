@@ -39,12 +39,11 @@ class MemoActivity : AppCompatActivity(), SetMemo {
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
 
-        var intent = getIntent()
         color = intent.getIntExtra("color", 0)
         setColor(this, color, activity_memo)
         //if (mid != -1) {  } else {}
 
-        getMemo()
+        //getMemo()
         etMemo.setFocusAndShowKeyboard()
 
         settingLayout.visibility = View.INVISIBLE
@@ -88,6 +87,7 @@ class MemoActivity : AppCompatActivity(), SetMemo {
         if (bkmr == 1) {
             cbBkmr.isChecked = true
         }
+        c.close()
     }
 
     override fun onBackPressed() {
@@ -108,8 +108,11 @@ class MemoActivity : AppCompatActivity(), SetMemo {
             database.insert(DBHelper.MEM_TABLE_NAME, null, contentValues)
         }
 
-        //dbHelper.close() ondestroy
-        //startActivity(Intent(this, MainActivity::class.java))
         finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dbHelper.close()
     }
 }
