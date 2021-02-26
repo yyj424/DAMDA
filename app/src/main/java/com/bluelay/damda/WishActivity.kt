@@ -34,7 +34,6 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         database = dbHelper.writableDatabase
         val wishAdapter = WishAdapter(this, this, wishList)
 
-        var intent = getIntent()
         color = intent.getIntExtra("color", 0)
         setColor(this, color, activity_wish)
 
@@ -90,6 +89,7 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
                 wishList.add(Wish("", null, 0, ""))
             }
         }
+        c.close()
     }
 
     override fun onBackPressed() {
@@ -123,11 +123,16 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
                 database.insert(DBHelper.WIS_TABLE_NAME, null, contentValues)
             }
         }
-        //dbHelper.close() ondestroy
+
         finish()
     }
 
     override fun cal(total: String) {
         tvWishTotal.text = total
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dbHelper.close()
     }
 }

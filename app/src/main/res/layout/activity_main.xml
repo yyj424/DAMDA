@@ -78,135 +78,54 @@
             android:text="MOVIE" />
     </com.google.android.material.tabs.TabLayout>
 
-
-<!--    <ScrollView-->
-<!--        android:id="@+id/mainMenuScrollView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/imageView4">-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent">-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/textView7"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="TextView" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/textView9"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="TextView" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/textView10"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="TextView" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/textView11"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="TextView" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/textView17"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="TextView" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/textView19"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="TextView" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/textView20"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="TextView" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/textView21"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="TextView" />-->
-<!--        </LinearLayout>-->
-<!--    </ScrollView>-->
-
-    <ScrollView
-        android:id="@+id/mainScrollView"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tabLayout">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="5dp"
+            android:contentDescription="TODO"
+            app:srcCompat="@drawable/icon_metro_pin" />
+
+        <!-- https://stackoverflow.com/questions/33863174/how-to-implement-horizontal-gridlayoutmanager -->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvBKMR_memo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="15dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
+            tools:listitem="@layout/adapter_view_bkmr_memo" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMain_memo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="15dp"
+            tools:listitem="@layout/adapter_view_main_memo" />
+    </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="2dp"
-                android:contentDescription="TODO"
-                app:srcCompat="@drawable/icon_metro_pin" />
-
-            <!-- https://stackoverflow.com/questions/33863174/how-to-implement-horizontal-gridlayoutmanager -->
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvBKMR_memo"
-                android:layout_width="match_parent"
-                android:layout_height="89dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="30dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="2"
-                tools:listitem="@layout/adapter_view_bkmr_memo" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvMain_memo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                tools:listitem="@layout/adapter_view_main_memo" />
-
-
-        </LinearLayout>
-    </ScrollView>
     <ImageView
         android:id="@+id/btnAddMemo"
         android:layout_width="wrap_content"
@@ -217,6 +136,4 @@
         app:layout_constraintEnd_toStartOf="@+id/imageView4"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_add" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,13 +38,12 @@ class BucketActivity : AppCompatActivity(), SetMemo {
         database = dbHelper.writableDatabase
         val bucketAdapter = BucketAdapter(this, bucketList)
 
-        var intent = getIntent()
         color = intent.getIntExtra("color", 0)
         setColor(this, color, activity_bucket)
 
         //if (bid != -1) {  } else {}
         //color =
-        getBucketList()
+        //getBucketList()
         /*for (i in 1.. 10) {
             bucketList.add(Bucket("", 0, ""))
         }*/
@@ -94,6 +93,7 @@ class BucketActivity : AppCompatActivity(), SetMemo {
                 bucketList.add(Bucket("", 0, ""))
             }
         }
+        c.close()
     }
 
     override fun onBackPressed() {
@@ -126,8 +126,12 @@ class BucketActivity : AppCompatActivity(), SetMemo {
                 database.insert(DBHelper.BUC_TABLE_NAME, null, contentValues)
             }
         }
-        //dbHelper.close() ondestroy
-        //startActivity(Intent(this, MainActivity::class.java))
+
         finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dbHelper.close()
     }
 }

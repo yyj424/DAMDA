@@ -3,6 +3,7 @@ package com.bluelay.damda
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Color
 import android.os.Bundle
@@ -11,6 +12,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bluelay.damda.DBHelper.Companion.BUCL_TABLE_NAME
@@ -29,6 +32,7 @@ import java.text.SimpleDateFormat
 class MainActivity : AppCompatActivity() {
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
+    lateinit var cursor : Cursor
 
     var tabTableName = ""
     lateinit var mainMemoAdapter : MainMemoAdapter
@@ -58,12 +62,16 @@ class MainActivity : AppCompatActivity() {
         Log.d("aty", mainMemoAdapter.mmList.toString())
         rvMain_memo.adapter = mainMemoAdapter
 
-        getAllMemo()
         selectTab()
 
         btnAddMemo.setOnClickListener {
             addMemoDialog()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getAllMemo()
     }
 
     fun addMemoDialog() {
@@ -84,12 +92,15 @@ class MainActivity : AppCompatActivity() {
         val ivColor5 = view.findViewById<ImageView>(R.id.ivColor5)
         val ivColor6 = view.findViewById<ImageView>(R.id.ivColor6)
         val btnOk = view.findViewById<ImageView>(R.id.btnOk)
+        val tvSelect = view.findViewById<TextView>(R.id.tvSelect)
+        tvSelect.visibility = View.INVISIBLE
 
         var selMem: View? = null
         var selCol: View? = null
         val memoClickListener = View.OnClickListener { v ->
             when (selMem) {
                 null -> {
+                    tvSelect.visibility = View.INVISIBLE
                     v.setBackgroundColor(Color.parseColor("#EAE8DD"))
                     selMem = v
                 }
@@ -192,8 +203,11 @@ class MainActivity : AppCompatActivity() {
             if (intent != null) {
                 intent.putExtra("color", selectedColor)
                 startActivity(intent)
+                dialog.dismiss()
             }
-            dialog.dismiss()
+            else {
+                tvSelect.visibility = View.VISIBLE
+            }
         }
         dialog.show()
     }
@@ -209,7 +223,7 @@ class MainActivity : AppCompatActivity() {
             query = "SELECT wdate, color " +
                     "FROM $t " +
                     "WHERE bkmr = 0"
-            val cursor = database.rawQuery(query, null)
+            cursor = database.rawQuery(query, null)
 
             while(cursor.moveToNext()){
                 val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate"))*1000L)
@@ -225,7 +239,7 @@ class MainActivity : AppCompatActivity() {
             query2 = "SELECT wdate, color " +
                     "FROM $t " +
                     "WHERE bkmr = 1"
-            val cursor = database.rawQuery(query2, null)
+            cursor = database.rawQuery(query2, null)
 
             while(cursor.moveToNext()){
                 val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate"))*1000L)
@@ -235,8 +249,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // cursor.close()
-//        database.close()
+        cursor.close()
 
         mainMemoAdapter.notifyDataSetChanged()
         bkmrMemoAdapter.notifyDataSetChanged()
@@ -248,7 +261,7 @@ class MainActivity : AppCompatActivity() {
 
         val query1 = "Select * From $tabTableName WHERE bkmr = 0"  //일반 메모
         Log.d("aty", "getMainMemo query: " + query1)
-        val cursor = database.rawQuery(query1, null)
+        cursor = database.rawQuery(query1, null)
 
         while(cursor.moveToNext()){
             val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate"))*1000L)
@@ -260,15 +273,14 @@ class MainActivity : AppCompatActivity() {
         Log.d("aty", mmList.size.toString())
 
         val query2 = "Select * From $tabTableName WHERE bkmr = 1"   //BKMR 메모
-        val cursor2 = database.rawQuery(query2, null)
-        while(cursor2.moveToNext()){
-            val wdate = formatWdate.format(cursor2.getInt(cursor2.getColumnIndex("wdate"))*1000L)
-            val color = cursor2.getInt(cursor2.getColumnIndex("color"))
+        cursor = database.rawQuery(query2, null)
+        while(cursor.moveToNext()){
+            val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate"))*1000L)
+            val color = cursor.getInt(cursor.getColumnIndex("color"))
             bmList.add(BkmrMemo(tabTableName, wdate, color))
         }
 
-        // cursor.close()
-//        database.close()
+        cursor.close()
 
         mainMemoAdapter.notifyDataSetChanged()
         bkmrMemoAdapter.notifyDataSetChanged()
