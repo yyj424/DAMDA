@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -41,7 +42,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     private val sdf = SimpleDateFormat(dateFormat, Locale.KOREA)
 
         // TODO: 2021-02-09  메인 만든 후에 ID 수정!!!!!! 작성 시 -1, 수정 시 1 이상
-    private var movieId = 1
+    private var movieId = -1
     private var color = 5
     private var score = 0.0F
     private var date = ""
@@ -55,6 +56,9 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
         setColor(this, color, clMovie)
+
+        color = intent.getIntExtra("color", 0)
+        movieId = intent.getIntExtra("id", -1)
 
         etMovieDate.hideKeyboard()
         dbHelper = DBHelper(this)
@@ -217,7 +221,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     private fun selectMovie() {
         database = dbHelper.readableDatabase
 
-        var cursor: Cursor = database.rawQuery(
+        val cursor: Cursor = database.rawQuery(
             "SELECT * FROM ${DBHelper.MOV_TABLE_NAME} WHERE ${DBHelper.MOV_COL_ID}=?", arrayOf(
                 movieId.toString()
             )
@@ -232,6 +236,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
             lock = cursor.getInt(cursor.getColumnIndex(DBHelper.MOV_COL_LOCK))
             bkmr = cursor.getInt(cursor.getColumnIndex(DBHelper.MOV_COL_BKMR))
         }
+        cursor.close()
     }
 
     private fun updateMovie() {
@@ -258,5 +263,10 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     private fun View.hideKeyboard() {
         val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dbHelper.close()
     }
 }
