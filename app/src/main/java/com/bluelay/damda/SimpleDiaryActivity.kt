@@ -38,7 +38,6 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
 
-        var intent = getIntent()
         color = intent.getIntExtra("color", 0)
         setColor(this, color, activity_simpe_diary)
 
@@ -171,14 +170,16 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
 
             diaryList.add(SimpleDiary(day, content, moodPic, weather))
         }
+        c.close()
     }
 
     private fun getURLForResource(resId: Int): String? {
         return Uri.parse("android.resource://" + R::class.java.getPackage().name + "/" + resId)
             .toString()
     }
-    private fun getURLForResource(resId: String): String? {
-        return Uri.parse("android.resource://" + R::class.java.getPackage().name + "/" + resId)
-            .toString()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dbHelper.close()
     }
 }
