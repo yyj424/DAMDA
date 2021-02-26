@@ -28,7 +28,6 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
 
         dbHelper = DBHelper(this)
 
-        var intent = getIntent()
         color = intent.getIntExtra("color", 0)
         setColor(this, color, activity_recipe)
 
@@ -72,6 +71,7 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
             etIngredients.setText(c.getString(c.getColumnIndex(DBHelper.REC_COL_INGREDIENTS)))
             etRecipeContent.setText(c.getString(c.getColumnIndex(DBHelper.REC_COL_CONTENT)))
         }
+        c.close()
     }
 
     private fun insertRecipe() {
@@ -106,5 +106,8 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
         Log.d("RecipeActivity", "recipeUpdate")
     }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        dbHelper.close()
+    }
 }
