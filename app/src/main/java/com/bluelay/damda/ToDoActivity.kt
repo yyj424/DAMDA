@@ -38,6 +38,9 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
         setContentView(R.layout.activity_todo)
         setColor(this, color, clToDo)
 
+        color = intent.getIntExtra("color", 0)
+        toDoId = intent.getIntExtra("id", -1)
+
         etTodoDate.hideKeyboard()
         dbHelper = DBHelper(this)
         val toDoAdapter = ToDoAdapter(this, toDoList)
@@ -123,6 +126,8 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
         while(cursor.moveToNext()) {
             toDoList.add(ToDo(cursor.getString(cursor.getColumnIndex(DBHelper.TOD_COL_CONTENT)), cursor.getInt(cursor.getColumnIndex(DBHelper.TOD_COL_CHECKED))))
         }
+
+        cursor.close()
     }
 
     private fun updateToDo() {
@@ -151,5 +156,10 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
     private fun View.hideKeyboard() {
         val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dbHelper.close()
     }
 }

@@ -117,9 +117,11 @@
         android:lines="15"
         android:padding="5dp"
         android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivMoviePoster" />
+        app:layout_constraintTop_toBottomOf="@+id/ivMoviePoster"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/btnSettings"
