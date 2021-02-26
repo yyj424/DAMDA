@@ -44,9 +44,9 @@ class BucketActivity : AppCompatActivity(), SetMemo {
         //if (bid != -1) {  } else {}
         //color =
         //getBucketList()
-        /*for (i in 1.. 10) {
+        for (i in 1.. 10) {
             bucketList.add(Bucket("", 0, ""))
-        }*/
+        }
         lvBucket.adapter = bucketAdapter
 
         settingLayout.visibility = View.INVISIBLE

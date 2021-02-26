@@ -25,8 +25,6 @@ class MainMemoAdapter(val context : Context, val mmList : ArrayList<MainMemo>) :
         holder.getMainMemo(mm)
     }
 
-
-
     class ViewHolder(val context : Context, itemView: View) : RecyclerView.ViewHolder(itemView), SetMemo{
         private var view : View = itemView
 
