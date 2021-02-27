@@ -9,11 +9,10 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bluelay.damda.DBHelper.Companion.BUCL_TABLE_NAME
@@ -67,11 +66,36 @@ class MainActivity : AppCompatActivity() {
         btnAddMemo.setOnClickListener {
             addMemoDialog()
         }
+
+        btnMenu.setOnClickListener {
+            var intent : Intent? = null
+            val pop = PopupMenu(this, btnMenu)
+            menuInflater.inflate(R.menu.setting_menu, pop.menu)
+
+            pop.setOnMenuItemClickListener { item->
+                when (item.itemId) {
+                    //R.id.optionEdit -> intent = Intent(this, ::class.java)
+                    R.id.optionSetBG -> intent = Intent(this, SettingBGActivity::class.java)
+                    R.id.optionSetPW -> intent = Intent(this, SettingPWActivity::class.java)
+                }
+                if (intent != null) {
+                    startActivity(intent)
+                }
+                false
+            }
+            pop.show()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        getAllMemo()
+        Log.d("yyj", "onresume")
+        if(tabTableName != "All" && tabTableName != "") {
+            getTypeMemo(tabTableName)
+        }
+        else {
+            getAllMemo()
+        }
     }
 
     fun addMemoDialog() {
@@ -215,7 +239,15 @@ class MainActivity : AppCompatActivity() {
     private fun getAllMemo(){
         mmList.clear()
         bmList.clear()
-        val tableList : ArrayList<String> = arrayListOf(MEM_TABLE_NAME, TODL_TABLE_NAME, WISL_TABLE_NAME, WEE_TABLE_NAME, REC_TABLE_NAME, BUCL_TABLE_NAME, MOV_TABLE_NAME)
+        val tableList : ArrayList<String> = arrayListOf(
+            MEM_TABLE_NAME,
+            TODL_TABLE_NAME,
+            WISL_TABLE_NAME,
+            WEE_TABLE_NAME,
+            REC_TABLE_NAME,
+            BUCL_TABLE_NAME,
+            MOV_TABLE_NAME
+        )
 
         //일반 메모
         var query : String?
@@ -226,7 +258,7 @@ class MainActivity : AppCompatActivity() {
             cursor = database.rawQuery(query, null)
 
             while(cursor.moveToNext()){
-                val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate"))*1000L)
+                val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
                 val color = cursor.getInt(cursor.getColumnIndex("color"))
 
                 mmList.add(MainMemo(t, wdate, color))
@@ -242,7 +274,7 @@ class MainActivity : AppCompatActivity() {
             cursor = database.rawQuery(query2, null)
 
             while(cursor.moveToNext()){
-                val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate"))*1000L)
+                val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
                 val color = cursor.getInt(cursor.getColumnIndex("color"))
 
                 bmList.add(BkmrMemo(t, wdate, color))
@@ -264,7 +296,7 @@ class MainActivity : AppCompatActivity() {
         cursor = database.rawQuery(query1, null)
 
         while(cursor.moveToNext()){
-            val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate"))*1000L)
+            val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
             Log.d("aty", "wdate: " + wdate)
             val color = cursor.getInt(cursor.getColumnIndex("color"))
             Log.d("aty", "color: " + color)
@@ -275,7 +307,7 @@ class MainActivity : AppCompatActivity() {
         val query2 = "Select * From $tabTableName WHERE bkmr = 1"   //BKMR 메모
         cursor = database.rawQuery(query2, null)
         while(cursor.moveToNext()){
-            val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate"))*1000L)
+            val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
             val color = cursor.getInt(cursor.getColumnIndex("color"))
             bmList.add(BkmrMemo(tabTableName, wdate, color))
         }

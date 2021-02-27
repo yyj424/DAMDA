@@ -109,8 +109,6 @@ class BucketActivity : AppCompatActivity(), SetMemo {
     }
 
     fun getBucketList() {
-        bid = 1 //임시 bid
-
         var columns = arrayOf(DBHelper.BUCL_COL_ID, DBHelper.BUCL_COL_COLOR, DBHelper.BUCL_COL_LOCK, DBHelper.BUCL_COL_BKMR)
         var selection = "_id=?"
         var selectArgs = arrayOf(bid.toString())
