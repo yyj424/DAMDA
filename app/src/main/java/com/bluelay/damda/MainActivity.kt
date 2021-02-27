@@ -151,26 +151,26 @@ class MainActivity : AppCompatActivity() {
             var sharedPref = this.getSharedPreferences("color", Context.MODE_PRIVATE)
             var intent : Intent? = null
             var selectedColor = 0
-            when (selMem?.id) {
-                R.id.llMemo -> {
+            when (selMem) {
+                llMemo -> {
                     intent = Intent(this, MemoActivity::class.java)
                 }
-                R.id.llTodo -> {
+                llTodo -> {
                     intent = Intent(this, ToDoActivity::class.java)
                 }
-                R.id.llDiary -> {
+                llDiary -> {
                     intent = Intent(this, SimpleDiaryActivity::class.java)
                 }
-                R.id.llBucket -> {
+                llBucket -> {
                     intent = Intent(this, BucketActivity::class.java)
                 }
-                R.id.llWish -> {
+                llWish -> {
                     intent = Intent(this, WishActivity::class.java)
                 }
-                R.id.llRecipe -> {
+                llRecipe -> {
                     intent = Intent(this, RecipeActivity::class.java)
                 }
-                R.id.llMovie -> {
+                llMovie -> {
                     intent = Intent(this, MovieActivity::class.java)
                 }
             }
