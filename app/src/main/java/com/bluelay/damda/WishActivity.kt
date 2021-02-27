@@ -1,19 +1,14 @@
 package com.bluelay.damda
 
+import android.app.AlertDialog
 import android.content.ContentValues
-import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_wish.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 
@@ -37,11 +32,15 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         color = intent.getIntExtra("color", 0)
         setColor(this, color, activity_wish)
 
-        //if (wid != -1) {  } else {}
-        //getWishList()
-        for (i in 1.. 10) {
-            wishList.add(Wish("", null, 0, ""))
+        if (wid != -1) {
+            getWishList()
         }
+        else {
+            for (i in 1.. 10) {
+                wishList.add(Wish("", null, 0, ""))
+            }
+        }
+
         lvWish.adapter = wishAdapter
 
         settingLayout.visibility = View.INVISIBLE
@@ -55,11 +54,61 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         cbBkmr.setOnCheckedChangeListener { _, isChecked ->
             bkmr = if(isChecked) 1 else 0
         }
+
+        btnChangeColor.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            val view = LayoutInflater.from(this).inflate(R.layout.dialog_change_color, null)
+            builder.setView(view)
+            val dialog = builder.create()
+            val ivColor0 = view.findViewById<ImageView>(R.id.ivColor0)
+            val ivColor1 = view.findViewById<ImageView>(R.id.ivColor1)
+            val ivColor2 = view.findViewById<ImageView>(R.id.ivColor2)
+            val ivColor3 = view.findViewById<ImageView>(R.id.ivColor3)
+            val ivColor4 = view.findViewById<ImageView>(R.id.ivColor4)
+            val ivColor5 = view.findViewById<ImageView>(R.id.ivColor5)
+            val ivColor6 = view.findViewById<ImageView>(R.id.ivColor6)
+
+            val colorClickListener = View.OnClickListener { v ->
+                when (v) {
+                    ivColor0 -> {
+                        color = 0
+                    }
+                    ivColor1 -> {
+                        color = 1
+                    }
+                    ivColor2 -> {
+                        color = 2
+                    }
+                    ivColor3 -> {
+                        color = 3
+                    }
+                    ivColor4 -> {
+                        color = 4
+                    }
+                    ivColor5 -> {
+                        color = 5
+                    }
+                    ivColor6 -> {
+                        color = 6
+                    }
+                }
+                setColor(this, color, activity_wish)
+                dialog.dismiss()
+            }
+
+            ivColor0!!.setOnClickListener(colorClickListener)
+            ivColor1!!.setOnClickListener(colorClickListener)
+            ivColor2!!.setOnClickListener(colorClickListener)
+            ivColor3!!.setOnClickListener(colorClickListener)
+            ivColor4!!.setOnClickListener(colorClickListener)
+            ivColor5!!.setOnClickListener(colorClickListener)
+            ivColor6!!.setOnClickListener(colorClickListener)
+
+            dialog.show()
+        }
     }
 
     fun getWishList() {
-        wid = 1
-
         var columns = arrayOf(DBHelper.WISL_COL_ID, DBHelper.WISL_COL_COLOR, DBHelper.WISL_COL_CATEGORY, DBHelper.WISL_COL_BKMR, DBHelper.WISL_COL_LOCK)
         var selection = "_id=?"
         var selectArgs = arrayOf(wid.toString())
@@ -93,7 +142,6 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
     }
 
     override fun onBackPressed() {
-        Log.d("yyj", "wish_BackPressed")
         var contentValues = ContentValues()
         contentValues.put(DBHelper.WISL_COL_WDATE, System.currentTimeMillis() / 1000L)
         contentValues.put(DBHelper.WISL_COL_COLOR, color)
