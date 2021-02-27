@@ -33,6 +33,13 @@
         <activity android:name=".MemoActivity"/>
         <activity android:name=".RecipeActivity"/>
         <activity android:name=".UnlockPWActivity"/>
+        <activity android:name=".LicenseActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
