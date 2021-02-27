@@ -3,26 +3,16 @@ package com.bluelay.damda
 import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.activity_bucket.*
 import kotlinx.android.synthetic.main.activity_memo.*
-import kotlinx.android.synthetic.main.activity_memo.btnSettings
-import kotlinx.android.synthetic.main.activity_memo.settingLayout
-import kotlinx.android.synthetic.main.activity_wish.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 
 class MemoActivity : AppCompatActivity(), SetMemo {
@@ -41,9 +31,11 @@ class MemoActivity : AppCompatActivity(), SetMemo {
 
         color = intent.getIntExtra("color", 0)
         setColor(this, color, activity_memo)
-        //if (mid != -1) {  } else {}
 
-        //getMemo()
+        if (mid != -1) {
+          getMemo()
+        }
+
         etMemo.setFocusAndShowKeyboard()
 
         settingLayout.visibility = View.INVISIBLE
@@ -56,6 +48,58 @@ class MemoActivity : AppCompatActivity(), SetMemo {
         }
         cbBkmr.setOnCheckedChangeListener { _, isChecked ->
             bkmr = if(isChecked) 1 else 0
+        }
+
+        btnChangeColor.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            val view = LayoutInflater.from(this).inflate(R.layout.dialog_change_color, null)
+            builder.setView(view)
+            val dialog = builder.create()
+            val ivColor0 = view.findViewById<ImageView>(R.id.ivColor0)
+            val ivColor1 = view.findViewById<ImageView>(R.id.ivColor1)
+            val ivColor2 = view.findViewById<ImageView>(R.id.ivColor2)
+            val ivColor3 = view.findViewById<ImageView>(R.id.ivColor3)
+            val ivColor4 = view.findViewById<ImageView>(R.id.ivColor4)
+            val ivColor5 = view.findViewById<ImageView>(R.id.ivColor5)
+            val ivColor6 = view.findViewById<ImageView>(R.id.ivColor6)
+
+            val colorClickListener = View.OnClickListener { v ->
+                when (v) {
+                    ivColor0 -> {
+                        color = 0
+                    }
+                    ivColor1 -> {
+                        color = 1
+                    }
+                    ivColor2 -> {
+                        color = 2
+                    }
+                    ivColor3 -> {
+                        color = 3
+                    }
+                    ivColor4 -> {
+                        color = 4
+                    }
+                    ivColor5 -> {
+                        color = 5
+                    }
+                    ivColor6 -> {
+                        color = 6
+                    }
+                }
+                setColor(this, color, activity_memo)
+                dialog.dismiss()
+            }
+
+            ivColor0!!.setOnClickListener(colorClickListener)
+            ivColor1!!.setOnClickListener(colorClickListener)
+            ivColor2!!.setOnClickListener(colorClickListener)
+            ivColor3!!.setOnClickListener(colorClickListener)
+            ivColor4!!.setOnClickListener(colorClickListener)
+            ivColor5!!.setOnClickListener(colorClickListener)
+            ivColor6!!.setOnClickListener(colorClickListener)
+
+            dialog.show()
         }
     }
 
@@ -70,8 +114,6 @@ class MemoActivity : AppCompatActivity(), SetMemo {
     }
 
     fun getMemo() {
-        mid = 1
-
         var columns = arrayOf(DBHelper.MEM_COL_ID, DBHelper.MEM_COL_COLOR, DBHelper.MEM_COL_CONTENT, DBHelper.MEM_COL_LOCK, DBHelper.MEM_COL_BKMR)
         var selection = "_id=?"
         var selectArgs = arrayOf(mid.toString())
@@ -91,7 +133,6 @@ class MemoActivity : AppCompatActivity(), SetMemo {
     }
 
     override fun onBackPressed() {
-        Log.d("yyj", "mem_BackPressed")
         var contentValues = ContentValues()
         contentValues.put(DBHelper.MEM_COL_WDATE, System.currentTimeMillis() / 1000L)
         contentValues.put(DBHelper.MEM_COL_COLOR, color)
