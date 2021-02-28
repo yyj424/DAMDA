@@ -29,8 +29,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView16"
-        app:srcCompat="@drawable/ic_baseline_movie_24"
-        app:tint="#000000" />
+        app:srcCompat="@drawable/ic_baseline_movie_24" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
