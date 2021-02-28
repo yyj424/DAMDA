@@ -9,8 +9,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +23,7 @@ import com.bluelay.damda.DBHelper.Companion.WISL_TABLE_NAME
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.adapter_view_main_memo.view.*
 import java.text.SimpleDateFormat
 
 
@@ -41,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     val bmList = arrayListOf<BkmrMemo>()
 
     val formatWdate = SimpleDateFormat("yyyy-MM-dd HH:mm")
+    lateinit var nextIntent : Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +58,38 @@ class MainActivity : AppCompatActivity() {
         val mmLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvMain_memo.layoutManager = mmLayoutManager
         mainMemoAdapter = MainMemoAdapter(this, mmList)
-        Log.d("aty", mainMemoAdapter.mmList.toString())
+        mainMemoAdapter.setItemClickListener(object: MainMemoAdapter.ItemClickListener{
+            override fun onClick(view: View, position: Int) {
+                Log.d("MainActivity", "setItemClickListener-onClick")
+
+                when (view.tvMemoType.text.toString()) {
+                    "Memo" -> {
+                        nextIntent = Intent(this@MainActivity, MemoActivity::class.java)
+                    }
+                    "TodoList" -> {
+                        nextIntent = Intent(this@MainActivity, ToDoActivity::class.java)
+                    }
+                    "WishList" -> {
+                        nextIntent = Intent(this@MainActivity, WishActivity::class.java)
+                    }
+                    "Weekly" -> {
+                        nextIntent = Intent(this@MainActivity, SimpleDiaryActivity::class.java)
+                    }
+                    "Recipe" -> {
+                        nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
+                    }
+                    "BucketList" -> {
+                        nextIntent = Intent(this@MainActivity, BucketActivity::class.java)
+                    }
+                    "Movie" -> {
+                        nextIntent = Intent(this@MainActivity, MovieActivity::class.java)
+                    }
+                }
+                nextIntent.putExtra("id", mmList[position].id)
+                Log.d("MainActivity", mmList[position].id.toString())
+                startActivity(nextIntent)
+            }
+        })
         rvMain_memo.adapter = mainMemoAdapter
 
         selectTab()
@@ -68,18 +99,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnMenu.setOnClickListener {
-            var intent : Intent? = null
             val pop = PopupMenu(this, btnMenu)
             menuInflater.inflate(R.menu.setting_menu, pop.menu)
 
             pop.setOnMenuItemClickListener { item->
                 when (item.itemId) {
                     //R.id.optionEdit -> intent = Intent(this, ::class.java)
-                    R.id.optionSetBG -> intent = Intent(this, SettingBGActivity::class.java)
-                    R.id.optionSetPW -> intent = Intent(this, SettingPWActivity::class.java)
+                    R.id.optionSetBG -> nextIntent = Intent(this, SettingBGActivity::class.java)
+                    R.id.optionSetPW -> nextIntent = Intent(this, SettingPWActivity::class.java)
                 }
-                if (intent != null) {
-                    startActivity(intent)
+                if (nextIntent != null) {
+                    startActivity(nextIntent)
                 }
                 false
             }
@@ -173,29 +203,29 @@ class MainActivity : AppCompatActivity() {
         val dialog = builder.create()
         btnOk.setOnClickListener{
             var sharedPref = this.getSharedPreferences("color", Context.MODE_PRIVATE)
-            var intent : Intent? = null
+//            var intent : Intent? = null
             var selectedColor = 0
             when (selMem) {
                 llMemo -> {
-                    intent = Intent(this, MemoActivity::class.java)
+                    nextIntent = Intent(this, MemoActivity::class.java)
                 }
                 llTodo -> {
-                    intent = Intent(this, ToDoActivity::class.java)
+                    nextIntent = Intent(this, ToDoActivity::class.java)
                 }
                 llDiary -> {
-                    intent = Intent(this, SimpleDiaryActivity::class.java)
+                    nextIntent = Intent(this, SimpleDiaryActivity::class.java)
                 }
                 llBucket -> {
-                    intent = Intent(this, BucketActivity::class.java)
+                    nextIntent = Intent(this, BucketActivity::class.java)
                 }
                 llWish -> {
-                    intent = Intent(this, WishActivity::class.java)
+                    nextIntent = Intent(this, WishActivity::class.java)
                 }
                 llRecipe -> {
-                    intent = Intent(this, RecipeActivity::class.java)
+                    nextIntent = Intent(this, RecipeActivity::class.java)
                 }
                 llMovie -> {
-                    intent = Intent(this, MovieActivity::class.java)
+                    nextIntent = Intent(this, MovieActivity::class.java)
                 }
             }
             when (selCol) {
@@ -224,9 +254,9 @@ class MainActivity : AppCompatActivity() {
                     selectedColor = 6
                 }
             }
-            if (intent != null) {
-                intent.putExtra("color", selectedColor)
-                startActivity(intent)
+            if (nextIntent != null) {
+                nextIntent.putExtra("color", selectedColor)
+                startActivity(nextIntent)
                 dialog.dismiss()
             }
             else {
@@ -252,32 +282,34 @@ class MainActivity : AppCompatActivity() {
         //일반 메모
         var query : String?
         for (t in tableList) {
-            query = "SELECT wdate, color " +
+            query = "SELECT * " +
                     "FROM $t " +
                     "WHERE bkmr = 0"
             cursor = database.rawQuery(query, null)
 
             while(cursor.moveToNext()){
+                val id = cursor.getInt(cursor.getColumnIndex("_id"))
                 val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
                 val color = cursor.getInt(cursor.getColumnIndex("color"))
 
-                mmList.add(MainMemo(t, wdate, color))
+                mmList.add(MainMemo(id, t, wdate, color))
             }
         }
 
         //BKMR 메모
         var query2 : String?
         for (t in tableList) {
-            query2 = "SELECT wdate, color " +
+            query2 = "SELECT * " +
                     "FROM $t " +
                     "WHERE bkmr = 1"
             cursor = database.rawQuery(query2, null)
 
             while(cursor.moveToNext()){
+                val id = cursor.getInt(cursor.getColumnIndex("_id"))
                 val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
                 val color = cursor.getInt(cursor.getColumnIndex("color"))
 
-                bmList.add(BkmrMemo(t, wdate, color))
+                bmList.add(BkmrMemo(id, t, wdate, color))
             }
         }
 
@@ -296,20 +328,22 @@ class MainActivity : AppCompatActivity() {
         cursor = database.rawQuery(query1, null)
 
         while(cursor.moveToNext()){
+            val id = cursor.getInt(cursor.getColumnIndex("_id"))
             val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
             Log.d("aty", "wdate: " + wdate)
             val color = cursor.getInt(cursor.getColumnIndex("color"))
             Log.d("aty", "color: " + color)
-            mmList.add(MainMemo(tabTableName, wdate, color))
+            mmList.add(MainMemo(id, tabTableName, wdate, color))
         }
         Log.d("aty", mmList.size.toString())
 
         val query2 = "Select * From $tabTableName WHERE bkmr = 1"   //BKMR 메모
         cursor = database.rawQuery(query2, null)
         while(cursor.moveToNext()){
+            val id = cursor.getInt(cursor.getColumnIndex("_id"))
             val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
             val color = cursor.getInt(cursor.getColumnIndex("color"))
-            bmList.add(BkmrMemo(tabTableName, wdate, color))
+            bmList.add(BkmrMemo(id, tabTableName, wdate, color))
         }
 
         cursor.close()
