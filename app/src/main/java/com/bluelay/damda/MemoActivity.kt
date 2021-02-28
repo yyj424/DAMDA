@@ -29,13 +29,17 @@ class MemoActivity : AppCompatActivity(), SetMemo {
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
 
-        color = intent.getIntExtra("color", 0)
-        setColor(this, color, activity_memo)
-
-        if (mid != -1) {
-          getMemo()
+        if (intent.hasExtra("memo")) {
+            var memo = intent.getSerializableExtra("memo") as MemoInfo
+            color = memo.color
+            mid = memo.id
+            getMemo()
+        }
+        else {
+            color = intent.getIntExtra("color", 0)
         }
 
+        setColor(this, color, activity_memo)
         etMemo.setFocusAndShowKeyboard()
 
         settingLayout.visibility = View.INVISIBLE

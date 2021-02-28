@@ -36,10 +36,11 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_todo)
-        setColor(this, color, clToDo)
 
         color = intent.getIntExtra("color", 0)
         toDoId = intent.getIntExtra("id", -1)
+
+        setColor(this, color, clToDo)
 
         etTodoDate.hideKeyboard()
         dbHelper = DBHelper(this)

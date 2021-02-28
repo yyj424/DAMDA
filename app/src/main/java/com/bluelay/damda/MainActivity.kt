@@ -34,10 +34,10 @@ class MainActivity : AppCompatActivity() {
 
     var tabTableName = ""
     lateinit var mainMemoAdapter : MainMemoAdapter
-    val mmList = arrayListOf<MainMemo>()
+    val mmList = arrayListOf<MemoInfo>()
 
     lateinit var bkmrMemoAdapter : BkmrMemoAdapter
-    val bmList = arrayListOf<BkmrMemo>()
+    val bmList = arrayListOf<MemoInfo>()
 
     val formatWdate = SimpleDateFormat("yyyy-MM-dd HH:mm")
     lateinit var nextIntent : Intent
@@ -52,7 +52,40 @@ class MainActivity : AppCompatActivity() {
         val bmLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvMain_memo.layoutManager = bmLayoutManager
         bkmrMemoAdapter = BkmrMemoAdapter(this, bmList)
-        Log.d("aty", bkmrMemoAdapter.bmList.toString())
+        bkmrMemoAdapter.setItemClickListener(object: BkmrMemoAdapter.ItemClickListener{
+            override fun onClick(view: View, position: Int) {
+                if (bmList[position].lock == 1) {
+                    nextIntent = Intent(this@MainActivity, UnlockPWActivity::class.java)
+                }
+                else {
+                    when (bmList[position].type) {
+                        "Memo" -> {
+                            nextIntent = Intent(this@MainActivity, MemoActivity::class.java)
+                        }
+                        "TodoList" -> {
+                            nextIntent = Intent(this@MainActivity, ToDoActivity::class.java)
+                        }
+                        "WishList" -> {
+                            nextIntent = Intent(this@MainActivity, WishActivity::class.java)
+                        }
+                        "Weekly" -> {
+                            nextIntent = Intent(this@MainActivity, SimpleDiaryActivity::class.java)
+                        }
+                        "Recipe" -> {
+                            nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
+                        }
+                        "BucketList" -> {
+                            nextIntent = Intent(this@MainActivity, BucketActivity::class.java)
+                        }
+                        "Movie" -> {
+                            nextIntent = Intent(this@MainActivity, MovieActivity::class.java)
+                        }
+                    }
+                }
+                nextIntent.putExtra("memo", bmList[position])
+                startActivity(nextIntent)
+            }
+        })
         rvBKMR_memo.adapter = bkmrMemoAdapter
 
         val mmLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -60,33 +93,35 @@ class MainActivity : AppCompatActivity() {
         mainMemoAdapter = MainMemoAdapter(this, mmList)
         mainMemoAdapter.setItemClickListener(object: MainMemoAdapter.ItemClickListener{
             override fun onClick(view: View, position: Int) {
-                Log.d("MainActivity", "setItemClickListener-onClick")
-
-                when (view.tvMemoType.text.toString()) {
-                    "Memo" -> {
-                        nextIntent = Intent(this@MainActivity, MemoActivity::class.java)
-                    }
-                    "TodoList" -> {
-                        nextIntent = Intent(this@MainActivity, ToDoActivity::class.java)
-                    }
-                    "WishList" -> {
-                        nextIntent = Intent(this@MainActivity, WishActivity::class.java)
-                    }
-                    "Weekly" -> {
-                        nextIntent = Intent(this@MainActivity, SimpleDiaryActivity::class.java)
-                    }
-                    "Recipe" -> {
-                        nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
-                    }
-                    "BucketList" -> {
-                        nextIntent = Intent(this@MainActivity, BucketActivity::class.java)
-                    }
-                    "Movie" -> {
-                        nextIntent = Intent(this@MainActivity, MovieActivity::class.java)
+                if (mmList[position].lock == 1) {
+                    nextIntent = Intent(this@MainActivity, UnlockPWActivity::class.java)
+                }
+                else {
+                    when (mmList[position].type) {
+                        "Memo" -> {
+                            nextIntent = Intent(this@MainActivity, MemoActivity::class.java)
+                        }
+                        "TodoList" -> {
+                            nextIntent = Intent(this@MainActivity, ToDoActivity::class.java)
+                        }
+                        "WishList" -> {
+                            nextIntent = Intent(this@MainActivity, WishActivity::class.java)
+                        }
+                        "Weekly" -> {
+                            nextIntent = Intent(this@MainActivity, SimpleDiaryActivity::class.java)
+                        }
+                        "Recipe" -> {
+                            nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
+                        }
+                        "BucketList" -> {
+                            nextIntent = Intent(this@MainActivity, BucketActivity::class.java)
+                        }
+                        "Movie" -> {
+                            nextIntent = Intent(this@MainActivity, MovieActivity::class.java)
+                        }
                     }
                 }
-                nextIntent.putExtra("id", mmList[position].id)
-                Log.d("MainActivity", mmList[position].id.toString())
+                nextIntent.putExtra("memo", mmList[position])
                 startActivity(nextIntent)
             }
         })
@@ -291,8 +326,9 @@ class MainActivity : AppCompatActivity() {
                 val id = cursor.getInt(cursor.getColumnIndex("_id"))
                 val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
                 val color = cursor.getInt(cursor.getColumnIndex("color"))
+                val lock = cursor.getInt(cursor.getColumnIndex("lock"))
 
-                mmList.add(MainMemo(id, t, wdate, color))
+                mmList.add(MemoInfo(id, t, wdate, color, lock))
             }
         }
 
@@ -308,8 +344,9 @@ class MainActivity : AppCompatActivity() {
                 val id = cursor.getInt(cursor.getColumnIndex("_id"))
                 val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
                 val color = cursor.getInt(cursor.getColumnIndex("color"))
+                val lock = cursor.getInt(cursor.getColumnIndex("lock"))
 
-                bmList.add(BkmrMemo(id, t, wdate, color))
+                bmList.add(MemoInfo(id, t, wdate, color, lock))
             }
         }
 
@@ -333,7 +370,9 @@ class MainActivity : AppCompatActivity() {
             Log.d("aty", "wdate: " + wdate)
             val color = cursor.getInt(cursor.getColumnIndex("color"))
             Log.d("aty", "color: " + color)
-            mmList.add(MainMemo(id, tabTableName, wdate, color))
+            val lock = cursor.getInt(cursor.getColumnIndex("lock"))
+
+            mmList.add(MemoInfo(id, tabTableName, wdate, color, lock))
         }
         Log.d("aty", mmList.size.toString())
 
@@ -343,7 +382,9 @@ class MainActivity : AppCompatActivity() {
             val id = cursor.getInt(cursor.getColumnIndex("_id"))
             val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
             val color = cursor.getInt(cursor.getColumnIndex("color"))
-            bmList.add(BkmrMemo(id, tabTableName, wdate, color))
+            val lock = cursor.getInt(cursor.getColumnIndex("lock"))
+
+            bmList.add(MemoInfo(id, tabTableName, wdate, color, lock))
         }
 
         cursor.close()
