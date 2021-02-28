@@ -10,7 +10,15 @@ import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.adapter_view_main_memo.view.*
 
 class MainMemoAdapter(val context : Context, val mmList : ArrayList<MainMemo>) : RecyclerView.Adapter<MainMemoAdapter.ViewHolder>() {
-//    var mmList = ArrayList<MainMemo>()
+    interface ItemClickListener {
+        fun onClick(view: View, position: Int)
+    }
+
+    private lateinit var itemClickListener: ItemClickListener
+
+    fun setItemClickListener(itemClickListener: ItemClickListener) {
+        this.itemClickListener = itemClickListener
+    }
 
     override fun getItemCount() = mmList.size
 
@@ -23,6 +31,9 @@ class MainMemoAdapter(val context : Context, val mmList : ArrayList<MainMemo>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val mm = mmList[position]
         holder.getMainMemo(mm)
+        holder.itemView.setOnClickListener {
+            itemClickListener.onClick(it, position)
+        }
     }
 
     class ViewHolder(val context : Context, itemView: View) : RecyclerView.ViewHolder(itemView), SetMemo{
