@@ -29,18 +29,20 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         database = dbHelper.writableDatabase
         val wishAdapter = WishAdapter(this, this, wishList)
 
-        color = intent.getIntExtra("color", 0)
-        setColor(this, color, activity_wish)
-
-        if (wid != -1) {
+        if (intent.hasExtra("memo")) {
+            var memo = intent.getSerializableExtra("memo") as MemoInfo
+            color = memo.color
+            wid = memo.id
             getWishList()
         }
         else {
+            color = intent.getIntExtra("color", 0)
             for (i in 1.. 10) {
                 wishList.add(Wish("", null, 0, ""))
             }
         }
 
+        setColor(this, color, activity_wish)
         lvWish.adapter = wishAdapter
 
         settingLayout.visibility = View.INVISIBLE

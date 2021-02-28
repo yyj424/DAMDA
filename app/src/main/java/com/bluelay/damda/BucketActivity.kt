@@ -29,18 +29,20 @@ class BucketActivity : AppCompatActivity(), SetMemo {
         database = dbHelper.writableDatabase
         val bucketAdapter = BucketAdapter(this, bucketList)
 
-        color = intent.getIntExtra("color", 0)
-        setColor(this, color, activity_bucket)
-
-        if (bid != -1) {
+        if (intent.hasExtra("memo")) {
+            var memo = intent.getSerializableExtra("memo") as MemoInfo
+            color = memo.color
+            bid = memo.id
             getBucketList()
         }
         else {
+            color = intent.getIntExtra("color", 0)
             for (i in 1.. 10) {
                 bucketList.add(Bucket("", 0, ""))
             }
         }
 
+        setColor(this, color, activity_bucket)
         lvBucket.adapter = bucketAdapter
 
         settingLayout.visibility = View.INVISIBLE
