@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var bkmrMemoAdapter : BkmrMemoAdapter
     val bmList = arrayListOf<MemoInfo>()
 
-    val formatWdate = SimpleDateFormat("yyyy-MM-dd HH:mm")
+    val formatWdate = SimpleDateFormat("yy-MM-dd HH:mm")
     lateinit var nextIntent : Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -327,8 +327,9 @@ class MainActivity : AppCompatActivity() {
                 val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
                 val color = cursor.getInt(cursor.getColumnIndex("color"))
                 val lock = cursor.getInt(cursor.getColumnIndex("lock"))
+                val bkmr = cursor.getInt(cursor.getColumnIndex("bkmr"))
 
-                mmList.add(MemoInfo(id, t, wdate, color, lock))
+                mmList.add(MemoInfo(id, t, wdate, color, lock, bkmr))
             }
         }
 
@@ -345,13 +346,16 @@ class MainActivity : AppCompatActivity() {
                 val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
                 val color = cursor.getInt(cursor.getColumnIndex("color"))
                 val lock = cursor.getInt(cursor.getColumnIndex("lock"))
+                val bkmr = cursor.getInt(cursor.getColumnIndex("bkmr"))
 
-                bmList.add(MemoInfo(id, t, wdate, color, lock))
+                bmList.add(MemoInfo(id, t, wdate, color, lock, bkmr))
             }
         }
 
         cursor.close()
 
+        mmList.sortByDescending { memoInfo -> memoInfo.wdate }
+        bmList.sortByDescending { memoInfo -> memoInfo.wdate }
         mainMemoAdapter.notifyDataSetChanged()
         bkmrMemoAdapter.notifyDataSetChanged()
     }
@@ -371,8 +375,9 @@ class MainActivity : AppCompatActivity() {
             val color = cursor.getInt(cursor.getColumnIndex("color"))
             Log.d("aty", "color: " + color)
             val lock = cursor.getInt(cursor.getColumnIndex("lock"))
+            val bkmr = cursor.getInt(cursor.getColumnIndex("bkmr"))
 
-            mmList.add(MemoInfo(id, tabTableName, wdate, color, lock))
+            mmList.add(MemoInfo(id, tabTableName, wdate, color, lock, bkmr))
         }
         Log.d("aty", mmList.size.toString())
 
@@ -383,12 +388,15 @@ class MainActivity : AppCompatActivity() {
             val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
             val color = cursor.getInt(cursor.getColumnIndex("color"))
             val lock = cursor.getInt(cursor.getColumnIndex("lock"))
+            val bkmr = cursor.getInt(cursor.getColumnIndex("bkmr"))
 
-            bmList.add(MemoInfo(id, tabTableName, wdate, color, lock))
+            bmList.add(MemoInfo(id, tabTableName, wdate, color, lock, bkmr))
         }
 
         cursor.close()
 
+        mmList.sortByDescending { memoInfo -> memoInfo.wdate }
+        bmList.sortByDescending { memoInfo -> memoInfo.wdate }
         mainMemoAdapter.notifyDataSetChanged()
         bkmrMemoAdapter.notifyDataSetChanged()
     }
