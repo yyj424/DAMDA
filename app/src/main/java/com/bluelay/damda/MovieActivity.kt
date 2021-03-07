@@ -42,9 +42,8 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     private val dateFormat = "yyyy.MM.dd"
     private val sdf = SimpleDateFormat(dateFormat, Locale.KOREA)
 
-        // TODO: 2021-02-09  메인 만든 후에 ID 수정!!!!!! 작성 시 -1, 수정 시 1 이상
     private var movieId = -1
-    private var color = 5
+    private var color = 0
     private var score = 0.0F
     private var date = ""
     private var title = ""
@@ -57,12 +56,36 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
 
-        color = intent.getIntExtra("color", 0)
-        movieId = intent.getIntExtra("id", -1)
-        setColor(this, color, clMovie)
-
         etMovieDate.hideKeyboard()
         dbHelper = DBHelper(this)
+        color = intent.getIntExtra("color", 0)
+
+        if (intent.hasExtra("memo")) {
+            val memo = intent.getSerializableExtra("memo") as MemoInfo
+            color = memo.color
+            movieId = memo.id
+            lock = memo.lock
+            bkmr = memo.bkmr
+
+            selectMovie()
+            rbMovieScore.rating = score
+            etMovieDate.setText(date)
+            etMovieTitle.setText(title)
+            etMovieReview.setText(content)
+            if (lock == 1) cbLock.isChecked = true
+            if (bkmr == 1) cbBkmr.isChecked = true
+            if (image != "") {
+                Glide.with(this)
+                    .load(image)
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .dontAnimate()
+                    .into(ivMoviePoster)
+            }
+        }
+
+        setColor(this, color, clMovie)
 
         var datePicker = OnDateSetListener { view, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
@@ -92,25 +115,6 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
         }
         cbBkmr.setOnCheckedChangeListener { _, isChecked ->
             bkmr = if(isChecked) 1 else 0
-        }
-
-        if (movieId != -1) {
-            selectMovie()
-            rbMovieScore.rating = score
-            etMovieDate.setText(date)
-            etMovieTitle.setText(title)
-            etMovieReview.setText(content)
-            if (lock == 1) cbLock.isChecked = true
-            if (bkmr == 1) cbBkmr.isChecked = true
-            if (image != "") {
-                Glide.with(this)
-                    .load(image)
-                    .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .dontAnimate()
-                    .into(ivMoviePoster)
-            }
         }
 
         ivMoviePoster.setOnClickListener {

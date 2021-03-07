@@ -9,6 +9,9 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import kotlinx.android.synthetic.main.activity_movie.*
 import kotlinx.android.synthetic.main.activity_todo.*
 import kotlinx.android.synthetic.main.activity_todo.btnSettings
 import kotlinx.android.synthetic.main.activity_todo.settingLayout
@@ -25,7 +28,6 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
     private val dateFormat = "yyyy.MM.dd"
     private var sdf = SimpleDateFormat(dateFormat, Locale.KOREA)
 
-    // TODO: 2021-01-30 메인 만든 후에 ID 수정!!!!!! -1 로 초기화, putExtra 있으면 그 값 넣기
     private var toDoId = -1
     private var date : String = ""
     private var color = 0
@@ -36,14 +38,24 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_todo)
 
-        color = intent.getIntExtra("color", 0)
-        toDoId = intent.getIntExtra("id", -1)
-
-        setColor(this, color, clToDo)
-
+        val toDoAdapter = ToDoAdapter(this, toDoList)
         etTodoDate.hideKeyboard()
         dbHelper = DBHelper(this)
-        val toDoAdapter = ToDoAdapter(this, toDoList)
+        color = intent.getIntExtra("color", 0)
+
+        if (intent.hasExtra("memo")) {
+            val memo = intent.getSerializableExtra("memo") as MemoInfo
+            color = memo.color
+            toDoId = memo.id
+            lock = memo.lock
+            bkmr = memo.bkmr
+
+            selectToDo()
+            etTodoDate.setText(date)
+            if (lock == 1) cbLock.isChecked = true
+            if (bkmr == 1) cbBkmr.isChecked = true
+        }
+        setColor(this, color, clToDo)
 
         var recordDatePicker = OnDateSetListener { view, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
@@ -68,10 +80,7 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
         }
 
         if (toDoId != -1) {
-            selectToDo()
-            etTodoDate.setText(date)
-            if (lock == 1) cbLock.isChecked = true
-            if (bkmr == 1) cbBkmr.isChecked = true
+
         }
 
         val listSize = toDoList.size
