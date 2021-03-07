@@ -31,8 +31,10 @@ class MemoActivity : AppCompatActivity(), SetMemo {
 
         if (intent.hasExtra("memo")) {
             var memo = intent.getSerializableExtra("memo") as MemoInfo
-            color = memo.color
             mid = memo.id
+            color = memo.color
+            lock = memo.lock
+            bkmr = memo.bkmr
             getMemo()
         }
         else {
@@ -118,15 +120,14 @@ class MemoActivity : AppCompatActivity(), SetMemo {
     }
 
     fun getMemo() {
-        var columns = arrayOf(DBHelper.MEM_COL_ID, DBHelper.MEM_COL_COLOR, DBHelper.MEM_COL_CONTENT, DBHelper.MEM_COL_LOCK, DBHelper.MEM_COL_BKMR)
+        var columns = arrayOf(DBHelper.MEM_COL_ID, DBHelper.MEM_COL_COLOR, DBHelper.MEM_COL_CONTENT)
         var selection = "_id=?"
         var selectArgs = arrayOf(mid.toString())
         var c : Cursor = database.query(DBHelper.MEM_TABLE_NAME, columns, selection, selectArgs, null, null, null)
         c.moveToNext()
         setColor(this, c.getInt(c.getColumnIndex(DBHelper.MEM_COL_COLOR)), activity_memo)
         etMemo.setText(c.getString(c.getColumnIndex(DBHelper.MEM_COL_CONTENT)))
-        lock = c.getInt(c.getColumnIndex(DBHelper.MEM_COL_LOCK))
-        bkmr = c.getInt(c.getColumnIndex(DBHelper.MEM_COL_BKMR))
+
         if (lock == 1) {
             cbLock.isChecked = true
         }

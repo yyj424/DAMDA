@@ -22,7 +22,9 @@ import com.bluelay.damda.DBHelper.Companion.WISL_TABLE_NAME
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.adapter_view_main_memo.*
 import kotlinx.android.synthetic.main.adapter_view_main_memo.view.*
+import kotlinx.android.synthetic.main.layout_memo_settings.*
 import java.text.SimpleDateFormat
 
 
@@ -47,6 +49,47 @@ class MainActivity : AppCompatActivity() {
 
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
+
+        editBar.visibility = View.GONE
+
+        val itemCheckListener = object : MainMemoAdapter.ItemClickListener{
+            override fun onClick(view: View, position: Int) {
+                var checkBox = view.findViewById<CheckBox>(R.id.ck_mainMemo)
+                checkBox.isChecked = !checkBox.isChecked
+            }
+        }
+
+        val mainMemoitemClickListener = object: MainMemoAdapter.ItemClickListener{
+            override fun onClick(view: View, position: Int) {
+                if (mmList[position].lock == 1) {
+                    nextIntent = Intent(this@MainActivity, UnlockPWActivity::class.java)
+                }
+                else {
+                    when (mmList[position].type) {
+                        "Memo" -> {
+                            nextIntent = Intent(this@MainActivity, MemoActivity::class.java)
+                        }
+                        "TodoList" -> {
+                            nextIntent = Intent(this@MainActivity, ToDoActivity::class.java)
+                        }
+                        "WishList" -> {
+                            nextIntent = Intent(this@MainActivity, WishActivity::class.java)
+                        }
+                        "Weekly" -> {
+                            nextIntent = Intent(this@MainActivity, SimpleDiaryActivity::class.java)
+                        }
+                        "Recipe" -> {
+                            nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
+                        }
+                        "Movie" -> {
+                            nextIntent = Intent(this@MainActivity, MovieActivity::class.java)
+                        }
+                    }
+                }
+                nextIntent.putExtra("memo", mmList[position])
+                startActivity(nextIntent)
+            }
+        }
 
         val bmLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvMain_memo.layoutManager = bmLayoutManager
@@ -86,38 +129,8 @@ class MainActivity : AppCompatActivity() {
 
         val mmLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvMain_memo.layoutManager = mmLayoutManager
-        mainMemoAdapter = MainMemoAdapter(this, mmList)
-        mainMemoAdapter.setItemClickListener(object: MainMemoAdapter.ItemClickListener{
-            override fun onClick(view: View, position: Int) {
-                if (mmList[position].lock == 1) {
-                    nextIntent = Intent(this@MainActivity, UnlockPWActivity::class.java)
-                }
-                else {
-                    when (mmList[position].type) {
-                        "Memo" -> {
-                            nextIntent = Intent(this@MainActivity, MemoActivity::class.java)
-                        }
-                        "TodoList" -> {
-                            nextIntent = Intent(this@MainActivity, ToDoActivity::class.java)
-                        }
-                        "WishList" -> {
-                            nextIntent = Intent(this@MainActivity, WishActivity::class.java)
-                        }
-                        "Weekly" -> {
-                            nextIntent = Intent(this@MainActivity, SimpleDiaryActivity::class.java)
-                        }
-                        "Recipe" -> {
-                            nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
-                        }
-                        "Movie" -> {
-                            nextIntent = Intent(this@MainActivity, MovieActivity::class.java)
-                        }
-                    }
-                }
-                nextIntent.putExtra("memo", mmList[position])
-                startActivity(nextIntent)
-            }
-        })
+        mainMemoAdapter = MainMemoAdapter(this, mmList, false)
+        mainMemoAdapter.setItemClickListener(mainMemoitemClickListener)
         rvMain_memo.adapter = mainMemoAdapter
 
         selectTab()
@@ -132,11 +145,44 @@ class MainActivity : AppCompatActivity() {
 
             pop.setOnMenuItemClickListener { item->
                 when (item.itemId) {
-                    //R.id.optionEdit -> intent = Intent(this, ::class.java)
-                    R.id.optionSetBG -> nextIntent = Intent(this, SettingBGActivity::class.java)
-                    R.id.optionSetPW -> nextIntent = Intent(this, SettingPWActivity::class.java)
+                    R.id.optionEdit ->  {
+                        editBar.visibility = View.VISIBLE
+                        tvCancel.setOnClickListener {
+                            editBar.visibility = View.GONE
+                            mainMemoAdapter = MainMemoAdapter(this, mmList, false)
+                            mainMemoAdapter.setItemClickListener(mainMemoitemClickListener)
+                            rvMain_memo.adapter = mainMemoAdapter
+                            mainMemoAdapter.notifyDataSetChanged()
+                        }
+                        tvDelete.setOnClickListener {
+                            val iterator = mmList.iterator()
+                            while(iterator.hasNext()) {
+                                var m = iterator.next()
+                                if (m.check) {
+                                    database.execSQL("DELETE FROM ${m.type} WHERE _id = ${m.id}")
+                                    iterator.remove()
+                                }
+                            }
+                            editBar.visibility = View.GONE
+                            mainMemoAdapter = MainMemoAdapter(this, mmList, false)
+                            mainMemoAdapter.setItemClickListener(mainMemoitemClickListener)
+                            rvMain_memo.adapter = mainMemoAdapter
+                            mainMemoAdapter.notifyDataSetChanged()
+                        }
+                        mainMemoAdapter = MainMemoAdapter(this, mmList, true)
+                        mainMemoAdapter.setItemClickListener(itemCheckListener)
+                        rvMain_memo.adapter = mainMemoAdapter
+                        mainMemoAdapter.notifyDataSetChanged()
+                    }
+                    R.id.optionSetBG -> {
+                        nextIntent = Intent(this, SettingBGActivity::class.java)
+                        startActivity(nextIntent)
+                    }
+                    R.id.optionSetPW -> {
+                        nextIntent = Intent(this, SettingPWActivity::class.java)
+                        startActivity(nextIntent)
+                    }
                 }
-                startActivity(nextIntent)
                 false
             }
             pop.show()
@@ -145,7 +191,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        Log.d("yyj", "onresume")
         if(tabTableName != "All" && tabTableName != "") {
             getTypeMemo(tabTableName)
         }
@@ -309,7 +354,7 @@ class MainActivity : AppCompatActivity() {
                 val lock = cursor.getInt(cursor.getColumnIndex("lock"))
                 val bkmr = cursor.getInt(cursor.getColumnIndex("bkmr"))
 
-                mmList.add(MemoInfo(id, t, wdate, color, lock, bkmr))
+                mmList.add(MemoInfo(id, t, wdate, color, lock, bkmr, false))
             }
         }
 
@@ -328,8 +373,14 @@ class MainActivity : AppCompatActivity() {
                 val lock = cursor.getInt(cursor.getColumnIndex("lock"))
                 val bkmr = cursor.getInt(cursor.getColumnIndex("bkmr"))
 
-                bmList.add(MemoInfo(id, t, wdate, color, lock, bkmr))
+                bmList.add(MemoInfo(id, t, wdate, color, lock, bkmr, false))
             }
+        }
+        if(bmList.size == 0) {
+            imgBkmr.visibility = View.GONE
+        }
+        else {
+            imgBkmr.visibility = View.VISIBLE
         }
 
         cursor.close()
@@ -357,7 +408,7 @@ class MainActivity : AppCompatActivity() {
             val lock = cursor.getInt(cursor.getColumnIndex("lock"))
             val bkmr = cursor.getInt(cursor.getColumnIndex("bkmr"))
 
-            mmList.add(MemoInfo(id, tabTableName, wdate, color, lock, bkmr))
+            mmList.add(MemoInfo(id, tabTableName, wdate, color, lock, bkmr, false))
         }
         Log.d("aty", mmList.size.toString())
 
@@ -370,7 +421,13 @@ class MainActivity : AppCompatActivity() {
             val lock = cursor.getInt(cursor.getColumnIndex("lock"))
             val bkmr = cursor.getInt(cursor.getColumnIndex("bkmr"))
 
-            bmList.add(MemoInfo(id, tabTableName, wdate, color, lock, bkmr))
+            bmList.add(MemoInfo(id, tabTableName, wdate, color, lock, bkmr, false))
+        }
+        if(bmList.size == 0) {
+            imgBkmr.visibility = View.GONE
+        }
+        else {
+            imgBkmr.visibility = View.VISIBLE
         }
 
         cursor.close()
@@ -420,7 +477,7 @@ class MainActivity : AppCompatActivity() {
                         getTypeMemo(tabTableName)
 
                     }
-                    7 -> {
+                    6 -> {
                         Log.d("aty", "tabTableName = Movie")
                         tabTableName = "Movie"
                         getTypeMemo(tabTableName)

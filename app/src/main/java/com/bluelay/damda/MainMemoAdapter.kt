@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.adapter_view_main_memo.view.*
 
-class MainMemoAdapter(val context : Context, val mmList : ArrayList<MemoInfo>) : RecyclerView.Adapter<MainMemoAdapter.ViewHolder>() {
+class MainMemoAdapter(val context : Context, val mmList : ArrayList<MemoInfo>, val edit : Boolean) : RecyclerView.Adapter<MainMemoAdapter.ViewHolder>() {
     interface ItemClickListener {
         fun onClick(view: View, position: Int)
     }
@@ -23,7 +23,7 @@ class MainMemoAdapter(val context : Context, val mmList : ArrayList<MemoInfo>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.adapter_view_main_memo, parent, false)
 
-        return ViewHolder(context, itemView)
+        return ViewHolder(context, itemView, edit)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -34,13 +34,22 @@ class MainMemoAdapter(val context : Context, val mmList : ArrayList<MemoInfo>) :
         }
     }
 
-    class ViewHolder(val context : Context, itemView: View) : RecyclerView.ViewHolder(itemView), SetMemo{
+    class ViewHolder(val context : Context, itemView: View, val edit : Boolean) : RecyclerView.ViewHolder(itemView), SetMemo{
         private var view : View = itemView
 
         fun getMainMemo(mm: MemoInfo){
+            if (edit) {
+                view.ck_mainMemo.visibility = View.VISIBLE
+            }
+            else {
+                view.ck_mainMemo.visibility = View.GONE
+            }
             view.tvMemoType.text = mm.type
             view.tvMemoDate.text = mm.wdate
             setColor(context, mm.color, view.adapterMainMemo)
+            view.ck_mainMemo.setOnCheckedChangeListener { _, isChecked ->
+                mm.check = isChecked
+            }
         }
     }
 }
