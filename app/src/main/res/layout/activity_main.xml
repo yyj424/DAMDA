@@ -82,7 +82,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tabLayout">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/imgBkmr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -97,7 +97,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvBKMR_memo"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
@@ -130,4 +130,39 @@
         app:layout_constraintEnd_toStartOf="@+id/btnMenu"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_add" />
+
+    <LinearLayout
+        android:id="@+id/editBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#97B1C8"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tvCancel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/nanumsquareroundb"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="취소"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvDelete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/nanumsquareroundb"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="삭제"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

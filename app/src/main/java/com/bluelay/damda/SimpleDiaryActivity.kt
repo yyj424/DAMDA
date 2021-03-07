@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_simple_diary.*
 import kotlinx.android.synthetic.main.activity_simple_diary.btnSettings
 import kotlinx.android.synthetic.main.activity_simple_diary.settingLayout
+import kotlinx.android.synthetic.main.activity_wish.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,14 +44,52 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
 
-        color = intent.getIntExtra("color", 0)
-        setColor(this, color, activity_simpe_diary)
-
         var recordDatePicker = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+            Log.d("SimpleDiaryActivity", "DatePickerDialog.OnDateSetListener")
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            etDiaryDate.setText(sdf.format(calendar.time))
+            Log.d("SimpleDiaryActivity", "Calendar.DAY_OF_WEEK: " + calendar.get(Calendar.DAY_OF_WEEK))
+            var dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+            Log.d("SimpleDiaryActivity", "dayOfWeek: " + dayOfWeek)
+            Log.d("SimpleDiaryActivity", sdf.format(calendar.time) + " - " + (calendar.get(Calendar.DAY_OF_MONTH)+6))
+
+            if(dayOfWeek == 1){ //일
+                calendar.add(Calendar.DAY_OF_MONTH, -6)
+                etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
+                calendar.add(Calendar.DAY_OF_MONTH, +6)
+                etDiaryDate.append(sdf.format(calendar.time))
+            } else if(dayOfWeek == 2){  //월
+                etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
+                calendar.add(Calendar.DAY_OF_MONTH, +6)
+                etDiaryDate.append(sdf.format(calendar.time))
+            } else if(dayOfWeek == 3){
+                calendar.add(Calendar.DAY_OF_MONTH, -1)
+                etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
+                calendar.add(Calendar.DAY_OF_MONTH, +6)
+                etDiaryDate.append(sdf.format(calendar.time))
+            } else if(dayOfWeek == 4){
+                calendar.add(Calendar.DAY_OF_MONTH, -2)
+                etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
+                calendar.add(Calendar.DAY_OF_MONTH, +6)
+                etDiaryDate.append(sdf.format(calendar.time))
+            } else if(dayOfWeek == 5){
+                calendar.add(Calendar.DAY_OF_MONTH, -3)
+                etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
+                calendar.add(Calendar.DAY_OF_MONTH, +6)
+                etDiaryDate.append(sdf.format(calendar.time))
+            } else if(dayOfWeek == 6){
+                calendar.add(Calendar.DAY_OF_MONTH, -4)
+                etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
+                calendar.add(Calendar.DAY_OF_MONTH, +6)
+                etDiaryDate.append(sdf.format(calendar.time))
+            } else if(dayOfWeek == 7){
+                calendar.add(Calendar.DAY_OF_MONTH, -5)
+                etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
+                calendar.add(Calendar.DAY_OF_MONTH, +6)
+                etDiaryDate.append(sdf.format(calendar.time))
+            }
+
         }
         etDiaryDate.setOnClickListener {
             DatePickerDialog(
@@ -61,35 +100,48 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
                 calendar[Calendar.MONTH],
                 calendar[Calendar.DAY_OF_MONTH]
             ).show()
+            Log.d("SimpleDiaryActivity", "setOnClickListener")
         }
 
         val diaryAdapter = SimpleDiaryAdapter(this, diaryList)
-
-        if (did != -1) {
+        if (intent.hasExtra("memo")) {
+            var memo = intent.getSerializableExtra("memo") as MemoInfo
+            color = memo.color
+            did = memo.id
+            lock = memo.lock
+            bkmr = memo.bkmr
             selectDiary()
-        } else {
-            var day = "day"
-            for (i in 1.. 7) {
-                if(i == 1){
-                    day = "Mon"
-                } else if(i == 2){
-                    day = "Tue"
-                } else if(i == 3){
-                    day = "Wed"
-                }else if(i == 4){
-                    day = "Thu"
-                }else if(i == 5){
-                    day = "Fri"
-                }else if(i == 6){
-                    day = "Sat"
-                }else if(i == 7){
-                    day = "Sun"
-                }
+        }
+        else {
+            color = intent.getIntExtra("color", 0)
+            if (did != -1) {
+                selectDiary()
+            } else {
+                var day = "day"
+                for (i in 1.. 7) {
+                    if(i == 1){
+                        day = "Mon"
+                    } else if(i == 2){
+                        day = "Tue"
+                    } else if(i == 3){
+                        day = "Wed"
+                    }else if(i == 4){
+                        day = "Thu"
+                    }else if(i == 5){
+                        day = "Fri"
+                    }else if(i == 6){
+                        day = "Sat"
+                    }else if(i == 7){
+                        day = "Sun"
+                    }
 
-                diaryList.add(SimpleDiary(day, "", getURLForResource(R.drawable.select_emoji).toString(),
-                    getURLForResource(R.drawable.select_weather).toString()))
+                    diaryList.add(SimpleDiary(day, "", getURLForResource(R.drawable.select_emoji).toString(),
+                        getURLForResource(R.drawable.select_weather).toString()))
+                }
             }
         }
+        setColor(this, color, activity_simpe_diary)
+
         lvDiary.adapter = diaryAdapter
 
         settingLayout.visibility = View.INVISIBLE
@@ -197,6 +249,16 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
         database = dbHelper.readableDatabase
 
         var c : Cursor = database.rawQuery("SELECT * FROM ${DBHelper.DIA_TABLE_NAME} WHERE ${DBHelper.DIA_COL_DID} = ?", arrayOf(did.toString()))
+        var c2 : Cursor = database.rawQuery("SELECT * FROM ${DBHelper.WEE_TABLE_NAME} WHERE ${DBHelper.WEE_COL_ID} = ?", arrayOf(did.toString()))
+        if (lock == 1) {
+            cbLock.isChecked = true
+        }
+        if (bkmr == 1) {
+            cbBkmr.isChecked = true
+        }
+
+        c2.moveToFirst()
+        etDiaryDate.setText(c2.getString(c2.getColumnIndex(DBHelper.WEE_COL_DATE)))
 
         var day = "day"
         var moodPic : String
