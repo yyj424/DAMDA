@@ -66,12 +66,6 @@
             android:text="RECIPE" />
 
         <com.google.android.material.tabs.TabItem
-            android:id="@+id/tab_bucket"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BUCKET" />
-
-        <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_movie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

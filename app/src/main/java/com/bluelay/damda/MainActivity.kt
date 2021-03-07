@@ -13,7 +13,6 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bluelay.damda.DBHelper.Companion.BUCL_TABLE_NAME
 import com.bluelay.damda.DBHelper.Companion.MEM_TABLE_NAME
 import com.bluelay.damda.DBHelper.Companion.MOV_TABLE_NAME
 import com.bluelay.damda.DBHelper.Companion.REC_TABLE_NAME
@@ -74,9 +73,6 @@ class MainActivity : AppCompatActivity() {
                         "Recipe" -> {
                             nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
                         }
-                        "BucketList" -> {
-                            nextIntent = Intent(this@MainActivity, BucketActivity::class.java)
-                        }
                         "Movie" -> {
                             nextIntent = Intent(this@MainActivity, MovieActivity::class.java)
                         }
@@ -113,9 +109,6 @@ class MainActivity : AppCompatActivity() {
                         "Recipe" -> {
                             nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
                         }
-                        "BucketList" -> {
-                            nextIntent = Intent(this@MainActivity, BucketActivity::class.java)
-                        }
                         "Movie" -> {
                             nextIntent = Intent(this@MainActivity, MovieActivity::class.java)
                         }
@@ -143,9 +136,7 @@ class MainActivity : AppCompatActivity() {
                     R.id.optionSetBG -> nextIntent = Intent(this, SettingBGActivity::class.java)
                     R.id.optionSetPW -> nextIntent = Intent(this, SettingPWActivity::class.java)
                 }
-                if (nextIntent != null) {
-                    startActivity(nextIntent)
-                }
+                startActivity(nextIntent)
                 false
             }
             pop.show()
@@ -169,7 +160,6 @@ class MainActivity : AppCompatActivity() {
         val llMemo = view.findViewById<LinearLayout>(R.id.llMemo)
         val llTodo = view.findViewById<LinearLayout>(R.id.llTodo)
         val llDiary = view.findViewById<LinearLayout>(R.id.llDiary)
-        val llBucket = view.findViewById<LinearLayout>(R.id.llBucket)
         val llWish = view.findViewById<LinearLayout>(R.id.llWish)
         val llRecipe = view.findViewById<LinearLayout>(R.id.llRecipe)
         val llMovie = view.findViewById<LinearLayout>(R.id.llMovie)
@@ -221,7 +211,6 @@ class MainActivity : AppCompatActivity() {
         llMemo!!.setOnClickListener(memoClickListener)
         llTodo!!.setOnClickListener(memoClickListener)
         llDiary!!.setOnClickListener(memoClickListener)
-        llBucket!!.setOnClickListener(memoClickListener)
         llWish!!.setOnClickListener(memoClickListener)
         llRecipe!!.setOnClickListener(memoClickListener)
         llMovie!!.setOnClickListener(memoClickListener)
@@ -237,7 +226,7 @@ class MainActivity : AppCompatActivity() {
         builder.setView(view)
         val dialog = builder.create()
         btnOk.setOnClickListener{
-            var sharedPref = this.getSharedPreferences("color", Context.MODE_PRIVATE)
+            val sharedPref = this.getSharedPreferences("color", Context.MODE_PRIVATE)
 //            var intent : Intent? = null
             var selectedColor = 0
             when (selMem) {
@@ -249,9 +238,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 llDiary -> {
                     nextIntent = Intent(this, SimpleDiaryActivity::class.java)
-                }
-                llBucket -> {
-                    nextIntent = Intent(this, BucketActivity::class.java)
                 }
                 llWish -> {
                     nextIntent = Intent(this, WishActivity::class.java)
@@ -289,14 +275,9 @@ class MainActivity : AppCompatActivity() {
                     selectedColor = 6
                 }
             }
-            if (nextIntent != null) {
-                nextIntent.putExtra("color", selectedColor)
-                startActivity(nextIntent)
-                dialog.dismiss()
-            }
-            else {
-                tvSelect.visibility = View.VISIBLE
-            }
+            nextIntent.putExtra("color", selectedColor)
+            startActivity(nextIntent)
+            dialog.dismiss()
         }
         dialog.show()
     }
@@ -310,7 +291,6 @@ class MainActivity : AppCompatActivity() {
             WISL_TABLE_NAME,
             WEE_TABLE_NAME,
             REC_TABLE_NAME,
-            BUCL_TABLE_NAME,
             MOV_TABLE_NAME
         )
 
@@ -404,44 +384,47 @@ class MainActivity : AppCompatActivity() {
     private fun selectTab() {
         tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                if (tabLayout.selectedTabPosition == 0) {
-                    Log.d("aty", "tabTableName = All")
-                    tabTableName = "All"
-                    getAllMemo()
-                } else if (tabLayout.selectedTabPosition == 1) {
-                    Log.d("aty", "tabTableName = Memo")
-                    tabTableName = "Memo"
-                    getTypeMemo(tabTableName)
+                when (tabLayout.selectedTabPosition) {
+                    0 -> {
+                        Log.d("aty", "tabTableName = All")
+                        tabTableName = "All"
+                        getAllMemo()
+                    }
+                    1 -> {
+                        Log.d("aty", "tabTableName = Memo")
+                        tabTableName = "Memo"
+                        getTypeMemo(tabTableName)
 
-                } else if (tabLayout.selectedTabPosition == 2) {
-                    Log.d("aty", "tabTableName = TodoList")
-                    tabTableName = "TodoList"
-                    getTypeMemo(tabTableName)
+                    }
+                    2 -> {
+                        Log.d("aty", "tabTableName = TodoList")
+                        tabTableName = "TodoList"
+                        getTypeMemo(tabTableName)
 
-                } else if (tabLayout.selectedTabPosition == 3) {
-                    Log.d("aty", "tabTableName = WishList")
-                    tabTableName = "WishList"
-                    getTypeMemo(tabTableName)
+                    }
+                    3 -> {
+                        Log.d("aty", "tabTableName = WishList")
+                        tabTableName = "WishList"
+                        getTypeMemo(tabTableName)
 
-                } else if (tabLayout.selectedTabPosition == 4) {
-                    Log.d("aty", "tabTableName = Weekly")
-                    tabTableName = "Weekly"
-                    getTypeMemo(tabTableName)
+                    }
+                    4 -> {
+                        Log.d("aty", "tabTableName = Weekly")
+                        tabTableName = "Weekly"
+                        getTypeMemo(tabTableName)
 
-                } else if (tabLayout.selectedTabPosition == 5) {
-                    Log.d("aty", "tabTableName = Recipe")
-                    tabTableName = "Recipe"
-                    getTypeMemo(tabTableName)
+                    }
+                    5 -> {
+                        Log.d("aty", "tabTableName = Recipe")
+                        tabTableName = "Recipe"
+                        getTypeMemo(tabTableName)
 
-                } else if (tabLayout.selectedTabPosition == 6) {
-                    Log.d("aty", "tabTableName = BucketList")
-                    tabTableName = "BucketList"
-                    getTypeMemo(tabTableName)
-
-                } else if (tabLayout.selectedTabPosition == 7) {
-                    Log.d("aty", "tabTableName = Movie")
-                    tabTableName = "Movie"
-                    getTypeMemo(tabTableName)
+                    }
+                    7 -> {
+                        Log.d("aty", "tabTableName = Movie")
+                        tabTableName = "Movie"
+                        getTypeMemo(tabTableName)
+                    }
                 }
             }
 

@@ -46,9 +46,6 @@ class UnlockPWActivity : AppCompatActivity() {
                                 "Recipe" -> {
                                     nextIntent = Intent(this@UnlockPWActivity, RecipeActivity::class.java)
                                 }
-                                "BucketList" -> {
-                                    nextIntent = Intent(this@UnlockPWActivity, BucketActivity::class.java)
-                                }
                                 "Movie" -> {
                                     nextIntent = Intent(this@UnlockPWActivity, MovieActivity::class.java)
                                 }

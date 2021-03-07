@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_bucket.*
 import kotlinx.android.synthetic.main.activity_simple_diary.*
 import kotlinx.android.synthetic.main.activity_simple_diary.btnSettings
 import kotlinx.android.synthetic.main.activity_simple_diary.settingLayout
@@ -142,7 +141,7 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
                         color = 6
                     }
                 }
-                setColor(this, color, activity_bucket)
+                setColor(this, color, activity_simpe_diary)
                 dialog.dismiss()
             }
 
