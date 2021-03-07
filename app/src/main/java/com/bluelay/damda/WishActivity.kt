@@ -31,8 +31,10 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
 
         if (intent.hasExtra("memo")) {
             var memo = intent.getSerializableExtra("memo") as MemoInfo
-            color = memo.color
             wid = memo.id
+            color = memo.color
+            lock = memo.lock
+            bkmr = memo.bkmr
             getWishList()
         }
         else {
@@ -111,15 +113,14 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
     }
 
     fun getWishList() {
-        var columns = arrayOf(DBHelper.WISL_COL_ID, DBHelper.WISL_COL_COLOR, DBHelper.WISL_COL_CATEGORY, DBHelper.WISL_COL_BKMR, DBHelper.WISL_COL_LOCK)
+        var columns = arrayOf(DBHelper.WISL_COL_ID, DBHelper.WISL_COL_COLOR, DBHelper.WISL_COL_CATEGORY)
         var selection = "_id=?"
         var selectArgs = arrayOf(wid.toString())
         var c : Cursor = database.query(DBHelper.WISL_TABLE_NAME, columns, selection, selectArgs, null, null, null)
         c.moveToNext()
         etWishCategory.setText(c.getString(c.getColumnIndex(DBHelper.WISL_COL_CATEGORY)))
         setColor(this, c.getInt(c.getColumnIndex(DBHelper.WISL_COL_COLOR)), activity_wish)
-        lock = c.getInt(c.getColumnIndex(DBHelper.WISL_COL_LOCK))
-        bkmr = c.getInt(c.getColumnIndex(DBHelper.WISL_COL_BKMR))
+
         if (lock == 1) {
             cbLock.isChecked = true
         }
