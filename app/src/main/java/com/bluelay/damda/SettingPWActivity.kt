@@ -5,12 +5,10 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_setting_pw.*
-import kotlinx.android.synthetic.main.activity_unlock_password.*
 
 class SettingPWActivity : AppCompatActivity() {
     private lateinit var nPassword : String
@@ -37,7 +35,6 @@ class SettingPWActivity : AppCompatActivity() {
 
         etSetPassword.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                Log.d("goeun", "s : $s")
                 if (s.toString().length == 4) {
                     if (cPassword != "0") {
                         if (checkPassword(cPassword, s.toString())) {
@@ -47,20 +44,18 @@ class SettingPWActivity : AppCompatActivity() {
                             tvSetPWState.text = getString(R.string.diff_pw)
                         }
                     } else {
-                        // 비밀번호 설정
                         if (::nPassword.isInitialized) { // 두번째 입력
                             if (checkPassword(nPassword, s.toString())) {
-                                // TODO: 2021-02-18 main 에서 완료 토스트 띄우기
                                 sharedPref.edit().apply {
                                     putString("memoLock", nPassword)
                                     apply()
                                 }
-                                inputMethodManager.hideSoftInputFromWindow(etUnlockPassword.getWindowToken(), 0)
+                                inputMethodManager.hideSoftInputFromWindow(etSetPassword.windowToken, 0)
                                 finish()
                             } else {
                                 tvSetPWState.text = getString(R.string.diff_pw)
                             }
-                        } else { // 첫번째 입력
+                        } else {
                             nPassword = s.toString()
                             tvSetPWState.text = getString(R.string.re_input_new_pw)
                         }
