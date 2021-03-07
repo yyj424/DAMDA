@@ -14,6 +14,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -67,6 +68,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
             etMovieDate.setText(sdf.format(calendar.time))
         }
         etMovieDate.setOnClickListener {

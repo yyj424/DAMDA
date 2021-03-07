@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_bucket.*
 import kotlinx.android.synthetic.main.activity_recipe.*
 import kotlinx.android.synthetic.main.activity_recipe.btnSettings
 import kotlinx.android.synthetic.main.activity_recipe.settingLayout
@@ -90,7 +89,7 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
                         color = 6
                     }
                 }
-                setColor(this, color, activity_bucket)
+                setColor(this, color, activity_recipe)
                 dialog.dismiss()
             }
 
