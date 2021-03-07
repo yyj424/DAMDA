@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_recipe.*
 import kotlinx.android.synthetic.main.activity_recipe.btnSettings
 import kotlinx.android.synthetic.main.activity_recipe.settingLayout
+import kotlinx.android.synthetic.main.activity_simple_diary.*
+import kotlinx.android.synthetic.main.activity_wish.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 
 class RecipeActivity : AppCompatActivity(), SetMemo{
@@ -33,12 +35,16 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
 
         dbHelper = DBHelper(this)
 
-        color = intent.getIntExtra("color", 0)
-        setColor(this, color, activity_recipe)
-
-        if (recipeId != -1) {
+        if (intent.hasExtra("memo")) {
+            var memo = intent.getSerializableExtra("memo") as MemoInfo
+            color = memo.color
+            recipeId = memo.id
             selectRecipe()
         }
+        else {
+            color = intent.getIntExtra("color", 0)
+        }
+        setColor(this, color, activity_recipe)
 
         settingLayout.visibility = View.INVISIBLE
         btnSettings.setOnClickListener {
@@ -123,6 +129,13 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
         database = dbHelper.readableDatabase
 
         var c : Cursor = database.rawQuery("SELECT * FROM ${DBHelper.REC_TABLE_NAME} WHERE ${DBHelper.REC_COL_ID} = ?", arrayOf(recipeId.toString()))
+        if (lock == 1) {
+            cbLock.isChecked = true
+        }
+        if (bkmr == 1) {
+            cbBkmr.isChecked = true
+        }
+
         while(c.moveToNext()){
             etRecipeName.setText(c.getString(c.getColumnIndex(DBHelper.REC_COL_NAME)))
             etIngredients.setText(c.getString(c.getColumnIndex(DBHelper.REC_COL_INGREDIENTS)))
@@ -152,7 +165,7 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
         database = dbHelper.writableDatabase
         val contentValues = ContentValues()
 
-        contentValues.put(DBHelper.REC_COL_WDATE, System.currentTimeMillis())
+        contentValues.put(DBHelper.REC_COL_WDATE, System.currentTimeMillis()/1000L)
         contentValues.put(DBHelper.REC_COL_NAME, etRecipeName.text.toString())
         contentValues.put(DBHelper.REC_COL_INGREDIENTS, etIngredients.text.toString())
         contentValues.put(DBHelper.REC_COL_CONTENT, etRecipeContent.text.toString())

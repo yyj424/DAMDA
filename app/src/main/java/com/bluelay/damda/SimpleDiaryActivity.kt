@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_simple_diary.*
 import kotlinx.android.synthetic.main.activity_simple_diary.btnSettings
 import kotlinx.android.synthetic.main.activity_simple_diary.settingLayout
+import kotlinx.android.synthetic.main.activity_wish.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,9 +44,6 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
 
-        color = intent.getIntExtra("color", 0)
-        setColor(this, color, activity_simpe_diary)
-
         var recordDatePicker = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
@@ -64,32 +62,44 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
         }
 
         val diaryAdapter = SimpleDiaryAdapter(this, diaryList)
-
-        if (did != -1) {
+        if (intent.hasExtra("memo")) {
+            var memo = intent.getSerializableExtra("memo") as MemoInfo
+            color = memo.color
+            did = memo.id
+            lock = memo.lock
+            bkmr = memo.bkmr
             selectDiary()
-        } else {
-            var day = "day"
-            for (i in 1.. 7) {
-                if(i == 1){
-                    day = "Mon"
-                } else if(i == 2){
-                    day = "Tue"
-                } else if(i == 3){
-                    day = "Wed"
-                }else if(i == 4){
-                    day = "Thu"
-                }else if(i == 5){
-                    day = "Fri"
-                }else if(i == 6){
-                    day = "Sat"
-                }else if(i == 7){
-                    day = "Sun"
-                }
+        }
+        else {
+            color = intent.getIntExtra("color", 0)
+            if (did != -1) {
+                selectDiary()
+            } else {
+                var day = "day"
+                for (i in 1.. 7) {
+                    if(i == 1){
+                        day = "Mon"
+                    } else if(i == 2){
+                        day = "Tue"
+                    } else if(i == 3){
+                        day = "Wed"
+                    }else if(i == 4){
+                        day = "Thu"
+                    }else if(i == 5){
+                        day = "Fri"
+                    }else if(i == 6){
+                        day = "Sat"
+                    }else if(i == 7){
+                        day = "Sun"
+                    }
 
-                diaryList.add(SimpleDiary(day, "", getURLForResource(R.drawable.select_emoji).toString(),
-                    getURLForResource(R.drawable.select_weather).toString()))
+                    diaryList.add(SimpleDiary(day, "", getURLForResource(R.drawable.select_emoji).toString(),
+                        getURLForResource(R.drawable.select_weather).toString()))
+                }
             }
         }
+        setColor(this, color, activity_simpe_diary)
+
         lvDiary.adapter = diaryAdapter
 
         settingLayout.visibility = View.INVISIBLE
@@ -197,6 +207,13 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
         database = dbHelper.readableDatabase
 
         var c : Cursor = database.rawQuery("SELECT * FROM ${DBHelper.DIA_TABLE_NAME} WHERE ${DBHelper.DIA_COL_DID} = ?", arrayOf(did.toString()))
+
+        if (lock == 1) {
+            cbLock.isChecked = true
+        }
+        if (bkmr == 1) {
+            cbBkmr.isChecked = true
+        }
 
         var day = "day"
         var moodPic : String
