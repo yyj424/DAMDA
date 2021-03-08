@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.adapter_view_bkmr_memo.view.*
 import kotlinx.android.synthetic.main.adapter_view_main_memo.view.*
+import java.text.SimpleDateFormat
 
-class BkmrMemoAdapter(val context : Context, val bmList : ArrayList<MemoInfo>) : RecyclerView.Adapter<BkmrMemoAdapter.ViewHolder>() {
+class BkmrMemoAdapter(val context : Context, val bmList : ArrayList<MemoInfo>, val edit : Boolean) : RecyclerView.Adapter<BkmrMemoAdapter.ViewHolder>() {
     interface ItemClickListener {
         fun onClick(view: View, position: Int)
     }
@@ -24,7 +25,7 @@ class BkmrMemoAdapter(val context : Context, val bmList : ArrayList<MemoInfo>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.adapter_view_bkmr_memo, parent, false)
 
-        return ViewHolder(context, itemView)
+        return ViewHolder(context, itemView, edit)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -36,12 +37,24 @@ class BkmrMemoAdapter(val context : Context, val bmList : ArrayList<MemoInfo>) :
     }
 
 
-    class ViewHolder(val context : Context, itemView: View) : RecyclerView.ViewHolder(itemView), SetMemo{
+    class ViewHolder(val context : Context, itemView: View, val edit : Boolean) : RecyclerView.ViewHolder(itemView), SetMemo{
         private var view : View = itemView
+        val formatWdate = SimpleDateFormat("yy.MM.dd")
         fun getBkmrMemo(bm: MemoInfo){
-            view.tv_bkmrType.text = bm.type
-            view.tv_bkmrDate.text = bm.wdate
+            if (edit) {
+                view.ck_bkmrMemo.visibility = View.VISIBLE
+            }
+            else {
+                view.ck_bkmrMemo.visibility = View.GONE
+            }
+            view.ck_bkmrMemo.setOnCheckedChangeListener(null)
+            view.ck_bkmrMemo.isChecked = bm.check
+            view.tv_bkmrTitle.text = bm.title
+            view.tv_bkmrTypeNDate.text = bm.type + "\n" + formatWdate.format(bm.wdate)
             setColor(context, bm.color, view.adapterBkmrMemo)
+            view.ck_bkmrMemo.setOnCheckedChangeListener { _, isChecked ->
+                bm.check = isChecked
+            }
         }
     }
 }

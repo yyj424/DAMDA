@@ -12,16 +12,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_simple_diary.*
-import kotlinx.android.synthetic.main.activity_simple_diary.btnSettings
-import kotlinx.android.synthetic.main.activity_simple_diary.settingLayout
-import kotlinx.android.synthetic.main.activity_wish.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
+import kotlinx.android.synthetic.main.activity_weekly.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
+class WeeklyActivity : AppCompatActivity(), SetMemo{
 
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
@@ -35,11 +32,11 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
     private val dateFormat = "yyyy.MM.dd"
     private var sdf = SimpleDateFormat(dateFormat, Locale.KOREA)
 
-    var diaryList = arrayListOf<SimpleDiary>()
+    var diaryList = arrayListOf<Weekly>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_simple_diary)
+        setContentView(R.layout.activity_weekly)
 
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
@@ -103,7 +100,7 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
             Log.d("SimpleDiaryActivity", "setOnClickListener")
         }
 
-        val diaryAdapter = SimpleDiaryAdapter(this, diaryList)
+        val diaryAdapter = WeeklyAdapter(this, diaryList)
         if (intent.hasExtra("memo")) {
             var memo = intent.getSerializableExtra("memo") as MemoInfo
             color = memo.color
@@ -135,7 +132,7 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
                         day = "Sun"
                     }
 
-                    diaryList.add(SimpleDiary(day, "", getURLForResource(R.drawable.select_emoji).toString(),
+                    diaryList.add(Weekly(day, "", getURLForResource(R.drawable.select_emoji).toString(),
                         getURLForResource(R.drawable.select_weather).toString()))
                 }
             }
@@ -287,7 +284,7 @@ class SimpleDiaryActivity : AppCompatActivity(), SetMemo{
                 day = "Sun"
             }
 
-            diaryList.add(SimpleDiary(day, content, moodPic, weather))
+            diaryList.add(Weekly(day, content, moodPic, weather))
         }
         c.close()
     }

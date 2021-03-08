@@ -41,7 +41,7 @@ class UnlockPWActivity : AppCompatActivity() {
                                     nextIntent = Intent(this@UnlockPWActivity, WishActivity::class.java)
                                 }
                                 "Weekly" -> {
-                                    nextIntent = Intent(this@UnlockPWActivity, SimpleDiaryActivity::class.java)
+                                    nextIntent = Intent(this@UnlockPWActivity, WeeklyActivity::class.java)
                                 }
                                 "Recipe" -> {
                                     nextIntent = Intent(this@UnlockPWActivity, RecipeActivity::class.java)
