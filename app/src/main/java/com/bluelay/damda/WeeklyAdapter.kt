@@ -1,7 +1,6 @@
 package com.bluelay.damda
 
 import android.app.AlertDialog
-import android.app.DatePickerDialog
 import android.content.Context
 import android.net.Uri
 import android.text.Editable
@@ -13,11 +12,10 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.net.toUri
-import java.text.SimpleDateFormat
 import java.util.*
 
 
-class SimpleDiaryAdapter(val context: Context, val diaryList: ArrayList<SimpleDiary>) : BaseAdapter(){
+class WeeklyAdapter(val context: Context, val diaryList: ArrayList<Weekly>) : BaseAdapter(){
 
 //    private var date : String = ""
 //    private val calendar = Calendar.getInstance()
@@ -39,7 +37,7 @@ class SimpleDiaryAdapter(val context: Context, val diaryList: ArrayList<SimpleDi
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View = LayoutInflater.from(context).inflate(
-            R.layout.adapter_view_simple_diary,
+            R.layout.adapter_view_weekly,
             null
         )
 

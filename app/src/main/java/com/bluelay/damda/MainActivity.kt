@@ -13,11 +13,17 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bluelay.damda.DBHelper.Companion.MEM_COL_CONTENT
 import com.bluelay.damda.DBHelper.Companion.MEM_TABLE_NAME
+import com.bluelay.damda.DBHelper.Companion.MOV_COL_TITLE
 import com.bluelay.damda.DBHelper.Companion.MOV_TABLE_NAME
+import com.bluelay.damda.DBHelper.Companion.REC_COL_NAME
 import com.bluelay.damda.DBHelper.Companion.REC_TABLE_NAME
+import com.bluelay.damda.DBHelper.Companion.TODL_COL_DATE
 import com.bluelay.damda.DBHelper.Companion.TODL_TABLE_NAME
+import com.bluelay.damda.DBHelper.Companion.WEE_COL_DATE
 import com.bluelay.damda.DBHelper.Companion.WEE_TABLE_NAME
+import com.bluelay.damda.DBHelper.Companion.WISL_COL_CATEGORY
 import com.bluelay.damda.DBHelper.Companion.WISL_TABLE_NAME
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
@@ -25,7 +31,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.adapter_view_main_memo.*
 import kotlinx.android.synthetic.main.adapter_view_main_memo.view.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
-import java.text.SimpleDateFormat
 
 
 class MainActivity : AppCompatActivity() {
@@ -40,8 +45,15 @@ class MainActivity : AppCompatActivity() {
     lateinit var bkmrMemoAdapter : BkmrMemoAdapter
     val bmList = arrayListOf<MemoInfo>()
 
-    val formatWdate = SimpleDateFormat("yy-MM-dd HH:mm")
     lateinit var nextIntent : Intent
+
+    val titles = mutableMapOf(
+        MEM_TABLE_NAME to MEM_COL_CONTENT,
+        TODL_TABLE_NAME to TODL_COL_DATE,
+        WISL_TABLE_NAME to WISL_COL_CATEGORY,
+        WEE_TABLE_NAME to WEE_COL_DATE,
+        REC_TABLE_NAME to REC_COL_NAME,
+        MOV_TABLE_NAME to MOV_COL_TITLE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +71,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val mainMemoitemClickListener = object: MainMemoAdapter.ItemClickListener{
+        val itemCheckListener2 = object : BkmrMemoAdapter.ItemClickListener{
+            override fun onClick(view: View, position: Int) {
+                var checkBox = view.findViewById<CheckBox>(R.id.ck_bkmrMemo)
+                checkBox.isChecked = !checkBox.isChecked
+            }
+        }
+
+        val mainMemoItemClickListener = object: MainMemoAdapter.ItemClickListener{
             override fun onClick(view: View, position: Int) {
                 if (mmList[position].lock == 1) {
                     nextIntent = Intent(this@MainActivity, UnlockPWActivity::class.java)
@@ -76,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                             nextIntent = Intent(this@MainActivity, WishActivity::class.java)
                         }
                         "Weekly" -> {
-                            nextIntent = Intent(this@MainActivity, SimpleDiaryActivity::class.java)
+                            nextIntent = Intent(this@MainActivity, WeeklyActivity::class.java)
                         }
                         "Recipe" -> {
                             nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
@@ -91,10 +110,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val bmLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        rvMain_memo.layoutManager = bmLayoutManager
-        bkmrMemoAdapter = BkmrMemoAdapter(this, bmList)
-        bkmrMemoAdapter.setItemClickListener(object: BkmrMemoAdapter.ItemClickListener{
+        val bkmrMemoItemClickListener = object: BkmrMemoAdapter.ItemClickListener{
             override fun onClick(view: View, position: Int) {
                 if (bmList[position].lock == 1) {
                     nextIntent = Intent(this@MainActivity, UnlockPWActivity::class.java)
@@ -111,7 +127,7 @@ class MainActivity : AppCompatActivity() {
                             nextIntent = Intent(this@MainActivity, WishActivity::class.java)
                         }
                         "Weekly" -> {
-                            nextIntent = Intent(this@MainActivity, SimpleDiaryActivity::class.java)
+                            nextIntent = Intent(this@MainActivity, WeeklyActivity::class.java)
                         }
                         "Recipe" -> {
                             nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
@@ -124,13 +140,18 @@ class MainActivity : AppCompatActivity() {
                 nextIntent.putExtra("memo", bmList[position])
                 startActivity(nextIntent)
             }
-        })
+        }
+
+        val bmLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        rvMain_memo.layoutManager = bmLayoutManager
+        bkmrMemoAdapter = BkmrMemoAdapter(this, bmList, false)
+        bkmrMemoAdapter.setItemClickListener(bkmrMemoItemClickListener)
         rvBKMR_memo.adapter = bkmrMemoAdapter
 
         val mmLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvMain_memo.layoutManager = mmLayoutManager
         mainMemoAdapter = MainMemoAdapter(this, mmList, false)
-        mainMemoAdapter.setItemClickListener(mainMemoitemClickListener)
+        mainMemoAdapter.setItemClickListener(mainMemoItemClickListener)
         rvMain_memo.adapter = mainMemoAdapter
 
         selectTab()
@@ -150,29 +171,49 @@ class MainActivity : AppCompatActivity() {
                         tvCancel.setOnClickListener {
                             editBar.visibility = View.GONE
                             mainMemoAdapter = MainMemoAdapter(this, mmList, false)
-                            mainMemoAdapter.setItemClickListener(mainMemoitemClickListener)
+                            mainMemoAdapter.setItemClickListener(mainMemoItemClickListener)
                             rvMain_memo.adapter = mainMemoAdapter
                             mainMemoAdapter.notifyDataSetChanged()
+                            bkmrMemoAdapter = BkmrMemoAdapter(this, bmList, false)
+                            bkmrMemoAdapter.setItemClickListener(bkmrMemoItemClickListener)
+                            rvBKMR_memo.adapter = bkmrMemoAdapter
+                            bkmrMemoAdapter.notifyDataSetChanged()
                         }
                         tvDelete.setOnClickListener {
                             val iterator = mmList.iterator()
                             while(iterator.hasNext()) {
-                                var m = iterator.next()
+                                val m = iterator.next()
                                 if (m.check) {
                                     database.execSQL("DELETE FROM ${m.type} WHERE _id = ${m.id}")
                                     iterator.remove()
                                 }
                             }
+                            val iterator2 = bmList.iterator()
+                            while(iterator2.hasNext()) {
+                                val m = iterator2.next()
+                                if (m.check) {
+                                    database.execSQL("DELETE FROM ${m.type} WHERE _id = ${m.id}")
+                                    iterator2.remove()
+                                }
+                            }
                             editBar.visibility = View.GONE
                             mainMemoAdapter = MainMemoAdapter(this, mmList, false)
-                            mainMemoAdapter.setItemClickListener(mainMemoitemClickListener)
+                            mainMemoAdapter.setItemClickListener(mainMemoItemClickListener)
                             rvMain_memo.adapter = mainMemoAdapter
                             mainMemoAdapter.notifyDataSetChanged()
+                            bkmrMemoAdapter = BkmrMemoAdapter(this, bmList, false)
+                            bkmrMemoAdapter.setItemClickListener(bkmrMemoItemClickListener)
+                            rvBKMR_memo.adapter = bkmrMemoAdapter
+                            bkmrMemoAdapter.notifyDataSetChanged()
                         }
                         mainMemoAdapter = MainMemoAdapter(this, mmList, true)
                         mainMemoAdapter.setItemClickListener(itemCheckListener)
                         rvMain_memo.adapter = mainMemoAdapter
                         mainMemoAdapter.notifyDataSetChanged()
+                        bkmrMemoAdapter = BkmrMemoAdapter(this, bmList, true)
+                        bkmrMemoAdapter.setItemClickListener(itemCheckListener2)
+                        rvBKMR_memo.adapter = bkmrMemoAdapter
+                        bkmrMemoAdapter.notifyDataSetChanged()
                     }
                     R.id.optionSetBG -> {
                         nextIntent = Intent(this, SettingBGActivity::class.java)
@@ -192,7 +233,8 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if(tabTableName != "All" && tabTableName != "") {
-            getTypeMemo(tabTableName)
+            Log.d("mainActivity", "onresume")
+            titles[tabTableName]?.let { getTypeMemo(tabTableName, it) }
         }
         else {
             getAllMemo()
@@ -282,7 +324,7 @@ class MainActivity : AppCompatActivity() {
                     nextIntent = Intent(this, ToDoActivity::class.java)
                 }
                 llDiary -> {
-                    nextIntent = Intent(this, SimpleDiaryActivity::class.java)
+                    nextIntent = Intent(this, WeeklyActivity::class.java)
                 }
                 llWish -> {
                     nextIntent = Intent(this, WishActivity::class.java)
@@ -330,50 +372,44 @@ class MainActivity : AppCompatActivity() {
     private fun getAllMemo(){
         mmList.clear()
         bmList.clear()
-        val tableList : ArrayList<String> = arrayListOf(
-            MEM_TABLE_NAME,
-            TODL_TABLE_NAME,
-            WISL_TABLE_NAME,
-            WEE_TABLE_NAME,
-            REC_TABLE_NAME,
-            MOV_TABLE_NAME
-        )
 
         //일반 메모
         var query : String?
-        for (t in tableList) {
+        for (t in titles) {
             query = "SELECT * " +
-                    "FROM $t " +
+                    "FROM ${t.key} " +
                     "WHERE bkmr = 0"
             cursor = database.rawQuery(query, null)
 
             while(cursor.moveToNext()){
                 val id = cursor.getInt(cursor.getColumnIndex("_id"))
-                val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
+                val wdate =cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L
                 val color = cursor.getInt(cursor.getColumnIndex("color"))
                 val lock = cursor.getInt(cursor.getColumnIndex("lock"))
                 val bkmr = cursor.getInt(cursor.getColumnIndex("bkmr"))
+                val title = cursor.getString(cursor.getColumnIndex(t.value))
 
-                mmList.add(MemoInfo(id, t, wdate, color, lock, bkmr, false))
+                mmList.add(MemoInfo(id, t.key, wdate, color, lock, bkmr, false, title))
             }
         }
 
         //BKMR 메모
         var query2 : String?
-        for (t in tableList) {
+        for (t in titles) {
             query2 = "SELECT * " +
-                    "FROM $t " +
+                    "FROM ${t.key} " +
                     "WHERE bkmr = 1"
             cursor = database.rawQuery(query2, null)
 
             while(cursor.moveToNext()){
                 val id = cursor.getInt(cursor.getColumnIndex("_id"))
-                val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
+                val wdate = cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L
                 val color = cursor.getInt(cursor.getColumnIndex("color"))
                 val lock = cursor.getInt(cursor.getColumnIndex("lock"))
                 val bkmr = cursor.getInt(cursor.getColumnIndex("bkmr"))
+                val title = cursor.getString(cursor.getColumnIndex(t.value))
 
-                bmList.add(MemoInfo(id, t, wdate, color, lock, bkmr, false))
+                bmList.add(MemoInfo(id, t.key, wdate, color, lock, bkmr, false, title))
             }
         }
         if(bmList.size == 0) {
@@ -391,37 +427,36 @@ class MainActivity : AppCompatActivity() {
         bkmrMemoAdapter.notifyDataSetChanged()
     }
 
-    private fun getTypeMemo(tabTableName: String){
+    private fun getTypeMemo(tabTableName: String, t : String){
+        Log.d("mainActivity", "table " + tabTableName + "t " + t)
         mmList.clear()
         bmList.clear()
 
         val query1 = "Select * From $tabTableName WHERE bkmr = 0"  //일반 메모
-        Log.d("aty", "getMainMemo query: " + query1)
         cursor = database.rawQuery(query1, null)
 
         while(cursor.moveToNext()){
             val id = cursor.getInt(cursor.getColumnIndex("_id"))
-            val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
-            Log.d("aty", "wdate: " + wdate)
+            val wdate = cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L
             val color = cursor.getInt(cursor.getColumnIndex("color"))
-            Log.d("aty", "color: " + color)
             val lock = cursor.getInt(cursor.getColumnIndex("lock"))
             val bkmr = cursor.getInt(cursor.getColumnIndex("bkmr"))
+            val title = cursor.getString(cursor.getColumnIndex(t))
 
-            mmList.add(MemoInfo(id, tabTableName, wdate, color, lock, bkmr, false))
+            mmList.add(MemoInfo(id, tabTableName, wdate, color, lock, bkmr, false, title))
         }
-        Log.d("aty", mmList.size.toString())
 
         val query2 = "Select * From $tabTableName WHERE bkmr = 1"   //BKMR 메모
         cursor = database.rawQuery(query2, null)
         while(cursor.moveToNext()){
             val id = cursor.getInt(cursor.getColumnIndex("_id"))
-            val wdate = formatWdate.format(cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L)
+            val wdate = cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L
             val color = cursor.getInt(cursor.getColumnIndex("color"))
             val lock = cursor.getInt(cursor.getColumnIndex("lock"))
             val bkmr = cursor.getInt(cursor.getColumnIndex("bkmr"))
+            val title = cursor.getString(cursor.getColumnIndex(t))
 
-            bmList.add(MemoInfo(id, tabTableName, wdate, color, lock, bkmr, false))
+            bmList.add(MemoInfo(id, tabTableName, wdate, color, lock, bkmr, false, title))
         }
         if(bmList.size == 0) {
             imgBkmr.visibility = View.GONE
@@ -450,37 +485,36 @@ class MainActivity : AppCompatActivity() {
                     1 -> {
                         Log.d("aty", "tabTableName = Memo")
                         tabTableName = "Memo"
-                        getTypeMemo(tabTableName)
+                        getTypeMemo(MEM_TABLE_NAME, MEM_COL_CONTENT)
 
                     }
                     2 -> {
                         Log.d("aty", "tabTableName = TodoList")
                         tabTableName = "TodoList"
-                        getTypeMemo(tabTableName)
+                        getTypeMemo(TODL_TABLE_NAME, TODL_COL_DATE)
 
                     }
                     3 -> {
                         Log.d("aty", "tabTableName = WishList")
                         tabTableName = "WishList"
-                        getTypeMemo(tabTableName)
+                        getTypeMemo(WISL_TABLE_NAME, WISL_COL_CATEGORY)
 
                     }
                     4 -> {
                         Log.d("aty", "tabTableName = Weekly")
                         tabTableName = "Weekly"
-                        getTypeMemo(tabTableName)
+                        getTypeMemo(WEE_TABLE_NAME, WEE_COL_DATE)
 
                     }
                     5 -> {
                         Log.d("aty", "tabTableName = Recipe")
                         tabTableName = "Recipe"
-                        getTypeMemo(tabTableName)
-
+                        getTypeMemo(REC_TABLE_NAME, REC_COL_NAME)
                     }
                     6 -> {
                         Log.d("aty", "tabTableName = Movie")
                         tabTableName = "Movie"
-                        getTypeMemo(tabTableName)
+                        getTypeMemo(MOV_TABLE_NAME, MOV_COL_TITLE)
                     }
                 }
             }

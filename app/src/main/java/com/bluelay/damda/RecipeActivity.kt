@@ -13,8 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_recipe.*
 import kotlinx.android.synthetic.main.activity_recipe.btnSettings
 import kotlinx.android.synthetic.main.activity_recipe.settingLayout
-import kotlinx.android.synthetic.main.activity_simple_diary.*
-import kotlinx.android.synthetic.main.activity_wish.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 
 class RecipeActivity : AppCompatActivity(), SetMemo{
@@ -170,6 +168,8 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
         contentValues.put(DBHelper.REC_COL_INGREDIENTS, etIngredients.text.toString())
         contentValues.put(DBHelper.REC_COL_CONTENT, etRecipeContent.text.toString())
         contentValues.put(DBHelper.REC_COL_COLOR, color)
+        contentValues.put(DBHelper.REC_COL_BKMR, bkmr)
+        contentValues.put(DBHelper.REC_COL_LOCK, lock)
 
         database.update(DBHelper.REC_TABLE_NAME, contentValues, "${DBHelper.REC_COL_ID}=?", arrayOf(recipeId.toString()))
 
