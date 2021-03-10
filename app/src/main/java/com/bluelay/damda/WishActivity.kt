@@ -13,13 +13,13 @@ import kotlinx.android.synthetic.main.activity_wish.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 
 class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
-    var wishList = arrayListOf<Wish>()
-    lateinit var dbHelper : DBHelper
-    lateinit var database : SQLiteDatabase
-    var wid = -1
-    var lock = 0
-    var bkmr = 0
-    var color = -1
+    private var wishList = arrayListOf<Wish>()
+    private lateinit var dbHelper : DBHelper
+    private lateinit var database : SQLiteDatabase
+    private var wid = -1
+    private var lock = 0
+    private var bkmr = 0
+    private var color = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +30,7 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         val wishAdapter = WishAdapter(this, this, wishList)
 
         if (intent.hasExtra("memo")) {
-            var memo = intent.getSerializableExtra("memo") as MemoInfo
+            val memo = intent.getSerializableExtra("memo") as MemoInfo
             wid = memo.id
             color = memo.color
             lock = memo.lock
@@ -73,28 +73,15 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
             val ivColor6 = view.findViewById<ImageView>(R.id.ivColor6)
 
             val colorClickListener = View.OnClickListener { v ->
-                when (v) {
-                    ivColor0 -> {
-                        color = 0
-                    }
-                    ivColor1 -> {
-                        color = 1
-                    }
-                    ivColor2 -> {
-                        color = 2
-                    }
-                    ivColor3 -> {
-                        color = 3
-                    }
-                    ivColor4 -> {
-                        color = 4
-                    }
-                    ivColor5 -> {
-                        color = 5
-                    }
-                    ivColor6 -> {
-                        color = 6
-                    }
+                color = when (v) {
+                    ivColor0 -> 0
+                    ivColor1 -> 1
+                    ivColor2 -> 2
+                    ivColor3 -> 3
+                    ivColor4 -> 4
+                    ivColor5 -> 5
+                    ivColor6 -> 6
+                    else -> 0
                 }
                 setColor(this, color, activity_wish)
                 dialog.dismiss()
@@ -112,7 +99,7 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         }
     }
 
-    fun getWishList() {
+    private fun getWishList() {
         var columns = arrayOf(DBHelper.WISL_COL_ID, DBHelper.WISL_COL_COLOR, DBHelper.WISL_COL_CATEGORY)
         var selection = "_id=?"
         var selectArgs = arrayOf(wid.toString())
@@ -133,7 +120,7 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         selectArgs = arrayOf(wid.toString())
         c = database.query(DBHelper.WIS_TABLE_NAME, columns, selection, selectArgs, null, null, null)
         wishList.clear()
-        for (i in 1.. 10) {
+        for (whereClause in 1.. 10) {
             if (c.moveToNext()) {
                 wishList.add(Wish(c.getString(c.getColumnIndex(DBHelper.WIS_COL_ITEM)), c.getInt(c.getColumnIndex(DBHelper.WIS_COL_PRICE)), c.getInt(c.getColumnIndex(DBHelper.WIS_COL_CHECKED)), c.getString(c.getColumnIndex(DBHelper.WIS_COL_LINK))))
             }
@@ -145,7 +132,7 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
     }
 
     override fun onBackPressed() {
-        var contentValues = ContentValues()
+        val contentValues = ContentValues()
         contentValues.put(DBHelper.WISL_COL_WDATE, System.currentTimeMillis() / 1000L)
         contentValues.put(DBHelper.WISL_COL_COLOR, color)
         contentValues.put(DBHelper.WISL_COL_CATEGORY, etWishCategory.text.toString())
@@ -153,19 +140,19 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         contentValues.put(DBHelper.WISL_COL_BKMR, bkmr)
 
        if (wid != -1) {
-            var whereCluase = "_id=?"
-            var whereArgs = arrayOf(wid.toString())
-            database.update(DBHelper.WISL_TABLE_NAME, contentValues, whereCluase, whereArgs)
+            var whereClause = "_id=?"
+            val whereArgs = arrayOf(wid.toString())
+            database.update(DBHelper.WISL_TABLE_NAME, contentValues, whereClause, whereArgs)
 
-            whereCluase = "wid=?"
-            database.delete(DBHelper.WIS_TABLE_NAME, whereCluase, whereArgs)
+            whereClause = "wid=?"
+            database.delete(DBHelper.WIS_TABLE_NAME, whereClause, whereArgs)
         }
        else {
            wid = database.insert(DBHelper.WISL_TABLE_NAME, null, contentValues).toInt()
        }
         for(wish in wishList){
             contentValues.clear()
-            if (!wish.item.replace(" ", "").equals("")) {
+            if (wish.item.replace(" ", "") != "") {
                 contentValues.put(DBHelper.WIS_COL_WID, wid)
                 contentValues.put(DBHelper.WIS_COL_ITEM, wish.item)
                 contentValues.put(DBHelper.WIS_COL_PRICE, wish.price)

@@ -1,17 +1,17 @@
 package com.bluelay.damda
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import kotlinx.android.synthetic.main.activity_movie.*
 import kotlinx.android.synthetic.main.activity_todo.*
 import kotlinx.android.synthetic.main.activity_todo.btnSettings
 import kotlinx.android.synthetic.main.activity_todo.settingLayout
@@ -21,15 +21,15 @@ import java.util.*
 
 class ToDoActivity : AppCompatActivity(), SetMemo  {
 
-    private lateinit var dbHelper : DBHelper
     private lateinit var database : SQLiteDatabase
+    private var dbHelper = DBHelper(this)
     private var toDoList = arrayListOf<ToDo>()
     private val calendar = Calendar.getInstance()
     private val dateFormat = "yyyy.MM.dd"
     private var sdf = SimpleDateFormat(dateFormat, Locale.KOREA)
 
     private var toDoId = -1
-    private var date : String = ""
+    private var date  = ""
     private var color = 0
     private var lock = 0
     private var bkmr = 0
@@ -38,11 +38,10 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_todo)
 
-        val toDoAdapter = ToDoAdapter(this, toDoList)
         etTodoDate.hideKeyboard()
-        dbHelper = DBHelper(this)
-        color = intent.getIntExtra("color", 0)
+        val toDoAdapter = ToDoAdapter(this, toDoList)
 
+        color = intent.getIntExtra("color", 0)
         if (intent.hasExtra("memo")) {
             val memo = intent.getSerializableExtra("memo") as MemoInfo
             color = memo.color
@@ -57,7 +56,7 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
         }
         setColor(this, color, clToDo)
 
-        var recordDatePicker = OnDateSetListener { view, year, month, dayOfMonth ->
+        val recordDatePicker = OnDateSetListener { _, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
@@ -71,7 +70,6 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
         btnSettings.setOnClickListener {
             settingLayout.visibility = if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE  else View.INVISIBLE
         }
-
         cbLock.setOnCheckedChangeListener { _, isChecked ->
             lock = if(isChecked) 1 else 0
         }
@@ -79,15 +77,48 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
             bkmr = if(isChecked) 1 else 0
         }
 
-        if (toDoId != -1) {
-
-        }
-
         val listSize = toDoList.size
         for (i in 1.. 10-listSize) {
             toDoList.add(ToDo("", 0))
         }
        lvToDo.adapter = toDoAdapter
+
+        btnChangeColor.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            val view = LayoutInflater.from(this).inflate(R.layout.dialog_change_color, null)
+            builder.setView(view)
+            val dialog = builder.create()
+            val ivColor0 = view.findViewById<ImageView>(R.id.ivColor0)
+            val ivColor1 = view.findViewById<ImageView>(R.id.ivColor1)
+            val ivColor2 = view.findViewById<ImageView>(R.id.ivColor2)
+            val ivColor3 = view.findViewById<ImageView>(R.id.ivColor3)
+            val ivColor4 = view.findViewById<ImageView>(R.id.ivColor4)
+            val ivColor5 = view.findViewById<ImageView>(R.id.ivColor5)
+            val ivColor6 = view.findViewById<ImageView>(R.id.ivColor6)
+
+            val colorClickListener = View.OnClickListener { v ->
+                color = when (v) {
+                    ivColor0 -> 0
+                    ivColor1 -> 1
+                    ivColor2 -> 2
+                    ivColor3 -> 3
+                    ivColor4 -> 4
+                    ivColor5 -> 5
+                    ivColor6 -> 6
+                    else -> 0
+                }
+                setColor(this, color, clToDo)
+                dialog.dismiss()
+            }
+            ivColor0!!.setOnClickListener(colorClickListener)
+            ivColor1!!.setOnClickListener(colorClickListener)
+            ivColor2!!.setOnClickListener(colorClickListener)
+            ivColor3!!.setOnClickListener(colorClickListener)
+            ivColor4!!.setOnClickListener(colorClickListener)
+            ivColor5!!.setOnClickListener(colorClickListener)
+            ivColor6!!.setOnClickListener(colorClickListener)
+            dialog.show()
+        }
     }
 
     override fun onBackPressed() {
@@ -111,6 +142,7 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
         value.put(DBHelper.TODL_COL_LOCK, lock)
         val id =  database.insert(DBHelper.TODL_TABLE_NAME, null, value)
         value.clear()
+
         for (toDo in toDoList) {
             if (toDo.content != "")  {
                 value.put(DBHelper.TOD_COL_CHECKED, toDo.checked)

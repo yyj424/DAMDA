@@ -55,24 +55,6 @@
                     android:layout_weight="1"
                     android:text="text"
                     android:textColor="#000000" />
-
-                <!--                <EditText-->
-                <!--                    android:id="@+id/etDiaryDate"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginTop="4dp"-->
-                <!--                    android:layout_marginBottom="4dp"-->
-                <!--                    android:background="@null"-->
-                <!--                    android:drawableLeft="@drawable/calendar"-->
-                <!--                    android:drawablePadding="3dp"-->
-                <!--                    android:editable="false"-->
-                <!--                    android:ems="10"-->
-                <!--                    android:focusable="false"-->
-                <!--                    android:fontFamily="@font/nanumsquareroundr"-->
-                <!--                    android:gravity="center_vertical"-->
-                <!--                    android:inputType="textPersonName"-->
-                <!--                    android:text="날짜"-->
-                <!--                    android:textSize="13dp" />-->
             </LinearLayout>
 
             <EditText

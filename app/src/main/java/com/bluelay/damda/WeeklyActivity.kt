@@ -7,7 +7,6 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -20,19 +19,19 @@ import java.util.*
 
 class WeeklyActivity : AppCompatActivity(), SetMemo{
 
-    lateinit var dbHelper : DBHelper
-    lateinit var database : SQLiteDatabase
+    private lateinit var dbHelper : DBHelper
+    private lateinit var database : SQLiteDatabase
 
-    var did = -1
-    var lock = 0
-    var bkmr = 0
-    var color = -1
+    private var did = -1
+    private var lock = 0
+    private var bkmr = 0
+    private var color = -1
 
     private val calendar = Calendar.getInstance()
     private val dateFormat = "yyyy.MM.dd"
     private var sdf = SimpleDateFormat(dateFormat, Locale.KOREA)
 
-    var diaryList = arrayListOf<Weekly>()
+    private var diaryList = arrayListOf<Weekly>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,53 +40,22 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
 
-        var recordDatePicker = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-            Log.d("SimpleDiaryActivity", "DatePickerDialog.OnDateSetListener")
+        var recordDatePicker = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            Log.d("SimpleDiaryActivity", "Calendar.DAY_OF_WEEK: " + calendar.get(Calendar.DAY_OF_WEEK))
-            var dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-            Log.d("SimpleDiaryActivity", "dayOfWeek: " + dayOfWeek)
-            Log.d("SimpleDiaryActivity", sdf.format(calendar.time) + " - " + (calendar.get(Calendar.DAY_OF_MONTH)+6))
 
-            if(dayOfWeek == 1){ //일
-                calendar.add(Calendar.DAY_OF_MONTH, -6)
-                etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
-                calendar.add(Calendar.DAY_OF_MONTH, +6)
-                etDiaryDate.append(sdf.format(calendar.time))
-            } else if(dayOfWeek == 2){  //월
-                etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
-                calendar.add(Calendar.DAY_OF_MONTH, +6)
-                etDiaryDate.append(sdf.format(calendar.time))
-            } else if(dayOfWeek == 3){
-                calendar.add(Calendar.DAY_OF_MONTH, -1)
-                etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
-                calendar.add(Calendar.DAY_OF_MONTH, +6)
-                etDiaryDate.append(sdf.format(calendar.time))
-            } else if(dayOfWeek == 4){
-                calendar.add(Calendar.DAY_OF_MONTH, -2)
-                etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
-                calendar.add(Calendar.DAY_OF_MONTH, +6)
-                etDiaryDate.append(sdf.format(calendar.time))
-            } else if(dayOfWeek == 5){
-                calendar.add(Calendar.DAY_OF_MONTH, -3)
-                etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
-                calendar.add(Calendar.DAY_OF_MONTH, +6)
-                etDiaryDate.append(sdf.format(calendar.time))
-            } else if(dayOfWeek == 6){
-                calendar.add(Calendar.DAY_OF_MONTH, -4)
-                etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
-                calendar.add(Calendar.DAY_OF_MONTH, +6)
-                etDiaryDate.append(sdf.format(calendar.time))
-            } else if(dayOfWeek == 7){
-                calendar.add(Calendar.DAY_OF_MONTH, -5)
-                etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
-                calendar.add(Calendar.DAY_OF_MONTH, +6)
-                etDiaryDate.append(sdf.format(calendar.time))
+            when (calendar.get(Calendar.DAY_OF_WEEK)) {
+                1 -> getWeeklyDay(-6)
+                2 -> getWeeklyDay(-7)
+                3 -> getWeeklyDay(-1)
+                4-> getWeeklyDay(-2)
+                5 -> getWeeklyDay(-3)
+                6 -> getWeeklyDay(-4)
+                7 -> getWeeklyDay(-5)
             }
-
         }
+
         etDiaryDate.setOnClickListener {
             DatePickerDialog(
                 this,
@@ -97,12 +65,11 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
                 calendar[Calendar.MONTH],
                 calendar[Calendar.DAY_OF_MONTH]
             ).show()
-            Log.d("SimpleDiaryActivity", "setOnClickListener")
         }
 
         val diaryAdapter = WeeklyAdapter(this, diaryList)
         if (intent.hasExtra("memo")) {
-            var memo = intent.getSerializableExtra("memo") as MemoInfo
+            val memo = intent.getSerializableExtra("memo") as MemoInfo
             color = memo.color
             did = memo.id
             lock = memo.lock
@@ -114,22 +81,17 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
             if (did != -1) {
                 selectDiary()
             } else {
-                var day = "day"
+                var day : String
                 for (i in 1.. 7) {
-                    if(i == 1){
-                        day = "Mon"
-                    } else if(i == 2){
-                        day = "Tue"
-                    } else if(i == 3){
-                        day = "Wed"
-                    }else if(i == 4){
-                        day = "Thu"
-                    }else if(i == 5){
-                        day = "Fri"
-                    }else if(i == 6){
-                        day = "Sat"
-                    }else if(i == 7){
-                        day = "Sun"
+                    day = when(i) {
+                        1 -> "Mon"
+                        2 -> "Tue"
+                        3 -> "Wed"
+                        4-> "Thu"
+                        5 -> "Fri"
+                        6 -> "Sat"
+                        7 -> "Sun"
+                        else -> ""
                     }
 
                     diaryList.add(Weekly(day, "", getURLForResource(R.drawable.select_emoji).toString(),
@@ -167,28 +129,15 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
             val ivColor6 = view.findViewById<ImageView>(R.id.ivColor6)
 
             val colorClickListener = View.OnClickListener { v ->
-                when (v) {
-                    ivColor0 -> {
-                        color = 0
-                    }
-                    ivColor1 -> {
-                        color = 1
-                    }
-                    ivColor2 -> {
-                        color = 2
-                    }
-                    ivColor3 -> {
-                        color = 3
-                    }
-                    ivColor4 -> {
-                        color = 4
-                    }
-                    ivColor5 -> {
-                        color = 5
-                    }
-                    ivColor6 -> {
-                        color = 6
-                    }
+                color = when (v) {
+                    ivColor0 -> 0
+                    ivColor1 -> 1
+                    ivColor2 -> 2
+                    ivColor3 -> 3
+                    ivColor4 -> 4
+                    ivColor5 -> 5
+                    ivColor6 -> 6
+                    else -> 0
                 }
                 setColor(this, color, activity_simpe_diary)
                 dialog.dismiss()
@@ -207,8 +156,7 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
     }
 
     override fun onBackPressed() {
-        Log.d("SimpleDiaryActivity", "onBackPressed")
-        var contentValues = ContentValues()
+        val contentValues = ContentValues()
         contentValues.put(DBHelper.WEE_COL_WDATE , System.currentTimeMillis()/1000L)
         contentValues.put(DBHelper.WEE_COL_COLOR , color)
         contentValues.put(DBHelper.WEE_COL_BKMR, bkmr)
@@ -216,12 +164,12 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
         contentValues.put(DBHelper.WEE_COL_DATE, etDiaryDate.text.toString())
 
         if (did != -1) {
-            var whereCluase = "_id=?"
-            var whereArgs = arrayOf(did.toString())
-            database.update(DBHelper.WEE_TABLE_NAME, contentValues, whereCluase, whereArgs)
+            var whereClause = "_id=?"
+            val whereArgs = arrayOf(did.toString())
+            database.update(DBHelper.WEE_TABLE_NAME, contentValues, whereClause, whereArgs)
 
-            whereCluase = "did=?"
-            database.delete(DBHelper.DIA_TABLE_NAME, whereCluase, whereArgs)
+            whereClause = "did=?"
+            database.delete(DBHelper.DIA_TABLE_NAME, whereClause, whereArgs)
         }
         else  {
             did = database.insert(DBHelper.WEE_TABLE_NAME, null, contentValues).toInt()
@@ -236,17 +184,13 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
             database.insert(DBHelper.DIA_TABLE_NAME, null, contentValues)
 
         }
-        //dbHelper.close() ondestroy
-        //startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 
     private fun selectDiary() {
-        Log.d("SimpleDiaryActivity", "diarySelect")
         database = dbHelper.readableDatabase
 
-        var c : Cursor = database.rawQuery("SELECT * FROM ${DBHelper.DIA_TABLE_NAME} WHERE ${DBHelper.DIA_COL_DID} = ?", arrayOf(did.toString()))
-        var c2 : Cursor = database.rawQuery("SELECT * FROM ${DBHelper.WEE_TABLE_NAME} WHERE ${DBHelper.WEE_COL_ID} = ?", arrayOf(did.toString()))
+        var c : Cursor = database.rawQuery("SELECT * FROM ${DBHelper.WEE_TABLE_NAME} WHERE ${DBHelper.WEE_COL_ID} = ?", arrayOf(did.toString()))
         if (lock == 1) {
             cbLock.isChecked = true
         }
@@ -254,42 +198,37 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
             cbBkmr.isChecked = true
         }
 
-        c2.moveToFirst()
-        etDiaryDate.setText(c2.getString(c2.getColumnIndex(DBHelper.WEE_COL_DATE)))
+        c.moveToFirst()
+        etDiaryDate.setText(c.getString(c.getColumnIndex(DBHelper.WEE_COL_DATE)))
 
-        var day = "day"
+        var day : String
         var moodPic : String
         var weather : String
         var content : String
 
+        c = database.rawQuery("SELECT * FROM ${DBHelper.DIA_TABLE_NAME} WHERE ${DBHelper.DIA_COL_DID} = ?", arrayOf(did.toString()))
         for (i in 1.. 7) {
             c.moveToNext()
             moodPic = c.getString(c.getColumnIndex(DBHelper.DIA_COL_MOODPIC))
             weather = c.getString(c.getColumnIndex(DBHelper.DIA_COL_WEATHER))
             content = c.getString(c.getColumnIndex(DBHelper.DIA_COL_CONTENT))
 
-            if (i == 1) {
-                day = "Mon"
-            } else if (i == 2) {
-                day = "Tue"
-            } else if (i == 3) {
-                day = "Wed"
-            } else if (i == 4) {
-                day = "Thu"
-            } else if (i == 5) {
-                day = "Fri"
-            } else if (i == 6) {
-                day = "Sat"
-            } else if (i == 7) {
-                day = "Sun"
+            day = when(i) {
+                1 -> "Mon"
+                2 -> "Tue"
+                3 -> "Wed"
+                4-> "Thu"
+                5 -> "Fri"
+                6 -> "Sat"
+                7 -> "Sun"
+                else -> ""
             }
-
             diaryList.add(Weekly(day, content, moodPic, weather))
         }
         c.close()
     }
 
-    private fun getURLForResource(resId: Int): String? {
+    private fun getURLForResource(resId: Int): String {
         return Uri.parse("android.resource://" + R::class.java.getPackage().name + "/" + resId)
             .toString()
     }
@@ -297,5 +236,14 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
     override fun onDestroy() {
         super.onDestroy()
         dbHelper.close()
+    }
+
+    private fun getWeeklyDay(n : Int) {
+        if (n != -7 ) {
+            calendar.add(Calendar.DAY_OF_MONTH, n)
+        }
+        etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
+        calendar.add(Calendar.DAY_OF_MONTH, +6)
+        etDiaryDate.append(sdf.format(calendar.time))
     }
 }

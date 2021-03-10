@@ -11,5 +11,5 @@
         android:title="비밀번호 설정" />
     <item
         android:id="@+id/optionLicense"
-        android:title="license" />
+        android:title="오픈소스 라이선스" />
 </menu>

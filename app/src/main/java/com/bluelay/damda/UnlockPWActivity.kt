@@ -8,20 +8,18 @@ import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_setting_bg.*
 import kotlinx.android.synthetic.main.activity_unlock_password.*
 
 class UnlockPWActivity : AppCompatActivity() {
-    lateinit var nextIntent : Intent
-    lateinit var inputMethodManager : InputMethodManager
+    private lateinit var nextIntent : Intent
+    private lateinit var inputMethodManager : InputMethodManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_unlock_password)
 
-        var sharedPref = this.getSharedPreferences("memoLock", Context.MODE_PRIVATE)
-        inputMethodManager =
-            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val sharedPref = this.getSharedPreferences("memoLock", Context.MODE_PRIVATE)
+        inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         etUnlockPassword.setFocusAndShowKeyboard()
         etUnlockPassword.addTextChangedListener(object : TextWatcher {
@@ -29,7 +27,7 @@ class UnlockPWActivity : AppCompatActivity() {
                 if (s.toString().length == 4) {
                     if (sharedPref.getString("memoLock", "0").equals(s.toString())) {
                         if (intent.hasExtra("memo")) {
-                            var memo = intent.getSerializableExtra("memo") as MemoInfo
+                            val memo = intent.getSerializableExtra("memo") as MemoInfo
                             when (memo.type) {
                                 "Memo" -> {
                                     nextIntent = Intent(this@UnlockPWActivity, MemoActivity::class.java)
@@ -52,7 +50,7 @@ class UnlockPWActivity : AppCompatActivity() {
                             }
                             nextIntent.putExtra("memo", memo)
                             startActivity(nextIntent)
-                            inputMethodManager.hideSoftInputFromWindow(etUnlockPassword.getWindowToken(), 0)
+                            inputMethodManager.hideSoftInputFromWindow(etUnlockPassword.windowToken, 0)
                             finish()
                         }
                     }
@@ -62,11 +60,8 @@ class UnlockPWActivity : AppCompatActivity() {
                 }
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
     }
 

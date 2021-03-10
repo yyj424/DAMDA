@@ -6,10 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.adapter_view_bkmr_memo.view.*
-import kotlinx.android.synthetic.main.adapter_view_main_memo.view.*
 import java.text.SimpleDateFormat
 
-class BkmrMemoAdapter(val context : Context, val bmList : ArrayList<MemoInfo>, val edit : Boolean) : RecyclerView.Adapter<BkmrMemoAdapter.ViewHolder>() {
+class BkmrMemoAdapter(val context : Context, private val bmList : ArrayList<MemoInfo>, private val edit : Boolean) : RecyclerView.Adapter<BkmrMemoAdapter.ViewHolder>() {
     interface ItemClickListener {
         fun onClick(view: View, position: Int)
     }
@@ -36,10 +35,9 @@ class BkmrMemoAdapter(val context : Context, val bmList : ArrayList<MemoInfo>, v
         }
     }
 
-
-    class ViewHolder(val context : Context, itemView: View, val edit : Boolean) : RecyclerView.ViewHolder(itemView), SetMemo{
+    class ViewHolder(val context : Context, itemView: View, private val edit : Boolean) : RecyclerView.ViewHolder(itemView), SetMemo{
         private var view : View = itemView
-        val formatWdate = SimpleDateFormat("yy.MM.dd")
+        private val formatWDate = SimpleDateFormat("yy.MM.dd")
         fun getBkmrMemo(bm: MemoInfo){
             if (edit) {
                 view.ck_bkmrMemo.visibility = View.VISIBLE
@@ -50,7 +48,7 @@ class BkmrMemoAdapter(val context : Context, val bmList : ArrayList<MemoInfo>, v
             view.ck_bkmrMemo.setOnCheckedChangeListener(null)
             view.ck_bkmrMemo.isChecked = bm.check
             view.tv_bkmrTitle.text = bm.title
-            view.tv_bkmrTypeNDate.text = bm.type + "\n" + formatWdate.format(bm.wdate)
+            view.tv_bkmrTypeNDate.text = bm.type + "\n" + formatWDate.format(bm.wdate)
             setColor(context, bm.color, view.adapterBkmrMemo)
             view.ck_bkmrMemo.setOnCheckedChangeListener { _, isChecked ->
                 bm.check = isChecked
