@@ -46,7 +46,7 @@
             android:layout_marginRight="8dp"
             android:layout_weight="1"
             android:fontFamily="@font/nanumsquareroundr"
-            android:gravity="right"
+            android:gravity="end"
             android:text="WishList 2020.03.08"
             android:textColor="#000000" />
 

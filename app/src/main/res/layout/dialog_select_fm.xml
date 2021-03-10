@@ -10,7 +10,6 @@
         android:layout_width="65dp"
         android:layout_height="56dp"
         android:layout_marginTop="32dp"
-        android:onClick="onClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.464"
         app:layout_constraintStart_toEndOf="@+id/ivSelectMemo"
@@ -24,7 +23,6 @@
         android:layout_marginStart="96dp"
         android:layout_marginLeft="96dp"
         android:layout_marginTop="20dp"
-        android:onClick="onClick"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12"
         app:srcCompat="@drawable/icon_memo" />
@@ -51,7 +49,7 @@
         android:layout_marginBottom="50dp"
         android:fontFamily="@font/nanumsquareroundb"
         android:text="MEMO"
-        android:textSize="13dp"
+        android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -62,7 +60,7 @@
         android:layout_marginBottom="50dp"
         android:fontFamily="@font/nanumsquareroundb"
         android:text="FOLDER"
-        android:textSize="13dp"
+        android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvSelectMemo" />
