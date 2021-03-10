@@ -64,27 +64,27 @@ class WeeklyAdapter(val context: Context, val diaryList: ArrayList<Weekly>) : Ba
             dialog.show()
 
             iv_soso.setOnClickListener {
-                ivMoodPic.setImageURI(getURLForResource(R.drawable.soso_emoji)?.toUri())
+                ivMoodPic.setImageURI(getURLForResource(R.drawable.soso_emoji).toUri())
                 diaryList[position].moodPic = getURLForResource(R.drawable.soso_emoji).toString()
                 dialog.dismiss()
             }
             iv_happy.setOnClickListener {
-                ivMoodPic.setImageURI(getURLForResource(R.drawable.happy_emoji)?.toUri())
+                ivMoodPic.setImageURI(getURLForResource(R.drawable.happy_emoji).toUri())
                 diaryList[position].moodPic = getURLForResource(R.drawable.happy_emoji).toString()
                 dialog.dismiss()
             }
             iv_angry.setOnClickListener {
-                ivMoodPic.setImageURI(getURLForResource(R.drawable.angry_emoji)?.toUri())
+                ivMoodPic.setImageURI(getURLForResource(R.drawable.angry_emoji).toUri())
                 diaryList[position].moodPic = getURLForResource(R.drawable.angry_emoji).toString()
                 dialog.dismiss()
             }
             iv_sad.setOnClickListener {
-                ivMoodPic.setImageURI(getURLForResource(R.drawable.sad_emoji)?.toUri())
+                ivMoodPic.setImageURI(getURLForResource(R.drawable.sad_emoji).toUri())
                 diaryList[position].moodPic = getURLForResource(R.drawable.sad_emoji).toString()
                 dialog.dismiss()
             }
             iv_congrats.setOnClickListener {
-                ivMoodPic.setImageURI(getURLForResource(R.drawable.congrats_emoji)?.toUri())
+                ivMoodPic.setImageURI(getURLForResource(R.drawable.congrats_emoji).toUri())
                 diaryList[position].moodPic = getURLForResource(R.drawable.congrats_emoji).toString()
                 dialog.dismiss()
             }

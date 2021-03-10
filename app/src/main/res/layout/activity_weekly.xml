@@ -26,7 +26,6 @@
         android:layout_marginTop="2dp"
         android:background="@null"
         android:drawablePadding="3dp"
-        android:editable="false"
         android:ems="10"
         android:focusable="false"
         android:fontFamily="@font/nanumsquareroundr"
