@@ -7,14 +7,13 @@ import android.graphics.Color
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import android.widget.*
 import androidx.core.content.ContextCompat.startActivity
-import kotlinx.android.synthetic.main.activity_wish.view.*
 
 class WishAdapter(val calTotal: CalTotal, val context: Context, val wishList: ArrayList<Wish>) : BaseAdapter() {
     var total = 0
@@ -69,7 +68,7 @@ class WishAdapter(val calTotal: CalTotal, val context: Context, val wishList: Ar
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s != "") {
+                if (s.toString().replace(" ", "") != "") {
                     wish.price = Integer.parseInt(s.toString())
                 }
                 total = 0
@@ -105,14 +104,12 @@ class WishAdapter(val calTotal: CalTotal, val context: Context, val wishList: Ar
             etWishLink.setText(wish.link)
 
             btnWishLinkOpen.setOnClickListener {
+                var url = etWishLink.text.toString()
                 var open = Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse(etWishLink.text.toString())
+                    Uri.parse(url)
                 )
-
-                fun String.isValidUrl(): Boolean = Patterns.WEB_URL.matcher(this).matches()
-
-                if (!etWishLink.text.toString().isValidUrl()) {
+                if (!Patterns.WEB_URL.matcher(url).matches() || !URLUtil.isValidUrl(url)) {
                     Toast.makeText(context, "올바른 형식이 아닙니다.", Toast.LENGTH_SHORT).show()
                 } else{
                     startActivity(context, open, null)
@@ -122,7 +119,7 @@ class WishAdapter(val calTotal: CalTotal, val context: Context, val wishList: Ar
             builder.setView(view)
             val dialog = builder.create()
             btnLinkOk.setOnClickListener{
-                if (!etWishLink.text.toString().replace(" ", "").equals("")) {
+                if (etWishLink.text.toString().replace(" ", "") != "") {
                     btnWishLink.setBackgroundResource(R.drawable.link_checked)
                     wish.link = etWishLink.text.toString()
                 }
