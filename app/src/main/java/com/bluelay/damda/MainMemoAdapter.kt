@@ -23,7 +23,6 @@ class MainMemoAdapter(val context : Context, val mmList : ArrayList<MemoInfo>, v
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.adapter_view_main_memo, parent, false)
-
         return ViewHolder(context, itemView, edit)
     }
 

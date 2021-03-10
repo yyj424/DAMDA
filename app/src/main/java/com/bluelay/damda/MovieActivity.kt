@@ -18,6 +18,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM
 import androidx.annotation.RequiresApi
@@ -26,6 +27,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import kotlinx.android.synthetic.main.activity_memo.*
 import kotlinx.android.synthetic.main.activity_movie.*
 import kotlinx.android.synthetic.main.activity_movie.btnSettings
 import kotlinx.android.synthetic.main.activity_movie.settingLayout
@@ -115,6 +117,42 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
         }
         cbBkmr.setOnCheckedChangeListener { _, isChecked ->
             bkmr = if(isChecked) 1 else 0
+        }
+
+        btnChangeColor.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            val view = LayoutInflater.from(this).inflate(R.layout.dialog_change_color, null)
+            builder.setView(view)
+            val dialog = builder.create()
+            val ivColor0 = view.findViewById<ImageView>(R.id.ivColor0)
+            val ivColor1 = view.findViewById<ImageView>(R.id.ivColor1)
+            val ivColor2 = view.findViewById<ImageView>(R.id.ivColor2)
+            val ivColor3 = view.findViewById<ImageView>(R.id.ivColor3)
+            val ivColor4 = view.findViewById<ImageView>(R.id.ivColor4)
+            val ivColor5 = view.findViewById<ImageView>(R.id.ivColor5)
+            val ivColor6 = view.findViewById<ImageView>(R.id.ivColor6)
+
+            val colorClickListener = View.OnClickListener { v ->
+                when (v) {
+                    ivColor0 -> color = 0
+                    ivColor1 -> color = 1
+                    ivColor2 -> color = 2
+                    ivColor3 -> color = 3
+                    ivColor4 -> color = 4
+                    ivColor5 -> color = 5
+                    ivColor6 -> color = 6
+                }
+                setColor(this, color, activity_memo)
+                dialog.dismiss()
+            }
+            ivColor0!!.setOnClickListener(colorClickListener)
+            ivColor1!!.setOnClickListener(colorClickListener)
+            ivColor2!!.setOnClickListener(colorClickListener)
+            ivColor3!!.setOnClickListener(colorClickListener)
+            ivColor4!!.setOnClickListener(colorClickListener)
+            ivColor5!!.setOnClickListener(colorClickListener)
+            ivColor6!!.setOnClickListener(colorClickListener)
+            dialog.show()
         }
 
         ivMoviePoster.setOnClickListener {

@@ -247,7 +247,7 @@
         android:fontFamily="@font/nanumsquareroundr"
         android:text="메모를 선택하세요"
         android:textColor="#A88E40"
-        android:textSize="10sp"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView15" />
 

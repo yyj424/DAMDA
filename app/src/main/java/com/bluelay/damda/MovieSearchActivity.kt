@@ -2,7 +2,6 @@ package com.bluelay.damda
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -18,8 +17,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 class MovieSearchActivity : AppCompatActivity() {
-
-    private val TAG = "MovieSearchActivity"
     private var movieList = arrayListOf<Movie>()
     private val movieAdapter = MovieSearchAdapter(this, movieList)
 
@@ -50,7 +47,6 @@ class MovieSearchActivity : AppCompatActivity() {
                 return false
             }
         })
-
 
         lvSearchMovie.setOnItemClickListener { parent, view, position, id ->
             val resultIntent = Intent()
@@ -87,7 +83,7 @@ class MovieSearchActivity : AppCompatActivity() {
     }
 
     object MoviesDB {
-        private val api: Api //인터페이스 구현
+        private val api: Api
 
         init {
             val retrofit = Retrofit.Builder()
@@ -109,15 +105,11 @@ class MovieSearchActivity : AppCompatActivity() {
                             val responseBody = response.body()
                             if (responseBody != null) {
                                 onSuccess.invoke(responseBody.movies)
-                            } else {
-                                Log.d("Repository", "Failed to get response")
                             }
                         }
                     }
 
-                    override fun onFailure(call: Call<GetMoviesResponse>, t: Throwable) {
-                        Log.e("Repository", "onFailure", t)
-                    }
+                    override fun onFailure(call: Call<GetMoviesResponse>, t: Throwable) {}
                 })
         }
     }
