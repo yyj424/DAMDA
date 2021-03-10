@@ -14,32 +14,15 @@ import android.widget.TextView
 import androidx.core.net.toUri
 import java.util.*
 
-
 class WeeklyAdapter(val context: Context, val diaryList: ArrayList<Weekly>) : BaseAdapter(){
+    override fun getCount(): Int { return diaryList.size }
 
-//    private var date : String = ""
-//    private val calendar = Calendar.getInstance()
-//    private val dateFormat = "yyyy.MM.dd"
-//    private var sdf = SimpleDateFormat(dateFormat, Locale.KOREA)
-//    private var diaryId = 1
+    override fun getItem(position: Int): Any { return diaryList[position] }
 
-    override fun getCount(): Int {
-        return diaryList.size
-    }
-
-    override fun getItem(position: Int): Any {
-        return diaryList[position]
-    }
-
-    override fun getItemId(position: Int): Long {
-        return 0
-    }
+    override fun getItemId(position: Int): Long { return 0 }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view: View = LayoutInflater.from(context).inflate(
-            R.layout.adapter_view_weekly,
-            null
-        )
+        val view: View = LayoutInflater.from(context).inflate(R.layout.adapter_view_weekly, null)
 
         val ivMoodPic = view.findViewById<ImageView>(R.id.ivMoodPic)
         val ivWeather = view.findViewById<ImageView>(R.id.ivWeather)
@@ -50,7 +33,7 @@ class WeeklyAdapter(val context: Context, val diaryList: ArrayList<Weekly>) : Ba
 
         ivMoodPic.setImageURI(diary.moodPic.toUri())
         ivWeather.setImageURI(diary.weather.toUri())
-        tvDay.setText(diary.day)
+        tvDay.text = diary.day
 
         etDiaryContent.text = diary.content
         val textWatcher = object : TextWatcher {
@@ -153,7 +136,7 @@ class WeeklyAdapter(val context: Context, val diaryList: ArrayList<Weekly>) : Ba
         return view
     }
 
-    private fun getURLForResource(resId: Int): String? {
+    private fun getURLForResource(resId: Int): String {
         return Uri.parse("android.resource://" + R::class.java.getPackage().name + "/" + resId)
             .toString()
     }

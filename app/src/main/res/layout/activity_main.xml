@@ -97,8 +97,6 @@
             android:contentDescription="TODO"
             app:srcCompat="@drawable/icon_metro_pin" />
 
-        <!-- https://stackoverflow.com/questions/33863174/how-to-implement-horizontal-gridlayoutmanager -->
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvBKMR_memo"
             android:layout_width="match_parent"

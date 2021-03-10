@@ -1,9 +1,9 @@
 package com.bluelay.damda
 
 import android.content.Context
+import android.graphics.Color
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,15 +20,14 @@ class ToDoAdapter (val context : Context, val toDoList : ArrayList<ToDo>) : Base
 
         val toDo = toDoList[position]
         cbToDo.isChecked = toDo.checked == 1
+        if (cbToDo.isChecked) {
+            etToDoContent.setTextColor(Color.parseColor("#969191"))
+        }
         etToDoContent.setText(toDo.content)
 
         val textWatcher = object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 toDoList[position].content = s.toString()
             }
@@ -38,24 +37,20 @@ class ToDoAdapter (val context : Context, val toDoList : ArrayList<ToDo>) : Base
         cbToDo.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 toDoList[position].checked = 1
+                etToDoContent.setTextColor(Color.parseColor("#969191"))
             }
             else {
                 toDoList[position].checked = 0
+                etToDoContent.setTextColor(Color.parseColor("#000000"))
             }
         }
 
         return view
     }
-    override fun getCount(): Int {
-        return toDoList.size
-    }
 
-    override fun getItem(position: Int): Any {
-        return toDoList[position]
-    }
+    override fun getCount(): Int { return toDoList.size }
 
-    override fun getItemId(position: Int): Long {
-        return 0
-    }
+    override fun getItem(position: Int): Any { return toDoList[position] }
 
+    override fun getItemId(position: Int): Long { return 0 }
 }

@@ -68,14 +68,15 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
             val ivColor6 = view.findViewById<ImageView>(R.id.ivColor6)
 
             val colorClickListener = View.OnClickListener { v ->
-                when (v) {
-                    ivColor0 -> color = 0
-                    ivColor1 -> color = 1
-                    ivColor2 -> color = 2
-                    ivColor3 -> color = 3
-                    ivColor4 -> color = 4
-                    ivColor5 -> color = 5
-                    ivColor6 -> color = 6
+                color = when (v) {
+                    ivColor0 -> 0
+                    ivColor1 -> 1
+                    ivColor2 -> 2
+                    ivColor3 -> 3
+                    ivColor4 -> 4
+                    ivColor5 -> 5
+                    ivColor6 -> 6
+                    else -> 0
                 }
                 setColor(this, color, activity_memo)
                 dialog.dismiss()

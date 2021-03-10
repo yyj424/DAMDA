@@ -10,28 +10,19 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import kotlinx.android.synthetic.main.activity_memo.*
 import kotlinx.android.synthetic.main.activity_movie.*
-import kotlinx.android.synthetic.main.activity_movie.btnSettings
-import kotlinx.android.synthetic.main.activity_movie.settingLayout
-import kotlinx.android.synthetic.main.activity_todo.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -133,16 +124,17 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
             val ivColor6 = view.findViewById<ImageView>(R.id.ivColor6)
 
             val colorClickListener = View.OnClickListener { v ->
-                when (v) {
-                    ivColor0 -> color = 0
-                    ivColor1 -> color = 1
-                    ivColor2 -> color = 2
-                    ivColor3 -> color = 3
-                    ivColor4 -> color = 4
-                    ivColor5 -> color = 5
-                    ivColor6 -> color = 6
+                color = when (v) {
+                    ivColor0 -> 0
+                    ivColor1 -> 1
+                    ivColor2 -> 2
+                    ivColor3 -> 3
+                    ivColor4 -> 4
+                    ivColor5 -> 5
+                    ivColor6 -> 6
+                    else -> 0
                 }
-                setColor(this, color, activity_memo)
+                setColor(this, color, clMovie)
                 dialog.dismiss()
             }
             ivColor0!!.setOnClickListener(colorClickListener)

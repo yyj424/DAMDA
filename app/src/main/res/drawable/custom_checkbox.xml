@@ -3,5 +3,5 @@
     <item android:state_checked="false"
         android:drawable="@drawable/checkbox_default"/>
     <item android:state_checked="true"
-        android:drawable="@drawable/checked_dark"/>
+        android:drawable="@drawable/checkbox_checked"/>
 </selector>

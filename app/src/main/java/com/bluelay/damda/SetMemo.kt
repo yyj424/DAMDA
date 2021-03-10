@@ -2,7 +2,6 @@ package com.bluelay.damda
 
 import android.content.Context
 import android.view.View
-import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 
 interface SetMemo {
