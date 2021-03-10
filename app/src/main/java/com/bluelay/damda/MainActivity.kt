@@ -290,7 +290,7 @@ class MainActivity : AppCompatActivity() {
         builder.setView(view)
         val dialog = builder.create()
         btnOk.setOnClickListener{
-            val sharedPref = this.getSharedPreferences("color", Context.MODE_PRIVATE)
+            val sharedPref = this.getSharedPreferences("memoColor", Context.MODE_PRIVATE)
             nextIntent = null
             var selectedColor = 0
             when (selMem) {
