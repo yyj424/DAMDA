@@ -7,7 +7,6 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -45,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var bkmrMemoAdapter : BkmrMemoAdapter
     val bmList = arrayListOf<MemoInfo>()
 
-    lateinit var nextIntent : Intent
+    var nextIntent : Intent? = null
 
     val titles = mutableMapOf(
         MEM_TABLE_NAME to MEM_COL_CONTENT,
@@ -85,27 +84,15 @@ class MainActivity : AppCompatActivity() {
                 }
                 else {
                     when (mmList[position].type) {
-                        "Memo" -> {
-                            nextIntent = Intent(this@MainActivity, MemoActivity::class.java)
-                        }
-                        "TodoList" -> {
-                            nextIntent = Intent(this@MainActivity, ToDoActivity::class.java)
-                        }
-                        "WishList" -> {
-                            nextIntent = Intent(this@MainActivity, WishActivity::class.java)
-                        }
-                        "Weekly" -> {
-                            nextIntent = Intent(this@MainActivity, WeeklyActivity::class.java)
-                        }
-                        "Recipe" -> {
-                            nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
-                        }
-                        "Movie" -> {
-                            nextIntent = Intent(this@MainActivity, MovieActivity::class.java)
-                        }
+                        "Memo" -> nextIntent = Intent(this@MainActivity, MemoActivity::class.java)
+                        "TodoList" -> nextIntent = Intent(this@MainActivity, ToDoActivity::class.java)
+                        "WishList" -> nextIntent = Intent(this@MainActivity, WishActivity::class.java)
+                        "Weekly" -> nextIntent = Intent(this@MainActivity, WeeklyActivity::class.java)
+                        "Recipe" -> nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
+                        "Movie" -> nextIntent = Intent(this@MainActivity, MovieActivity::class.java)
                     }
                 }
-                nextIntent.putExtra("memo", mmList[position])
+                nextIntent?.putExtra("memo", mmList[position])
                 startActivity(nextIntent)
             }
         }
@@ -117,27 +104,15 @@ class MainActivity : AppCompatActivity() {
                 }
                 else {
                     when (bmList[position].type) {
-                        "Memo" -> {
-                            nextIntent = Intent(this@MainActivity, MemoActivity::class.java)
-                        }
-                        "TodoList" -> {
-                            nextIntent = Intent(this@MainActivity, ToDoActivity::class.java)
-                        }
-                        "WishList" -> {
-                            nextIntent = Intent(this@MainActivity, WishActivity::class.java)
-                        }
-                        "Weekly" -> {
-                            nextIntent = Intent(this@MainActivity, WeeklyActivity::class.java)
-                        }
-                        "Recipe" -> {
-                            nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
-                        }
-                        "Movie" -> {
-                            nextIntent = Intent(this@MainActivity, MovieActivity::class.java)
-                        }
+                        "Memo" -> nextIntent = Intent(this@MainActivity, MemoActivity::class.java)
+                        "TodoList" -> nextIntent = Intent(this@MainActivity, ToDoActivity::class.java)
+                        "WishList" -> nextIntent = Intent(this@MainActivity, WishActivity::class.java)
+                        "Weekly" -> nextIntent = Intent(this@MainActivity, WeeklyActivity::class.java)
+                        "Recipe" ->  nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
+                        "Movie" -> nextIntent = Intent(this@MainActivity, MovieActivity::class.java)
                     }
                 }
-                nextIntent.putExtra("memo", bmList[position])
+                nextIntent?.putExtra("memo", bmList[position])
                 startActivity(nextIntent)
             }
         }
@@ -223,6 +198,10 @@ class MainActivity : AppCompatActivity() {
                         nextIntent = Intent(this, SettingPWActivity::class.java)
                         startActivity(nextIntent)
                     }
+                    R.id.optionLicense -> {
+                        nextIntent = Intent(this, LicenseActivity::class.java)
+                        startActivity(nextIntent)
+                    }
                 }
                 false
             }
@@ -233,7 +212,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if(tabTableName != "All" && tabTableName != "") {
-            Log.d("mainActivity", "onresume")
             titles[tabTableName]?.let { getTypeMemo(tabTableName, it) }
         }
         else {
@@ -294,7 +272,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
         llMemo!!.setOnClickListener(memoClickListener)
         llTodo!!.setOnClickListener(memoClickListener)
         llDiary!!.setOnClickListener(memoClickListener)
@@ -314,57 +291,34 @@ class MainActivity : AppCompatActivity() {
         val dialog = builder.create()
         btnOk.setOnClickListener{
             val sharedPref = this.getSharedPreferences("color", Context.MODE_PRIVATE)
-//            var intent : Intent? = null
+            nextIntent = null
             var selectedColor = 0
             when (selMem) {
-                llMemo -> {
-                    nextIntent = Intent(this, MemoActivity::class.java)
-                }
-                llTodo -> {
-                    nextIntent = Intent(this, ToDoActivity::class.java)
-                }
-                llDiary -> {
-                    nextIntent = Intent(this, WeeklyActivity::class.java)
-                }
-                llWish -> {
-                    nextIntent = Intent(this, WishActivity::class.java)
-                }
-                llRecipe -> {
-                    nextIntent = Intent(this, RecipeActivity::class.java)
-                }
-                llMovie -> {
-                    nextIntent = Intent(this, MovieActivity::class.java)
-                }
+                llMemo -> nextIntent = Intent(this, MemoActivity::class.java)
+                llTodo -> nextIntent = Intent(this, ToDoActivity::class.java)
+                llDiary -> nextIntent = Intent(this, WeeklyActivity::class.java)
+                llWish -> nextIntent = Intent(this, WishActivity::class.java)
+                llRecipe -> nextIntent = Intent(this, RecipeActivity::class.java)
+                llMovie -> nextIntent = Intent(this, MovieActivity::class.java)
             }
             when (selCol) {
-                null -> {
-                    selectedColor = sharedPref.getInt("color", 0)
-                }
-                ivColor0 -> {
-                    selectedColor = 0
-                }
-                ivColor1 -> {
-                    selectedColor = 1
-                }
-                ivColor2 -> {
-                    selectedColor = 2
-                }
-                ivColor3 -> {
-                    selectedColor = 3
-                }
-                ivColor4 -> {
-                    selectedColor = 4
-                }
-                ivColor5 -> {
-                    selectedColor = 5
-                }
-                ivColor6 -> {
-                    selectedColor = 6
-                }
+                null -> selectedColor = sharedPref.getInt("color", 0)
+                ivColor0 -> selectedColor = 0
+                ivColor1 -> selectedColor = 1
+                ivColor2 -> selectedColor = 2
+                ivColor3 -> selectedColor = 3
+                ivColor4 -> selectedColor = 4
+                ivColor5 -> selectedColor = 5
+                ivColor6 -> selectedColor = 6
             }
-            nextIntent.putExtra("color", selectedColor)
-            startActivity(nextIntent)
-            dialog.dismiss()
+            nextIntent?.putExtra("color", selectedColor)
+            if (nextIntent == null) {
+                tvSelect.visibility = View.VISIBLE
+            }
+            else {
+                startActivity(nextIntent)
+                dialog.dismiss()
+            }
         }
         dialog.show()
     }
@@ -373,7 +327,6 @@ class MainActivity : AppCompatActivity() {
         mmList.clear()
         bmList.clear()
 
-        //일반 메모
         var query : String?
         for (t in titles) {
             query = "SELECT * " +
@@ -393,7 +346,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        //BKMR 메모
         var query2 : String?
         for (t in titles) {
             query2 = "SELECT * " +
@@ -418,9 +370,7 @@ class MainActivity : AppCompatActivity() {
         else {
             imgBkmr.visibility = View.VISIBLE
         }
-
         cursor.close()
-
         mmList.sortByDescending { memoInfo -> memoInfo.wdate }
         bmList.sortByDescending { memoInfo -> memoInfo.wdate }
         mainMemoAdapter.notifyDataSetChanged()
@@ -428,13 +378,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getTypeMemo(tabTableName: String, t : String){
-        Log.d("mainActivity", "table " + tabTableName + "t " + t)
         mmList.clear()
         bmList.clear()
 
-        val query1 = "Select * From $tabTableName WHERE bkmr = 0"  //일반 메모
+        val query1 = "Select * From $tabTableName WHERE bkmr = 0"
         cursor = database.rawQuery(query1, null)
-
         while(cursor.moveToNext()){
             val id = cursor.getInt(cursor.getColumnIndex("_id"))
             val wdate = cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L
@@ -446,7 +394,7 @@ class MainActivity : AppCompatActivity() {
             mmList.add(MemoInfo(id, tabTableName, wdate, color, lock, bkmr, false, title))
         }
 
-        val query2 = "Select * From $tabTableName WHERE bkmr = 1"   //BKMR 메모
+        val query2 = "Select * From $tabTableName WHERE bkmr = 1"
         cursor = database.rawQuery(query2, null)
         while(cursor.moveToNext()){
             val id = cursor.getInt(cursor.getColumnIndex("_id"))
@@ -464,9 +412,7 @@ class MainActivity : AppCompatActivity() {
         else {
             imgBkmr.visibility = View.VISIBLE
         }
-
         cursor.close()
-
         mmList.sortByDescending { memoInfo -> memoInfo.wdate }
         bmList.sortByDescending { memoInfo -> memoInfo.wdate }
         mainMemoAdapter.notifyDataSetChanged()
@@ -478,50 +424,41 @@ class MainActivity : AppCompatActivity() {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when (tabLayout.selectedTabPosition) {
                     0 -> {
-                        Log.d("aty", "tabTableName = All")
                         tabTableName = "All"
                         getAllMemo()
                     }
                     1 -> {
-                        Log.d("aty", "tabTableName = Memo")
                         tabTableName = "Memo"
                         getTypeMemo(MEM_TABLE_NAME, MEM_COL_CONTENT)
 
                     }
                     2 -> {
-                        Log.d("aty", "tabTableName = TodoList")
                         tabTableName = "TodoList"
                         getTypeMemo(TODL_TABLE_NAME, TODL_COL_DATE)
 
                     }
                     3 -> {
-                        Log.d("aty", "tabTableName = WishList")
                         tabTableName = "WishList"
                         getTypeMemo(WISL_TABLE_NAME, WISL_COL_CATEGORY)
 
                     }
                     4 -> {
-                        Log.d("aty", "tabTableName = Weekly")
                         tabTableName = "Weekly"
                         getTypeMemo(WEE_TABLE_NAME, WEE_COL_DATE)
 
                     }
                     5 -> {
-                        Log.d("aty", "tabTableName = Recipe")
                         tabTableName = "Recipe"
                         getTypeMemo(REC_TABLE_NAME, REC_COL_NAME)
                     }
                     6 -> {
-                        Log.d("aty", "tabTableName = Movie")
                         tabTableName = "Movie"
                         getTypeMemo(MOV_TABLE_NAME, MOV_COL_TITLE)
                     }
                 }
             }
-
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
     }
-
 }

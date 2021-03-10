@@ -71,32 +71,17 @@ class MemoActivity : AppCompatActivity(), SetMemo {
 
             val colorClickListener = View.OnClickListener { v ->
                 when (v) {
-                    ivColor0 -> {
-                        color = 0
-                    }
-                    ivColor1 -> {
-                        color = 1
-                    }
-                    ivColor2 -> {
-                        color = 2
-                    }
-                    ivColor3 -> {
-                        color = 3
-                    }
-                    ivColor4 -> {
-                        color = 4
-                    }
-                    ivColor5 -> {
-                        color = 5
-                    }
-                    ivColor6 -> {
-                        color = 6
-                    }
+                    ivColor0 -> color = 0
+                    ivColor1 -> color = 1
+                    ivColor2 -> color = 2
+                    ivColor3 -> color = 3
+                    ivColor4 -> color = 4
+                    ivColor5 -> color = 5
+                    ivColor6 -> color = 6
                 }
                 setColor(this, color, activity_memo)
                 dialog.dismiss()
             }
-
             ivColor0!!.setOnClickListener(colorClickListener)
             ivColor1!!.setOnClickListener(colorClickListener)
             ivColor2!!.setOnClickListener(colorClickListener)
@@ -104,7 +89,6 @@ class MemoActivity : AppCompatActivity(), SetMemo {
             ivColor4!!.setOnClickListener(colorClickListener)
             ivColor5!!.setOnClickListener(colorClickListener)
             ivColor6!!.setOnClickListener(colorClickListener)
-
             dialog.show()
         }
     }
@@ -153,7 +137,6 @@ class MemoActivity : AppCompatActivity(), SetMemo {
         else {
             database.insert(DBHelper.MEM_TABLE_NAME, null, contentValues)
         }
-
         finish()
     }
 

@@ -9,4 +9,7 @@
     <item
         android:id="@+id/optionSetPW"
         android:title="비밀번호 설정" />
+    <item
+        android:id="@+id/optionLicense"
+        android:title="license" />
 </menu>
