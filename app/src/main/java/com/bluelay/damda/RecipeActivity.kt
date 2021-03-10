@@ -5,22 +5,20 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_memo.*
 import kotlinx.android.synthetic.main.activity_recipe.*
 import kotlinx.android.synthetic.main.activity_recipe.btnSettings
 import kotlinx.android.synthetic.main.activity_recipe.settingLayout
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 
 class RecipeActivity : AppCompatActivity(), SetMemo{
-
     lateinit var dbHelper : DBHelper
     lateinit var database : SQLiteDatabase
 
-    // TODO: 메인 만든 후에 ID 수정!!!!!! -1 로 초기화, putExtra 있으면 그 값 넣기
     private var recipeId = -1
 
     var lock = 0
@@ -71,32 +69,17 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
 
             val colorClickListener = View.OnClickListener { v ->
                 when (v) {
-                    ivColor0 -> {
-                        color = 0
-                    }
-                    ivColor1 -> {
-                        color = 1
-                    }
-                    ivColor2 -> {
-                        color = 2
-                    }
-                    ivColor3 -> {
-                        color = 3
-                    }
-                    ivColor4 -> {
-                        color = 4
-                    }
-                    ivColor5 -> {
-                        color = 5
-                    }
-                    ivColor6 -> {
-                        color = 6
-                    }
+                    ivColor0 -> color = 0
+                    ivColor1 -> color = 1
+                    ivColor2 -> color = 2
+                    ivColor3 -> color = 3
+                    ivColor4 -> color = 4
+                    ivColor5 -> color = 5
+                    ivColor6 -> color = 6
                 }
-                setColor(this, color, activity_recipe)
+                setColor(this, color, activity_memo)
                 dialog.dismiss()
             }
-
             ivColor0!!.setOnClickListener(colorClickListener)
             ivColor1!!.setOnClickListener(colorClickListener)
             ivColor2!!.setOnClickListener(colorClickListener)
@@ -104,26 +87,21 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
             ivColor4!!.setOnClickListener(colorClickListener)
             ivColor5!!.setOnClickListener(colorClickListener)
             ivColor6!!.setOnClickListener(colorClickListener)
-
             dialog.show()
         }
     }
 
     override fun onBackPressed() {
-
         if (recipeId == -1) {
             insertRecipe()
         }
         else {
             updateRecipe()
         }
-
-        //startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 
     private fun selectRecipe() {
-        Log.d("RecipeActivity", "recipeSelect")
         database = dbHelper.readableDatabase
 
         var c : Cursor = database.rawQuery("SELECT * FROM ${DBHelper.REC_TABLE_NAME} WHERE ${DBHelper.REC_COL_ID} = ?", arrayOf(recipeId.toString()))
@@ -155,8 +133,6 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
         contentValues.put(DBHelper.REC_COL_LOCK, lock)
 
         database.insert(DBHelper.REC_TABLE_NAME, null, contentValues)
-
-        Log.d("RecipeActivity", "recipeInsert")
     }
 
     private fun updateRecipe() {
@@ -172,8 +148,6 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
         contentValues.put(DBHelper.REC_COL_LOCK, lock)
 
         database.update(DBHelper.REC_TABLE_NAME, contentValues, "${DBHelper.REC_COL_ID}=?", arrayOf(recipeId.toString()))
-
-        Log.d("RecipeActivity", "recipeUpdate")
     }
 
     override fun onDestroy() {
