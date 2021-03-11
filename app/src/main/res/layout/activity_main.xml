@@ -60,7 +60,7 @@
             android:id="@+id/tab_diary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DIARY" />
+            android:text="WEEKLY" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_recipe"

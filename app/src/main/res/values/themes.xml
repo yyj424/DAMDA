@@ -7,6 +7,7 @@
         <item name="colorControlHighlight">#97B1C8</item>
         <item name="colorPrimaryVariant">#97B1C8</item>
         <item name="colorOnPrimary">#97B1C8</item>
+        <item name="android:fontFamily">@font/nanumsquareroundb</item>
     </style>
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
