@@ -16,13 +16,13 @@ import kotlinx.android.synthetic.main.activity_recipe.settingLayout
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 
 class RecipeActivity : AppCompatActivity(), SetMemo{
-    lateinit var dbHelper : DBHelper
-    lateinit var database : SQLiteDatabase
+    private lateinit var dbHelper : DBHelper
+    private lateinit var database : SQLiteDatabase
 
     private var recipeId = -1
 
-    var lock = 0
-    var bkmr = 0
+    private var lock = 0
+    private var bkmr = 0
     var color = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +32,7 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
         dbHelper = DBHelper(this)
 
         if (intent.hasExtra("memo")) {
-            var memo = intent.getSerializableExtra("memo") as MemoInfo
+            val memo = intent.getSerializableExtra("memo") as MemoInfo
             color = memo.color
             recipeId = memo.id
             selectRecipe()
@@ -111,7 +111,7 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
     private fun selectRecipe() {
         database = dbHelper.readableDatabase
 
-        var c : Cursor = database.rawQuery("SELECT * FROM ${DBHelper.REC_TABLE_NAME} WHERE ${DBHelper.REC_COL_ID} = ?", arrayOf(recipeId.toString()))
+        val c : Cursor = database.rawQuery("SELECT * FROM ${DBHelper.REC_TABLE_NAME} WHERE ${DBHelper.REC_COL_ID} = ?", arrayOf(recipeId.toString()))
         if (lock == 1) {
             cbLock.isChecked = true
         }
@@ -129,7 +129,7 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
 
     private fun insertRecipe() {
         database = dbHelper.writableDatabase
-        var contentValues = ContentValues()
+        val contentValues = ContentValues()
 
         contentValues.put(DBHelper.REC_COL_WDATE, System.currentTimeMillis()/1000L)
         contentValues.put(DBHelper.REC_COL_NAME, etRecipeName.text.toString())

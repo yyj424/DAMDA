@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
-class MovieSearchAdapter (val context : Context, val movieList : ArrayList<Movie>) : BaseAdapter() {
+class MovieSearchAdapter (val context : Context, private val movieList : ArrayList<Movie>) : BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view : View = LayoutInflater.from(context).inflate(R.layout.adapter_view_movie, null)

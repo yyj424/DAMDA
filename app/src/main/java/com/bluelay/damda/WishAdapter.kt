@@ -27,7 +27,7 @@ class WishAdapter(val calTotal: CalTotal, val context: Context, val wishList: Ar
 
         val wish = wishList[position]
         cbWish.isChecked = wish.checked == 1
-        if(cbWish.isChecked == true) {
+        if(cbWish.isChecked) {
             etWishItem.setTextColor(Color.parseColor("#969191"))
             etWishPrice.setTextColor(Color.parseColor("#969191"))
         }
@@ -105,7 +105,7 @@ class WishAdapter(val calTotal: CalTotal, val context: Context, val wishList: Ar
 
             btnWishLinkOpen.setOnClickListener {
                 var url = etWishLink.text.toString()
-                var open = Intent(
+                val open = Intent(
                     Intent.ACTION_VIEW,
                     Uri.parse(url)
                 )

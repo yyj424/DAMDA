@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.adapter_view_main_memo.view.*
 import java.text.SimpleDateFormat
 
-class MainMemoAdapter(val context : Context, val mmList : ArrayList<MemoInfo>, val edit : Boolean) : RecyclerView.Adapter<MainMemoAdapter.ViewHolder>() {
+class MainMemoAdapter(val context : Context, private val mmList : ArrayList<MemoInfo>, private val edit : Boolean) : RecyclerView.Adapter<MainMemoAdapter.ViewHolder>() {
     interface ItemClickListener {
         fun onClick(view: View, position: Int)
     }
@@ -34,9 +34,9 @@ class MainMemoAdapter(val context : Context, val mmList : ArrayList<MemoInfo>, v
         }
     }
 
-    class ViewHolder(val context : Context, itemView: View, val edit : Boolean) : RecyclerView.ViewHolder(itemView), SetMemo{
+    class ViewHolder(val context : Context, itemView: View, private val edit : Boolean) : RecyclerView.ViewHolder(itemView), SetMemo{
         private var view : View = itemView
-        val formatWdate = SimpleDateFormat("yy.MM.dd")
+        private val formatWDate = SimpleDateFormat("yy.MM.dd")
 
         fun getMainMemo(mm: MemoInfo){
             if (edit) {
@@ -49,7 +49,7 @@ class MainMemoAdapter(val context : Context, val mmList : ArrayList<MemoInfo>, v
             view.ck_mainMemo.setOnCheckedChangeListener(null)
             view.ck_mainMemo.isChecked = mm.check
             view.tvMemoTitle.text = mm.title
-            view.tvMemoTypeNDate.text = mm.type +  "\n" + formatWdate.format(mm.wdate)
+            view.tvMemoTypeNDate.text = mm.type +  "\n" + formatWDate.format(mm.wdate)
             setColor(context, mm.color, view.adapterMainMemo)
             view.ck_mainMemo.setOnCheckedChangeListener { _, isChecked ->
                 mm.check = isChecked

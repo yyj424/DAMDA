@@ -80,7 +80,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
 
         setColor(this, color, clMovie)
 
-        var datePicker = OnDateSetListener { view, year, month, dayOfMonth ->
+        val datePicker = OnDateSetListener { view, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)

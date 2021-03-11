@@ -40,7 +40,7 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
 
-        var recordDatePicker = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+        val recordDatePicker = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
@@ -94,8 +94,9 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
                         else -> ""
                     }
 
-                    diaryList.add(Weekly(day, "", getURLForResource(R.drawable.select_emoji).toString(),
-                        getURLForResource(R.drawable.select_weather).toString()))
+                    diaryList.add(Weekly(day, "", getURLForResource(R.drawable.select_emoji),
+                        getURLForResource(R.drawable.select_weather)
+                    ))
                 }
             }
         }
