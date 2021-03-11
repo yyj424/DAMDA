@@ -138,7 +138,6 @@ class MainActivity : AppCompatActivity() {
         btnMenu.setOnClickListener {
             val pop = PopupMenu(this, btnMenu)
             menuInflater.inflate(R.menu.setting_menu, pop.menu)
-
             pop.setOnMenuItemClickListener { item->
                 when (item.itemId) {
                     R.id.optionEdit ->  {
@@ -170,6 +169,12 @@ class MainActivity : AppCompatActivity() {
                                     database.execSQL("DELETE FROM ${m.type} WHERE _id = ${m.id}")
                                     iterator2.remove()
                                 }
+                            }
+                            if(bmList.size == 0) {
+                                imgBkmr.visibility = View.GONE
+                            }
+                            else {
+                                imgBkmr.visibility = View.VISIBLE
                             }
                             editBar.visibility = View.GONE
                             mainMemoAdapter = MainMemoAdapter(this, mmList, false)
@@ -216,6 +221,12 @@ class MainActivity : AppCompatActivity() {
         }
         else {
             getAllMemo()
+        }
+        if(bmList.size == 0) {
+            imgBkmr.visibility = View.GONE
+        }
+        else {
+            imgBkmr.visibility = View.VISIBLE
         }
     }
 
@@ -364,12 +375,6 @@ class MainActivity : AppCompatActivity() {
                 bmList.add(MemoInfo(id, t.key, wdate, color, lock, bkmr, false, title))
             }
         }
-        if(bmList.size == 0) {
-            imgBkmr.visibility = View.GONE
-        }
-        else {
-            imgBkmr.visibility = View.VISIBLE
-        }
         cursor.close()
         mmList.sortByDescending { memoInfo -> memoInfo.wdate }
         bmList.sortByDescending { memoInfo -> memoInfo.wdate }
@@ -405,12 +410,6 @@ class MainActivity : AppCompatActivity() {
             val title = cursor.getString(cursor.getColumnIndex(t))
 
             bmList.add(MemoInfo(id, tabTableName, wdate, color, lock, bkmr, false, title))
-        }
-        if(bmList.size == 0) {
-            imgBkmr.visibility = View.GONE
-        }
-        else {
-            imgBkmr.visibility = View.VISIBLE
         }
         cursor.close()
         mmList.sortByDescending { memoInfo -> memoInfo.wdate }
