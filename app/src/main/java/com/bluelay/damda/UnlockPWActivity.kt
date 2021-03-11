@@ -56,6 +56,7 @@ class UnlockPWActivity : AppCompatActivity() {
                     }
                     else {
                         Toast.makeText(this@UnlockPWActivity, "비밀번호가 틀립니다.", Toast.LENGTH_SHORT).show()
+                        etUnlockPassword.setFocusAndShowKeyboard()
                     }
                 }
             }
@@ -71,5 +72,6 @@ class UnlockPWActivity : AppCompatActivity() {
         this.postDelayed({
             inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_FORCED)
         }, 100)
+        this.setText("")
     }
 }

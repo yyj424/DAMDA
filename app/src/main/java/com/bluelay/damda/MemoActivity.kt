@@ -16,11 +16,11 @@ import kotlinx.android.synthetic.main.activity_memo.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 
 class MemoActivity : AppCompatActivity(), SetMemo {
-    lateinit var dbHelper : DBHelper
-    lateinit var database : SQLiteDatabase
-    var mid = -1
-    var lock = 0
-    var bkmr = 0
+    private lateinit var dbHelper : DBHelper
+    private lateinit var database : SQLiteDatabase
+    private var mid = -1
+    private var lock = 0
+    private var bkmr = 0
     var color = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,7 @@ class MemoActivity : AppCompatActivity(), SetMemo {
         database = dbHelper.writableDatabase
 
         if (intent.hasExtra("memo")) {
-            var memo = intent.getSerializableExtra("memo") as MemoInfo
+            val memo = intent.getSerializableExtra("memo") as MemoInfo
             mid = memo.id
             color = memo.color
             lock = memo.lock
@@ -50,7 +50,13 @@ class MemoActivity : AppCompatActivity(), SetMemo {
         }
 
         cbLock.setOnCheckedChangeListener { _, isChecked ->
-            lock = if(isChecked) 1 else 0
+            if (checkExistPassword(this) && isChecked) {
+                lock = 1
+            }
+            else {
+                lock = 0
+                cbLock.isChecked = false
+            }
         }
         cbBkmr.setOnCheckedChangeListener { _, isChecked ->
             bkmr = if(isChecked) 1 else 0
@@ -104,11 +110,11 @@ class MemoActivity : AppCompatActivity(), SetMemo {
         }, 100)
     }
 
-    fun getMemo() {
-        var columns = arrayOf(DBHelper.MEM_COL_ID, DBHelper.MEM_COL_COLOR, DBHelper.MEM_COL_CONTENT)
-        var selection = "_id=?"
-        var selectArgs = arrayOf(mid.toString())
-        var c : Cursor = database.query(DBHelper.MEM_TABLE_NAME, columns, selection, selectArgs, null, null, null)
+    private fun getMemo() {
+        val columns = arrayOf(DBHelper.MEM_COL_ID, DBHelper.MEM_COL_COLOR, DBHelper.MEM_COL_CONTENT)
+        val selection = "_id=?"
+        val selectArgs = arrayOf(mid.toString())
+        val c : Cursor = database.query(DBHelper.MEM_TABLE_NAME, columns, selection, selectArgs, null, null, null)
         c.moveToNext()
         setColor(this, c.getInt(c.getColumnIndex(DBHelper.MEM_COL_COLOR)), activity_memo)
         etMemo.setText(c.getString(c.getColumnIndex(DBHelper.MEM_COL_CONTENT)))
@@ -123,7 +129,7 @@ class MemoActivity : AppCompatActivity(), SetMemo {
     }
 
     override fun onBackPressed() {
-        var contentValues = ContentValues()
+        val contentValues = ContentValues()
         contentValues.put(DBHelper.MEM_COL_WDATE, System.currentTimeMillis() / 1000L)
         contentValues.put(DBHelper.MEM_COL_COLOR, color)
         contentValues.put(DBHelper.MEM_COL_CONTENT, etMemo.text.toString())
@@ -131,8 +137,8 @@ class MemoActivity : AppCompatActivity(), SetMemo {
         contentValues.put(DBHelper.MEM_COL_BKMR, bkmr)
 
         if (mid != -1) {
-            var whereCluase = "_id=?"
-            var whereArgs = arrayOf(mid.toString())
+            val whereCluase = "_id=?"
+            val whereArgs = arrayOf(mid.toString())
             database.update(DBHelper.MEM_TABLE_NAME, contentValues, whereCluase, whereArgs)
         }
         else {

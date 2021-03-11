@@ -65,27 +65,27 @@ class WeeklyAdapter(val context: Context, val diaryList: ArrayList<Weekly>) : Ba
 
             iv_soso.setOnClickListener {
                 ivMoodPic.setImageURI(getURLForResource(R.drawable.soso_emoji).toUri())
-                diaryList[position].moodPic = getURLForResource(R.drawable.soso_emoji).toString()
+                diaryList[position].moodPic = getURLForResource(R.drawable.soso_emoji)
                 dialog.dismiss()
             }
             iv_happy.setOnClickListener {
                 ivMoodPic.setImageURI(getURLForResource(R.drawable.happy_emoji).toUri())
-                diaryList[position].moodPic = getURLForResource(R.drawable.happy_emoji).toString()
+                diaryList[position].moodPic = getURLForResource(R.drawable.happy_emoji)
                 dialog.dismiss()
             }
             iv_angry.setOnClickListener {
                 ivMoodPic.setImageURI(getURLForResource(R.drawable.angry_emoji).toUri())
-                diaryList[position].moodPic = getURLForResource(R.drawable.angry_emoji).toString()
+                diaryList[position].moodPic = getURLForResource(R.drawable.angry_emoji)
                 dialog.dismiss()
             }
             iv_sad.setOnClickListener {
                 ivMoodPic.setImageURI(getURLForResource(R.drawable.sad_emoji).toUri())
-                diaryList[position].moodPic = getURLForResource(R.drawable.sad_emoji).toString()
+                diaryList[position].moodPic = getURLForResource(R.drawable.sad_emoji)
                 dialog.dismiss()
             }
             iv_congrats.setOnClickListener {
                 ivMoodPic.setImageURI(getURLForResource(R.drawable.congrats_emoji).toUri())
-                diaryList[position].moodPic = getURLForResource(R.drawable.congrats_emoji).toString()
+                diaryList[position].moodPic = getURLForResource(R.drawable.congrats_emoji)
                 dialog.dismiss()
             }
 
@@ -107,28 +107,28 @@ class WeeklyAdapter(val context: Context, val diaryList: ArrayList<Weekly>) : Ba
             dialog.show()
 
             iv_sun.setOnClickListener {
-                ivWeather.setImageURI(getURLForResource(R.drawable.sun_weather)?.toUri())
-                diaryList[position].weather = getURLForResource(R.drawable.sun_weather).toString()
+                ivWeather.setImageURI(getURLForResource(R.drawable.sun_weather).toUri())
+                diaryList[position].weather = getURLForResource(R.drawable.sun_weather)
                 dialog.dismiss()
             }
             iv_cloud.setOnClickListener {
-                ivWeather.setImageURI(getURLForResource(R.drawable.cloud_weather)?.toUri())
-                diaryList[position].weather = getURLForResource(R.drawable.cloud_weather).toString()
+                ivWeather.setImageURI(getURLForResource(R.drawable.cloud_weather).toUri())
+                diaryList[position].weather = getURLForResource(R.drawable.cloud_weather)
                 dialog.dismiss()
             }
             iv_rain.setOnClickListener {
-                ivWeather.setImageURI(getURLForResource(R.drawable.rain_weather)?.toUri())
-                diaryList[position].weather = getURLForResource(R.drawable.rain_weather).toString()
+                ivWeather.setImageURI(getURLForResource(R.drawable.rain_weather).toUri())
+                diaryList[position].weather = getURLForResource(R.drawable.rain_weather)
                 dialog.dismiss()
             }
             iv_snow.setOnClickListener {
-                ivWeather.setImageURI(getURLForResource(R.drawable.snow_weather)?.toUri())
-                diaryList[position].weather = getURLForResource(R.drawable.snow_weather).toString()
+                ivWeather.setImageURI(getURLForResource(R.drawable.snow_weather).toUri())
+                diaryList[position].weather = getURLForResource(R.drawable.snow_weather)
                 dialog.dismiss()
             }
             iv_bolt.setOnClickListener {
-                ivWeather.setImageURI(getURLForResource(R.drawable.bolt_weather)?.toUri())
-                diaryList[position].weather = getURLForResource(R.drawable.bolt_weather).toString()
+                ivWeather.setImageURI(getURLForResource(R.drawable.bolt_weather).toUri())
+                diaryList[position].weather = getURLForResource(R.drawable.bolt_weather)
                 dialog.dismiss()
             }
         }

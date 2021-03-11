@@ -33,20 +33,20 @@ import kotlinx.android.synthetic.main.layout_memo_settings.*
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var dbHelper : DBHelper
-    lateinit var database : SQLiteDatabase
-    lateinit var cursor : Cursor
+    private lateinit var dbHelper : DBHelper
+    private lateinit var database : SQLiteDatabase
+    private lateinit var cursor : Cursor
 
     var tabTableName = ""
-    lateinit var mainMemoAdapter : MainMemoAdapter
+    private lateinit var mainMemoAdapter : MainMemoAdapter
     val mmList = arrayListOf<MemoInfo>()
 
-    lateinit var bkmrMemoAdapter : BkmrMemoAdapter
+    private lateinit var bkmrMemoAdapter : BkmrMemoAdapter
     val bmList = arrayListOf<MemoInfo>()
 
     var nextIntent : Intent? = null
 
-    val titles = mutableMapOf(
+    private val titles = mutableMapOf(
         MEM_TABLE_NAME to MEM_COL_CONTENT,
         TODL_TABLE_NAME to TODL_COL_DATE,
         WISL_TABLE_NAME to WISL_COL_CATEGORY,
@@ -65,14 +65,14 @@ class MainActivity : AppCompatActivity() {
 
         val itemCheckListener = object : MainMemoAdapter.ItemClickListener{
             override fun onClick(view: View, position: Int) {
-                var checkBox = view.findViewById<CheckBox>(R.id.ck_mainMemo)
+                val checkBox = view.findViewById<CheckBox>(R.id.ck_mainMemo)
                 checkBox.isChecked = !checkBox.isChecked
             }
         }
 
         val itemCheckListener2 = object : BkmrMemoAdapter.ItemClickListener{
             override fun onClick(view: View, position: Int) {
-                var checkBox = view.findViewById<CheckBox>(R.id.ck_bkmrMemo)
+                val checkBox = view.findViewById<CheckBox>(R.id.ck_bkmrMemo)
                 checkBox.isChecked = !checkBox.isChecked
             }
         }
@@ -219,7 +219,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun addMemoDialog() {
+    private fun addMemoDialog() {
         val builder = AlertDialog.Builder(this)
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_select_memo, null)
         val llMemo = view.findViewById<LinearLayout>(R.id.llMemo)
