@@ -71,7 +71,13 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
             settingLayout.visibility = if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE  else View.INVISIBLE
         }
         cbLock.setOnCheckedChangeListener { _, isChecked ->
-            lock = if(isChecked) 1 else 0
+            if (checkExistPassword(this) && isChecked) {
+                lock = 1
+            }
+            else {
+                lock = 0
+                cbLock.isChecked = false
+            }
         }
         cbBkmr.setOnCheckedChangeListener { _, isChecked ->
             bkmr = if(isChecked) 1 else 0
