@@ -21,7 +21,8 @@
         </activity>
         <activity android:name=".MovieSearchActivity"/>
         <activity android:name=".MovieActivity"/>
-        <activity android:name=".WishActivity" />
+        <activity android:name=".WishActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".WeeklyActivity" />
         <activity android:name=".SettingBGActivity" />
         <activity android:name=".SettingPWActivity" />

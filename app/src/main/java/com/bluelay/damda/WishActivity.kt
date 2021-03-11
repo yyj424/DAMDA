@@ -46,6 +46,7 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
 
         setColor(this, color, activity_wish)
         lvWish.adapter = wishAdapter
+        lvWish.itemsCanFocus = true
 
         settingLayout.visibility = View.INVISIBLE
         btnSettings.setOnClickListener {
