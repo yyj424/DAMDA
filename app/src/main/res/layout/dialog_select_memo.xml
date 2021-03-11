@@ -9,12 +9,12 @@
         android:id="@+id/btnOk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
         app:srcCompat="@drawable/btn_ok" />
 
     <TextView
@@ -34,7 +34,11 @@
         android:id="@+id/horizontalScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="15dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,9 +47,9 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="150dp"
+            android:baselineAligned="false"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/llMemo"
@@ -192,11 +196,21 @@
             android:id="@+id/ivColor2"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="17dp"
-            android:layout_marginRight="17dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/color_icon"
             app:tint="@color/pastel_yellow" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <ImageView
             android:id="@+id/ivColor3"
@@ -207,6 +221,16 @@
             android:layout_weight="1"
             app:srcCompat="@drawable/color_icon"
             app:tint="@color/pastel_green" />
+
+        <ImageView
+            android:id="@+id/ivColor6"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="17dp"
+            android:layout_marginRight="17dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/color_icon"
+            app:tint="@color/pastel_pink" />
 
         <ImageView
             android:id="@+id/ivColor4"
@@ -222,20 +246,9 @@
             android:id="@+id/ivColor5"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="17dp"
-            android:layout_marginRight="17dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/color_icon"
             app:tint="@color/pastel_purple" />
-
-        <ImageView
-            android:id="@+id/ivColor6"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/color_icon"
-            app:tint="@color/pastel_pink" />
-
     </LinearLayout>
 
     <TextView
