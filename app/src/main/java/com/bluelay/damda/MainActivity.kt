@@ -222,12 +222,6 @@ class MainActivity : AppCompatActivity() {
         else {
             getAllMemo()
         }
-        if(bmList.size == 0) {
-            imgBkmr.visibility = View.GONE
-        }
-        else {
-            imgBkmr.visibility = View.VISIBLE
-        }
     }
 
     private fun addMemoDialog() {
@@ -380,6 +374,12 @@ class MainActivity : AppCompatActivity() {
         bmList.sortByDescending { memoInfo -> memoInfo.wdate }
         mainMemoAdapter.notifyDataSetChanged()
         bkmrMemoAdapter.notifyDataSetChanged()
+        if(bmList.size == 0) {
+            imgBkmr.visibility = View.GONE
+        }
+        else {
+            imgBkmr.visibility = View.VISIBLE
+        }
     }
 
     private fun getTypeMemo(tabTableName: String, t : String){
@@ -416,6 +416,12 @@ class MainActivity : AppCompatActivity() {
         bmList.sortByDescending { memoInfo -> memoInfo.wdate }
         mainMemoAdapter.notifyDataSetChanged()
         bkmrMemoAdapter.notifyDataSetChanged()
+        if(bmList.size == 0) {
+            imgBkmr.visibility = View.GONE
+        }
+        else {
+            imgBkmr.visibility = View.VISIBLE
+        }
     }
 
     private fun selectTab() {
