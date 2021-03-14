@@ -35,6 +35,8 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
             val memo = intent.getSerializableExtra("memo") as MemoInfo
             color = memo.color
             recipeId = memo.id
+            lock = memo.lock
+            bkmr = memo.bkmr
             selectRecipe()
         }
         else {
