@@ -12,11 +12,13 @@ import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -70,7 +72,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
             if (image != "") {
                 Glide.with(this)
                     .load(image)
-                    .centerCrop()
+                    .fitCenter()
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .dontAnimate()
@@ -90,7 +92,6 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
         etMovieDate.setOnClickListener {
             DatePickerDialog(
                 this,
-                R.style.DialogTheme,
                 datePicker,
                 calendar[Calendar.YEAR],
                 calendar[Calendar.MONTH],
@@ -199,7 +200,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
                 if (image != "") {
                     Glide.with(this)
                             .load(image)
-                            .centerCrop()
+                            .fitCenter()
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .skipMemoryCache(true)
                             .dontAnimate()
@@ -210,12 +211,17 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
         else if (requestCode == 200) {
             if (resultCode == RESULT_OK) {
                 val photoUri : Uri = data?.data!!
+                if (photoUri.toString().contains("/gallery/picker")) {
+                    Toast.makeText(this,"클라우드 사진은 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    return
+                }
                 var cursor: Cursor? = null
                 try {
                     cursor = contentResolver.query(photoUri, null, null, null, null)
                     if (cursor != null) {
                         if (cursor.moveToFirst()) {
                             image = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
+                            Log.d("goeun", image)
                         }
                         cursor.close()
                     }
@@ -225,7 +231,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
 
                 Glide.with(this)
                     .load(image)
-                    .centerCrop()
+                    .fitCenter()
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .dontAnimate()
