@@ -84,7 +84,7 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
                     ivColor6 -> 6
                     else -> 0
                 }
-                setColor(this, color, activity_memo)
+                setColor(this, color, activity_recipe)
                 dialog.dismiss()
             }
             ivColor0!!.setOnClickListener(colorClickListener)
