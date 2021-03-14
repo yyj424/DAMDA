@@ -35,6 +35,8 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
             val memo = intent.getSerializableExtra("memo") as MemoInfo
             color = memo.color
             recipeId = memo.id
+            lock = memo.lock
+            bkmr = memo.bkmr
             selectRecipe()
         }
         else {
@@ -84,7 +86,7 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
                     ivColor6 -> 6
                     else -> 0
                 }
-                setColor(this, color, activity_memo)
+                setColor(this, color, activity_recipe)
                 dialog.dismiss()
             }
             ivColor0!!.setOnClickListener(colorClickListener)
