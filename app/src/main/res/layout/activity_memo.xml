@@ -37,7 +37,6 @@
         android:inputType="textMultiLine"
         android:lineSpacingExtra="5sp"
         android:padding="10dp"
-        android:text="아나아나안안아낭나ㅏㄴ아나아나안ㅇㄴㅇ나아나아ㅏㄴ아ㅏ앙"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
