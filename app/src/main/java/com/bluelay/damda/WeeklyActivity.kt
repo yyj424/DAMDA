@@ -59,7 +59,6 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
         etDiaryDate.setOnClickListener {
             DatePickerDialog(
                 this,
-                R.style.DialogTheme,
                 recordDatePicker,
                 calendar[Calendar.YEAR],
                 calendar[Calendar.MONTH],
