@@ -2,7 +2,7 @@
     <string name="app_name">DAMDA</string>
     <string name="movie_api_url">https://openapi.naver.com/v1/search/movie.xml?display=50&amp;start=1&amp;query=</string>
     <string name="input_new_pw">새로운 비밀번호 4자리를 입력하세요.</string>
-    <string name="re_input_new_pw">새로운 비밀번호 한 번 더 입력하세요.</string>
+    <string name="re_input_new_pw">새로운 비밀번호를 한 번 더 입력하세요.</string>
     <string name="input_cur_pw">현재 비밀번호를 입력하세요.</string>
     <string name="diff_pw">비밀번호가 일치하지 않습니다.\n비밀번호를 다시 입력하세요.</string>
 </resources>
