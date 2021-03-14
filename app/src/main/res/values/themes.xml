@@ -10,11 +10,6 @@
         <item name="android:fontFamily">@font/nanumsquareroundb</item>
     </style>
 
-    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
-        <item name="android:fontFamily">@font/nanumsquareroundb</item>
-        <item name="colorAccent">#97B1C8</item>
-    </style>
-
     <style name="EditTextPasswordStyle" parent="Widget.AppCompat.EditText">
         <item name="colorControlActivated">#97B1C8</item>
         <item name="colorControlNormal">#000000</item>
