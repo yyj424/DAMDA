@@ -63,7 +63,7 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
             etTodoDate.setText(sdf.format(calendar.time))
         }
         etTodoDate.setOnClickListener {
-            DatePickerDialog(this, R.style.DialogTheme, recordDatePicker, calendar[Calendar.YEAR], calendar[Calendar.MONTH], calendar[Calendar.DAY_OF_MONTH]).show()
+            DatePickerDialog(this, recordDatePicker, calendar[Calendar.YEAR], calendar[Calendar.MONTH], calendar[Calendar.DAY_OF_MONTH]).show()
         }
 
         settingLayout.visibility = View.INVISIBLE
