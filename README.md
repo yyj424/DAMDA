@@ -1,7 +1,7 @@
 # DAMDA
 <h3>DAMDA, 기록하고 싶은 모든 것을 담다</h3>
 
-![그룹 1309](https://user-images.githubusercontent.com/53987550/114315786-6f713d00-9b3b-11eb-87ec-258411c23da0.png)
+![DAMDA_info](https://user-images.githubusercontent.com/53987550/114315948-5026df80-9b3c-11eb-869c-b4feed469973.png)
 
 
 🔊 <b>앱 주요 기능 소개</b><br>
