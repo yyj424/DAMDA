@@ -1,5 +1,6 @@
 package com.bluelay.damda
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -132,7 +133,15 @@ class MainActivity : AppCompatActivity() {
         selectTab()
 
         btnAddMemo.setOnClickListener {
-            addMemoDialog()
+            when (tabLayout.selectedTabPosition) {
+                0 -> addMemoDialog()
+                1 -> moveMemoActivity(MemoActivity::class.java)
+                2 -> moveMemoActivity(ToDoActivity::class.java)
+                3 -> moveMemoActivity(WishActivity::class.java)
+                4 -> moveMemoActivity(WeeklyActivity::class.java)
+                5 -> moveMemoActivity(RecipeActivity::class.java)
+                6 -> moveMemoActivity(MovieActivity::class.java)
+            }
         }
 
         btnMenu.setOnClickListener {
@@ -212,6 +221,15 @@ class MainActivity : AppCompatActivity() {
             }
             pop.show()
         }
+    }
+
+    private fun moveMemoActivity(activity: Class<out AppCompatActivity>) {
+        val sharedPref = this.getSharedPreferences("memoColor", Context.MODE_PRIVATE)
+        var  selectedColor = sharedPref.getInt("color", 0)
+
+        nextIntent = Intent(this, activity)
+        nextIntent?.putExtra("color", selectedColor)
+        startActivity(nextIntent)
     }
 
     override fun onResume() {

@@ -5,16 +5,20 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
+import android.text.Html
+import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_memo.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 
-class MemoActivity : AppCompatActivity(), SetMemo {
-    private lateinit var dbHelper : DBHelper
-    private lateinit var database : SQLiteDatabase
+class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
+    private lateinit var dbHelper: DBHelper
+    private lateinit var database: SQLiteDatabase
     private var mid = -1
     private var lock = 0
     private var bkmr = 0
@@ -33,8 +37,7 @@ class MemoActivity : AppCompatActivity(), SetMemo {
             lock = memo.lock
             bkmr = memo.bkmr
             getMemo()
-        }
-        else {
+        } else {
             color = intent.getIntExtra("color", 0)
         }
 
@@ -43,21 +46,22 @@ class MemoActivity : AppCompatActivity(), SetMemo {
 
         settingLayout.visibility = View.INVISIBLE
         btnSettings.setOnClickListener {
-            settingLayout.visibility = if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE else View.INVISIBLE
+            settingLayout.visibility =
+                if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE else View.INVISIBLE
         }
 
         cbLock.setOnCheckedChangeListener { _, isChecked ->
             if (checkExistPassword(this) && isChecked) {
                 lock = 1
-            }
-            else {
+            } else {
                 lock = 0
                 cbLock.isChecked = false
             }
         }
         cbBkmr.setOnCheckedChangeListener { _, isChecked ->
-            bkmr = if(isChecked) 1 else 0
+            bkmr = if (isChecked) 1 else 0
         }
+
 
         btnChangeColor.setOnClickListener {
             val builder = AlertDialog.Builder(this)
@@ -95,13 +99,25 @@ class MemoActivity : AppCompatActivity(), SetMemo {
             ivColor6!!.setOnClickListener(colorClickListener)
             dialog.show()
         }
+
+        btnSaveMemo.setOnClickListener {
+
+        }
     }
 
     private fun getMemo() {
         val columns = arrayOf(DBHelper.MEM_COL_ID, DBHelper.MEM_COL_COLOR, DBHelper.MEM_COL_CONTENT)
         val selection = "_id=?"
         val selectArgs = arrayOf(mid.toString())
-        val c : Cursor = database.query(DBHelper.MEM_TABLE_NAME, columns, selection, selectArgs, null, null, null)
+        val c: Cursor = database.query(
+            DBHelper.MEM_TABLE_NAME,
+            columns,
+            selection,
+            selectArgs,
+            null,
+            null,
+            null
+        )
         c.moveToNext()
         setColor(this, c.getInt(c.getColumnIndex(DBHelper.MEM_COL_COLOR)), activity_memo)
         etMemo.setText(c.getString(c.getColumnIndex(DBHelper.MEM_COL_CONTENT)))
