@@ -26,33 +26,10 @@ class UnlockPWActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if (s.toString().length == 4) {
                     if (sharedPref.getString("memoLock", "0").equals(s.toString())) {
-                        if (intent.hasExtra("memo")) {
-                            val memo = intent.getSerializableExtra("memo") as MemoInfo
-                            when (memo.type) {
-                                "Memo" -> {
-                                    nextIntent = Intent(this@UnlockPWActivity, MemoActivity::class.java)
-                                }
-                                "TodoList" -> {
-                                    nextIntent = Intent(this@UnlockPWActivity, ToDoActivity::class.java)
-                                }
-                                "WishList" -> {
-                                    nextIntent = Intent(this@UnlockPWActivity, WishActivity::class.java)
-                                }
-                                "Weekly" -> {
-                                    nextIntent = Intent(this@UnlockPWActivity, WeeklyActivity::class.java)
-                                }
-                                "Recipe" -> {
-                                    nextIntent = Intent(this@UnlockPWActivity, RecipeActivity::class.java)
-                                }
-                                "Movie" -> {
-                                    nextIntent = Intent(this@UnlockPWActivity, MovieActivity::class.java)
-                                }
-                            }
-                            nextIntent.putExtra("memo", memo)
-                            startActivity(nextIntent)
-                            inputMethodManager.hideSoftInputFromWindow(etUnlockPassword.windowToken, 0)
-                            finish()
-                        }
+                        val resultIntent = Intent()
+                        setResult(RESULT_OK, resultIntent)
+                        inputMethodManager.hideSoftInputFromWindow(etUnlockPassword.windowToken, 0)
+                        finish()
                     }
                     else {
                         Toast.makeText(this@UnlockPWActivity, "비밀번호가 틀립니다.", Toast.LENGTH_SHORT).show()
@@ -73,5 +50,13 @@ class UnlockPWActivity : AppCompatActivity() {
             inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_FORCED)
         }, 100)
         this.setText("")
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val resultIntent = Intent()
+        setResult(RESULT_CANCELED, resultIntent)
+        inputMethodManager.hideSoftInputFromWindow(etUnlockPassword.windowToken, 0)
+        finish()
     }
 }
