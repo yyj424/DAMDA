@@ -32,7 +32,6 @@
         android:background="@null"
         android:fontFamily="@font/nanumsquareroundb"
         android:gravity="start"
-        android:hint="dlqfur"
         android:includeFontPadding="false"
         android:inputType="textMultiLine"
         android:lineSpacingExtra="5sp"

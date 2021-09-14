@@ -8,9 +8,12 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bluelay.damda.DBHelper.Companion.MEM_COL_CONTENT
@@ -54,6 +57,8 @@ class MainActivity : AppCompatActivity() {
         WEE_TABLE_NAME to WEE_COL_DATE,
         REC_TABLE_NAME to REC_COL_NAME,
         MOV_TABLE_NAME to MOV_COL_TITLE)
+
+    private lateinit var getResult : ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,6 +149,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        getResult = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                mmList.forEach {
+                    if (it.check) {
+                        database.execSQL("DELETE FROM ${it.type} WHERE _id = ${it.id}")
+                    }
+                }
+            }
+        }
+
         btnMenu.setOnClickListener {
             val pop = PopupMenu(this, btnMenu)
             menuInflater.inflate(R.menu.setting_menu, pop.menu)
@@ -163,14 +179,40 @@ class MainActivity : AppCompatActivity() {
                             bkmrMemoAdapter.notifyDataSetChanged()
                         }
                         tvDelete.setOnClickListener {
-                            val iterator = mmList.iterator()
-                            while(iterator.hasNext()) {
-                                val m = iterator.next()
-                                if (m.check) {
-                                    database.execSQL("DELETE FROM ${m.type} WHERE _id = ${m.id}")
-                                    iterator.remove()
+                            var locked = false
+                            mmList.forEach run@{
+                                if (it.check) {
+                                    if (it.lock == 1) {
+                                        locked = true
+                                        return@run
+                                    }
+                                } // 검토 필요
+                            }
+                            if (locked) {
+                                val builder = AlertDialog.Builder(this)
+                                val view = LayoutInflater.from(this).inflate(R.layout.dialog_delete_lock_memo, null)
+                                builder.setView(view)
+                                val btnDelConfirm = view.findViewById<Button>(R.id.btnDelConfirm)
+                                val btnDelCancel = view.findViewById<Button>(R.id.btnDelCancel)
+                                val dialog = builder.create()
+                                btnDelConfirm.setOnClickListener{
+                                    val intent = Intent(this, UnlockPWActivity::class.java)
+                                    getResult.launch(intent)
+                                    dialog.dismiss()
+                                }
+                                btnDelCancel.setOnClickListener{
+                                    dialog.dismiss()
+                                }
+                                dialog.show()
+                            }
+                            else {
+                                mmList.forEach {
+                                    if (it.check) {
+                                        database.execSQL("DELETE FROM ${it.type} WHERE _id = ${it.id}")
+                                    }
                                 }
                             }
+
                             val iterator2 = bmList.iterator()
                             while(iterator2.hasNext()) {
                                 val m = iterator2.next()
