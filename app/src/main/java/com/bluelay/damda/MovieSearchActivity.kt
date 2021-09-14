@@ -1,9 +1,14 @@
 package com.bluelay.damda
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.widget.SearchView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.gson.annotations.SerializedName
@@ -38,7 +43,10 @@ class MovieSearchActivity : AppCompatActivity() {
         svMovie.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
-                    MoviesDB.getSearchMovies(getString(R.string.api_key),1, query, ::onSearchMoviesFetched)
+                    if (isInternetConnection(this@MovieSearchActivity))
+                        MoviesDB.getSearchMovies(getString(R.string.api_key),1, query, ::onSearchMoviesFetched)
+                    else
+                        Toast.makeText(this@MovieSearchActivity, "인터넷에 연결되어 있어야 검색이 가능합니다.", Toast.LENGTH_SHORT).show()
                 }
                 return false
             }
@@ -111,6 +119,22 @@ class MovieSearchActivity : AppCompatActivity() {
 
                     override fun onFailure(call: Call<GetMoviesResponse>, t: Throwable) {}
                 })
+        }
+    }
+
+    private fun isInternetConnection(context : Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val nw      = connectivityManager.activeNetwork ?: return false
+            val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
+            return when {
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                else -> false
+            }
+        } else {
+            return connectivityManager.activeNetworkInfo?.isConnected ?: false
         }
     }
 }

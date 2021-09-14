@@ -5,11 +5,16 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.NetworkInfo
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -28,6 +33,7 @@ import kotlinx.android.synthetic.main.activity_movie.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class MovieActivity : AppCompatActivity(), SetMemo  {
 
@@ -165,9 +171,13 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
             alertDialog.show()
 
             tvSelSearchMovie.setOnClickListener {
-                val intent = Intent(this, MovieSearchActivity::class.java)
-                startActivityForResult(intent, 100)
                 alertDialog.dismiss()
+                if (isInternetConnection(this)) {
+                    val intent = Intent(this, MovieSearchActivity::class.java)
+                    startActivityForResult(intent, 100)
+                }
+                else
+                    Toast.makeText(this, "인터넷에 연결되어 있어야 검색이 가능합니다.", Toast.LENGTH_SHORT).show()
             }
             tvSelGallery.setOnClickListener {
                 if (ContextCompat.checkSelfPermission(
@@ -316,5 +326,21 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     override fun onDestroy() {
         super.onDestroy()
         dbHelper.close()
+    }
+
+    private fun isInternetConnection(context : Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val nw      = connectivityManager.activeNetwork ?: return false
+            val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
+            return when {
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                else -> false
+            }
+        } else {
+            return connectivityManager.activeNetworkInfo?.isConnected ?: false
+        }
     }
 }
