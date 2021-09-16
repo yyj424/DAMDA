@@ -7,4 +7,6 @@
     <color name="pastel_blue">#D6DEE5</color>
     <color name="pastel_purple">#D9DAE5</color>
     <color name="pastel_pink">#ECE2E8</color>
+    <color name="deletecolor">#DD3124</color>
+    <color name="bkmrcolor">#FFCA0C</color>
 </resources>

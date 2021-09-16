@@ -14,9 +14,18 @@ class MainMemoAdapter(val context : Context, private val mmList : ArrayList<Memo
     }
 
     private lateinit var itemClickListener: ItemClickListener
-
     fun setItemClickListener(itemClickListener: ItemClickListener) {
         this.itemClickListener = itemClickListener
+    }
+
+    fun deleteItem(i : Int){
+        mmList.removeAt(i)
+        notifyDataSetChanged()
+    }
+
+    fun makeBKMRItem(i : Int){
+        mmList.removeAt(i)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = mmList.size

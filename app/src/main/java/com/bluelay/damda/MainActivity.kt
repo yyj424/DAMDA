@@ -7,13 +7,16 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bluelay.damda.DBHelper.Companion.MEM_COL_CONTENT
 import com.bluelay.damda.DBHelper.Companion.MEM_TABLE_NAME
 import com.bluelay.damda.DBHelper.Companion.MOV_COL_TITLE
@@ -32,6 +35,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var dbHelper : DBHelper
     private lateinit var database : SQLiteDatabase
     private lateinit var cursor : Cursor
@@ -129,6 +133,31 @@ class MainActivity : AppCompatActivity() {
         rvMain_memo.layoutManager = mmLayoutManager
         mainMemoAdapter = MainMemoAdapter(this, mmList, false)
         mainMemoAdapter.setItemClickListener(mainMemoItemClickListener)
+        val swipeGesture = object : SwipeGesture(this){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+                when(direction){
+                    ItemTouchHelper.LEFT -> {
+                        if(mmList[viewHolder.adapterPosition].lock == 1){ //잠금상태인 경우
+
+                        }
+                        else{
+                            database.execSQL("DELETE FROM ${mmList[viewHolder.adapterPosition].type} WHERE _id = ${mmList[viewHolder.adapterPosition].id}")
+                            mainMemoAdapter.deleteItem(viewHolder.adapterPosition)
+                        }
+                    }
+
+                    ItemTouchHelper.RIGHT -> {
+                        database.execSQL("UPDATE ${mmList[viewHolder.adapterPosition].type} SET bkmr = 1 WHERE _id = ${mmList[viewHolder.adapterPosition].id}")
+                        mainMemoAdapter.makeBKMRItem(viewHolder.adapterPosition)
+                        bkmrMemoAdapter.makeBKMRItem()
+                        getAllMemo()
+                    }
+                }
+            }
+        }
+        val touchHelper = ItemTouchHelper(swipeGesture)
+        touchHelper.attachToRecyclerView(rvMain_memo)
         rvMain_memo.adapter = mainMemoAdapter
 
         selectTab()
