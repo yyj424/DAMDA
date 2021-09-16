@@ -1,6 +1,5 @@
 package com.bluelay.damda
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -8,7 +7,6 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -31,9 +29,6 @@ import com.bluelay.damda.DBHelper.Companion.WISL_TABLE_NAME
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.adapter_view_main_memo.*
-import kotlinx.android.synthetic.main.adapter_view_main_memo.view.*
-import kotlinx.android.synthetic.main.layout_memo_settings.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -58,7 +53,8 @@ class MainActivity : AppCompatActivity() {
         REC_TABLE_NAME to REC_COL_NAME,
         MOV_TABLE_NAME to MOV_COL_TITLE)
 
-    private lateinit var getResult : ActivityResultLauncher<Intent>
+    private lateinit var getResult_mmList : ActivityResultLauncher<Intent>
+    private lateinit var getResult_bmList : ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,12 +145,29 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        getResult = registerForActivityResult(
+        getResult_mmList = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                mmList.forEach {
-                    if (it.check) {
-                        database.execSQL("DELETE FROM ${it.type} WHERE _id = ${it.id}")
+                var iterator = mmList.iterator()
+                while(iterator.hasNext()) {
+                    val m = iterator.next()
+                    if (m.check) {
+                        database.execSQL("DELETE FROM ${m.type} WHERE _id = ${m.id}")
+                        iterator.remove()
+                    }
+                }
+            }
+        }
+
+        getResult_bmList = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                var iterator = bmList.iterator()
+                while(iterator.hasNext()) {
+                    val m = iterator.next()
+                    if (m.check) {
+                        database.execSQL("DELETE FROM ${m.type} WHERE _id = ${m.id}")
+                        iterator.remove()
                     }
                 }
             }
@@ -179,16 +192,18 @@ class MainActivity : AppCompatActivity() {
                             bkmrMemoAdapter.notifyDataSetChanged()
                         }
                         tvDelete.setOnClickListener {
-                            var locked = false
-                            mmList.forEach run@{
-                                if (it.check) {
-                                    if (it.lock == 1) {
-                                        locked = true
-                                        return@run
+                            var mmLocked = false
+                            var iterator = mmList.iterator()
+                            while(iterator.hasNext()) {
+                                val m = iterator.next()
+                                if (m.check) {
+                                    if (m.lock == 1) {
+                                        mmLocked = true
+                                        break
                                     }
-                                } // 검토 필요
+                                }
                             }
-                            if (locked) {
+                            if (mmLocked) {
                                 val builder = AlertDialog.Builder(this)
                                 val view = LayoutInflater.from(this).inflate(R.layout.dialog_delete_lock_memo, null)
                                 builder.setView(view)
@@ -197,7 +212,7 @@ class MainActivity : AppCompatActivity() {
                                 val dialog = builder.create()
                                 btnDelConfirm.setOnClickListener{
                                     val intent = Intent(this, UnlockPWActivity::class.java)
-                                    getResult.launch(intent)
+                                    getResult_mmList.launch(intent)
                                     dialog.dismiss()
                                 }
                                 btnDelCancel.setOnClickListener{
@@ -206,21 +221,55 @@ class MainActivity : AppCompatActivity() {
                                 dialog.show()
                             }
                             else {
-                                mmList.forEach {
-                                    if (it.check) {
-                                        database.execSQL("DELETE FROM ${it.type} WHERE _id = ${it.id}")
+                                var iterator = mmList.iterator()
+                                while(iterator.hasNext()) {
+                                    val m = iterator.next()
+                                    if (m.check) {
+                                        database.execSQL("DELETE FROM ${m.type} WHERE _id = ${m.id}")
+                                        iterator.remove()
                                     }
                                 }
                             }
 
+                            var bmLocked = false
                             val iterator2 = bmList.iterator()
                             while(iterator2.hasNext()) {
                                 val m = iterator2.next()
                                 if (m.check) {
-                                    database.execSQL("DELETE FROM ${m.type} WHERE _id = ${m.id}")
-                                    iterator2.remove()
+                                    if (m.lock == 1) {
+                                        bmLocked = true
+                                        break
+                                    }
                                 }
                             }
+                            if (bmLocked) {
+                                val builder = AlertDialog.Builder(this)
+                                val view = LayoutInflater.from(this).inflate(R.layout.dialog_delete_lock_memo, null)
+                                builder.setView(view)
+                                val btnDelConfirm = view.findViewById<Button>(R.id.btnDelConfirm)
+                                val btnDelCancel = view.findViewById<Button>(R.id.btnDelCancel)
+                                val dialog = builder.create()
+                                btnDelConfirm.setOnClickListener{
+                                    val intent = Intent(this, UnlockPWActivity::class.java)
+                                    getResult_bmList.launch(intent)
+                                    dialog.dismiss()
+                                }
+                                btnDelCancel.setOnClickListener{
+                                    dialog.dismiss()
+                                }
+                                dialog.show()
+                            }
+                            else {
+                                var iterator2 = bmList.iterator()
+                                while(iterator2.hasNext()) {
+                                    val m = iterator2.next()
+                                    if (m.check) {
+                                        database.execSQL("DELETE FROM ${m.type} WHERE _id = ${m.id}")
+                                        iterator2.remove()
+                                    }
+                                }
+                            }
+
                             if(bmList.size == 0) {
                                 imgBkmr.visibility = View.GONE
                             }
