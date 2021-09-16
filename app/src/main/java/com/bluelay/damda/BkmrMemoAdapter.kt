@@ -15,6 +15,10 @@ class BkmrMemoAdapter(val context : Context, private val bmList : ArrayList<Memo
 
     private lateinit var itemClickListener: ItemClickListener
 
+    fun makeBKMRItem(){
+        notifyDataSetChanged()
+    }
+
     fun setItemClickListener(itemClickListener: ItemClickListener) {
         this.itemClickListener = itemClickListener
     }
