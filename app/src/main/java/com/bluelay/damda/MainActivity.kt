@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         REC_TABLE_NAME to REC_COL_NAME,
         MOV_TABLE_NAME to MOV_COL_TITLE)
 
+    private lateinit var getResult_mainMemoDelete : ActivityResultLauncher<Intent>
     private lateinit var getResult_mmList : ActivityResultLauncher<Intent>
     private lateinit var getResult_bmList : ActivityResultLauncher<Intent>
 
@@ -129,6 +130,15 @@ class MainActivity : AppCompatActivity() {
         bkmrMemoAdapter.setItemClickListener(bkmrMemoItemClickListener)
         rvBKMR_memo.adapter = bkmrMemoAdapter
 
+        var swipeLockDelete = -1
+        getResult_mainMemoDelete = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()) { result ->
+            if(result.resultCode == RESULT_OK){
+                swipeLockDelete = 1
+            }
+        }
+
+
         val mmLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvMain_memo.layoutManager = mmLayoutManager
         mainMemoAdapter = MainMemoAdapter(this, mmList, false)
@@ -139,9 +149,14 @@ class MainActivity : AppCompatActivity() {
                 when(direction){
                     ItemTouchHelper.LEFT -> {
                         if(mmList[viewHolder.adapterPosition].lock == 1){ //잠금상태인 경우
-
+                            val intent = Intent(this@MainActivity, UnlockPWActivity::class.java)
+                            getResult_mainMemoDelete.launch(intent)
+                            if(swipeLockDelete == 1){
+                                database.execSQL("DELETE FROM ${mmList[viewHolder.adapterPosition].type} WHERE _id = ${mmList[viewHolder.adapterPosition].id}")
+                                mainMemoAdapter.deleteItem(viewHolder.adapterPosition)
+                            }
                         }
-                        else{
+                        else {
                             database.execSQL("DELETE FROM ${mmList[viewHolder.adapterPosition].type} WHERE _id = ${mmList[viewHolder.adapterPosition].id}")
                             mainMemoAdapter.deleteItem(viewHolder.adapterPosition)
                         }
