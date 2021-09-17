@@ -9,6 +9,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.AnimationUtils
+import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.layout_memo_settings.*
@@ -68,6 +70,7 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
 
         val diaryAdapter = WeeklyAdapter(this, diaryList)
         if (intent.hasExtra("memo")) {
+            btnDeleteMemo.visibility = View.VISIBLE
             val memo = intent.getSerializableExtra("memo") as MemoInfo
             color = memo.color
             did = memo.id
@@ -103,9 +106,29 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
 
         lvDiary.adapter = diaryAdapter
 
-        settingLayout.visibility = View.INVISIBLE
-        btnSettings.setOnClickListener {
-            settingLayout.visibility = if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE  else View.INVISIBLE
+        fabMemoSetting.setOnClickListener {
+            it.startAnimation(
+                AnimationUtils.loadAnimation(
+                    applicationContext, R.anim.fade_out
+                ))
+            btnCloseSetting.startAnimation(
+                AnimationUtils.loadAnimation(
+                    applicationContext, R.anim.fade_in
+                ))
+            it.visibility = View.INVISIBLE
+            settingLayout.visibility = View.VISIBLE
+        }
+        btnCloseSetting.setOnClickListener {
+            settingLayout.startAnimation(
+                AnimationUtils.loadAnimation(
+                    applicationContext, R.anim.fade_out
+                ))
+            fabMemoSetting.startAnimation(
+                AnimationUtils.loadAnimation(
+                    applicationContext, R.anim.fade_in
+                ))
+            settingLayout.visibility = View.INVISIBLE
+            fabMemoSetting.visibility = View.VISIBLE
         }
 
         cbLock.setOnCheckedChangeListener { _, isChecked ->
@@ -159,38 +182,31 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
 
             dialog.show()
         }
+
+        btnSaveMemo.setOnClickListener {
+            saveMemo()
+        }
+
+        btnDeleteMemo.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            val view = LayoutInflater.from(this).inflate(R.layout.dialog_delete_memo, null)
+            builder.setView(view)
+            val btnDelConfirm = view.findViewById<Button>(R.id.btnDelConfirm)
+            val btnDelCancel = view.findViewById<Button>(R.id.btnDelCancel)
+            val dialog = builder.create()
+            btnDelConfirm.setOnClickListener{
+                dialog.dismiss()
+                deleteMemo()
+            }
+            btnDelCancel.setOnClickListener{
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
     }
 
     override fun onBackPressed() {
-        val contentValues = ContentValues()
-        contentValues.put(DBHelper.WEE_COL_WDATE , System.currentTimeMillis()/1000L)
-        contentValues.put(DBHelper.WEE_COL_COLOR , color)
-        contentValues.put(DBHelper.WEE_COL_BKMR, bkmr)
-        contentValues.put(DBHelper.WEE_COL_LOCK, lock)
-        contentValues.put(DBHelper.WEE_COL_DATE, etDiaryDate.text.toString())
-
-        if (did != -1) {
-            var whereClause = "_id=?"
-            val whereArgs = arrayOf(did.toString())
-            database.update(DBHelper.WEE_TABLE_NAME, contentValues, whereClause, whereArgs)
-
-            whereClause = "did=?"
-            database.delete(DBHelper.DIA_TABLE_NAME, whereClause, whereArgs)
-        }
-        else  {
-            did = database.insert(DBHelper.WEE_TABLE_NAME, null, contentValues).toInt()
-        }
-        for(diary in diaryList){
-            contentValues.clear()
-
-            contentValues.put(DBHelper.DIA_COL_DID, did)
-            contentValues.put(DBHelper.DIA_COL_WEATHER, diary.weather)
-            contentValues.put(DBHelper.DIA_COL_MOODPIC, diary.moodPic)
-            contentValues.put(DBHelper.DIA_COL_CONTENT, diary.content)
-            database.insert(DBHelper.DIA_TABLE_NAME, null, contentValues)
-
-        }
-        finish()
+        saveMemo()
     }
 
     private fun selectDiary() {
@@ -237,6 +253,43 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
     private fun getURLForResource(resId: Int): String {
         return Uri.parse("android.resource://" + R::class.java.getPackage().name + "/" + resId)
             .toString()
+    }
+
+    private fun saveMemo() {
+        val contentValues = ContentValues()
+        contentValues.put(DBHelper.WEE_COL_WDATE , System.currentTimeMillis()/1000L)
+        contentValues.put(DBHelper.WEE_COL_COLOR , color)
+        contentValues.put(DBHelper.WEE_COL_BKMR, bkmr)
+        contentValues.put(DBHelper.WEE_COL_LOCK, lock)
+        contentValues.put(DBHelper.WEE_COL_DATE, etDiaryDate.text.toString())
+
+        if (did != -1) {
+            var whereClause = "_id=?"
+            val whereArgs = arrayOf(did.toString())
+            database.update(DBHelper.WEE_TABLE_NAME, contentValues, whereClause, whereArgs)
+
+            whereClause = "did=?"
+            database.delete(DBHelper.DIA_TABLE_NAME, whereClause, whereArgs)
+        }
+        else  {
+            did = database.insert(DBHelper.WEE_TABLE_NAME, null, contentValues).toInt()
+        }
+        for(diary in diaryList){
+            contentValues.clear()
+
+            contentValues.put(DBHelper.DIA_COL_DID, did)
+            contentValues.put(DBHelper.DIA_COL_WEATHER, diary.weather)
+            contentValues.put(DBHelper.DIA_COL_MOODPIC, diary.moodPic)
+            contentValues.put(DBHelper.DIA_COL_CONTENT, diary.content)
+            database.insert(DBHelper.DIA_TABLE_NAME, null, contentValues)
+
+        }
+        finish()
+    }
+
+    private fun deleteMemo() {
+        database.execSQL("DELETE FROM ${DBHelper.WEE_TABLE_NAME} WHERE _id = $did")
+        finish()
     }
 
     override fun onDestroy() {
