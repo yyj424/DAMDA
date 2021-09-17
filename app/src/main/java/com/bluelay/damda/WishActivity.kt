@@ -5,10 +5,12 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.database.getIntOrNull
 import kotlinx.android.synthetic.main.activity_wish.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 
@@ -129,7 +131,11 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         wishList.clear()
         for (whereClause in 1.. 10) {
             if (c.moveToNext()) {
-                wishList.add(Wish(c.getString(c.getColumnIndex(DBHelper.WIS_COL_ITEM)), c.getInt(c.getColumnIndex(DBHelper.WIS_COL_PRICE)), c.getInt(c.getColumnIndex(DBHelper.WIS_COL_CHECKED)), c.getString(c.getColumnIndex(DBHelper.WIS_COL_LINK))))
+                var price: Int? = null
+                if (c.getIntOrNull(c.getColumnIndex(DBHelper.WIS_COL_PRICE)) != null) {
+                    price = c.getInt(c.getColumnIndex(DBHelper.WIS_COL_PRICE))
+                }
+                wishList.add(Wish(c.getString(c.getColumnIndex(DBHelper.WIS_COL_ITEM)), price, c.getInt(c.getColumnIndex(DBHelper.WIS_COL_CHECKED)), c.getString(c.getColumnIndex(DBHelper.WIS_COL_LINK))))
             }
             else {
                 wishList.add(Wish("", null, 0, ""))

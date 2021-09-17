@@ -225,6 +225,20 @@ class MainActivity : AppCompatActivity() {
                     R.id.optionEdit ->  {
                         editBar.visibility = View.VISIBLE
                         tvCancel.setOnClickListener {
+                            var iterator = mmList.iterator()
+                            while(iterator.hasNext()) {
+                                val m = iterator.next()
+                                if (m.check) {
+                                    m.check = false
+                                }
+                            }
+                            var iterator2 = bmList.iterator()
+                            while(iterator2.hasNext()) {
+                                val m = iterator2.next()
+                                if (m.check) {
+                                    m.check = false
+                                }
+                            }
                             editBar.visibility = View.GONE
                             mainMemoAdapter = MainMemoAdapter(this, mmList, false)
                             mainMemoAdapter.setItemClickListener(mainMemoItemClickListener)

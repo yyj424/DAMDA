@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -33,7 +34,7 @@ class WishAdapter(val calTotal: CalTotal, val context: Context, val wishList: Ar
         }
         etWishItem.setText(wish.item)
 
-        if (wish.price == null) {
+        if(wish.price == null) {
             etWishPrice.setText("")
         }
         else {
@@ -70,6 +71,9 @@ class WishAdapter(val calTotal: CalTotal, val context: Context, val wishList: Ar
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.toString().replace(" ", "") != "") {
                     wish.price = Integer.parseInt(s.toString())
+                }
+                else {
+                    wish.price = null
                 }
                 total = 0
                 for (w in wishList) {

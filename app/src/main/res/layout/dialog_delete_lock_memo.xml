@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:fontFamily="@font/nanumsquareroundr"
+        android:fontFamily="@font/nanumsquareroundb"
         android:lineSpacingExtra="5sp"
         android:text="잠금된 메모가 포함되어있습니다.\n삭제하려면 암호를 입력하십시오."
         android:textAlignment="center"
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="50dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,15 +33,19 @@
 
         <Button
             android:id="@+id/btnDelConfirm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
-            android:text="확인" />
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_delconfirm"
+            android:fontFamily="@font/nanumsquareroundb" />
 
         <Button
             android:id="@+id/btnDelCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="취소" />
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_delcancel"
+            android:fontFamily="@font/nanumsquareroundb" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
