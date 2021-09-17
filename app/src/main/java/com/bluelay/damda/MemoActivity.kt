@@ -2,6 +2,7 @@ package com.bluelay.damda
 
 import android.app.AlertDialog
 import android.content.ContentValues
+import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
@@ -10,6 +11,8 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.AnimationUtils
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +34,7 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
         database = dbHelper.writableDatabase
 
         if (intent.hasExtra("memo")) {
+            btnDeleteMemo.visibility = View.VISIBLE
             val memo = intent.getSerializableExtra("memo") as MemoInfo
             mid = memo.id
             color = memo.color
@@ -44,10 +48,25 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
         setColor(this, color, activity_memo)
         etMemo.setSelection(etMemo.text.length)
 
-        settingLayout.visibility = View.INVISIBLE
-        btnSettings.setOnClickListener {
-            settingLayout.visibility =
-                if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE else View.INVISIBLE
+        fabMemoSetting.setOnClickListener {
+            it.startAnimation(AnimationUtils.loadAnimation(
+                applicationContext, R.anim.fade_out
+            ))
+            btnCloseSetting.startAnimation(AnimationUtils.loadAnimation(
+                applicationContext, R.anim.fade_in
+            ))
+            it.visibility = View.INVISIBLE
+            settingLayout.visibility = View.VISIBLE
+        }
+        btnCloseSetting.setOnClickListener {
+            settingLayout.startAnimation(AnimationUtils.loadAnimation(
+                applicationContext, R.anim.fade_out
+            ))
+            fabMemoSetting.startAnimation(AnimationUtils.loadAnimation(
+                applicationContext, R.anim.fade_in
+            ))
+            settingLayout.visibility = View.INVISIBLE
+            fabMemoSetting.visibility = View.VISIBLE
         }
 
         cbLock.setOnCheckedChangeListener { _, isChecked ->
@@ -101,7 +120,24 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
         }
 
         btnSaveMemo.setOnClickListener {
+            saveMemo()
+        }
 
+        btnDeleteMemo.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            val view = LayoutInflater.from(this).inflate(R.layout.dialog_delete_memo, null)
+            builder.setView(view)
+            val btnDelConfirm = view.findViewById<Button>(R.id.btnDelConfirm)
+            val btnDelCancel = view.findViewById<Button>(R.id.btnDelCancel)
+            val dialog = builder.create()
+            btnDelConfirm.setOnClickListener{
+                dialog.dismiss()
+                deleteMemo()
+            }
+            btnDelCancel.setOnClickListener{
+                dialog.dismiss()
+            }
+            dialog.show()
         }
     }
 
@@ -132,6 +168,10 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
     }
 
     override fun onBackPressed() {
+        saveMemo()
+    }
+
+    private fun saveMemo() {
         val contentValues = ContentValues()
         contentValues.put(DBHelper.MEM_COL_WDATE, System.currentTimeMillis() / 1000L)
         contentValues.put(DBHelper.MEM_COL_COLOR, color)
@@ -147,6 +187,11 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
         else {
             database.insert(DBHelper.MEM_TABLE_NAME, null, contentValues)
         }
+        finish()
+    }
+
+    private fun deleteMemo() {
+        database.execSQL("DELETE FROM ${DBHelper.MEM_TABLE_NAME} WHERE _id = $mid")
         finish()
     }
 

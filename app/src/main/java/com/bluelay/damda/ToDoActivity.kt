@@ -9,12 +9,12 @@ import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_todo.*
-import kotlinx.android.synthetic.main.activity_todo.btnSettings
-import kotlinx.android.synthetic.main.activity_todo.settingLayout
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,6 +43,7 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
 
         color = intent.getIntExtra("color", 0)
         if (intent.hasExtra("memo")) {
+            btnDeleteMemo.visibility = View.VISIBLE
             val memo = intent.getSerializableExtra("memo") as MemoInfo
             color = memo.color
             toDoId = memo.id
@@ -66,10 +67,31 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
             DatePickerDialog(this, recordDatePicker, calendar[Calendar.YEAR], calendar[Calendar.MONTH], calendar[Calendar.DAY_OF_MONTH]).show()
         }
 
-        settingLayout.visibility = View.INVISIBLE
-        btnSettings.setOnClickListener {
-            settingLayout.visibility = if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE  else View.INVISIBLE
+        fabMemoSetting.setOnClickListener {
+            it.startAnimation(
+                AnimationUtils.loadAnimation(
+                    applicationContext, R.anim.fade_out
+                ))
+            btnCloseSetting.startAnimation(
+                AnimationUtils.loadAnimation(
+                    applicationContext, R.anim.fade_in
+                ))
+            it.visibility = View.INVISIBLE
+            settingLayout.visibility = View.VISIBLE
         }
+        btnCloseSetting.setOnClickListener {
+            settingLayout.startAnimation(
+                AnimationUtils.loadAnimation(
+                    applicationContext, R.anim.fade_out
+                ))
+            fabMemoSetting.startAnimation(
+                AnimationUtils.loadAnimation(
+                    applicationContext, R.anim.fade_in
+                ))
+            settingLayout.visibility = View.INVISIBLE
+            fabMemoSetting.visibility = View.VISIBLE
+        }
+
         cbLock.setOnCheckedChangeListener { _, isChecked ->
             if (checkExistPassword(this) && isChecked) {
                 lock = 1
@@ -123,6 +145,27 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
             ivColor4!!.setOnClickListener(colorClickListener)
             ivColor5!!.setOnClickListener(colorClickListener)
             ivColor6!!.setOnClickListener(colorClickListener)
+            dialog.show()
+        }
+
+        btnSaveMemo.setOnClickListener {
+            saveMemo()
+        }
+
+        btnDeleteMemo.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            val view = LayoutInflater.from(this).inflate(R.layout.dialog_delete_memo, null)
+            builder.setView(view)
+            val btnDelConfirm = view.findViewById<Button>(R.id.btnDelConfirm)
+            val btnDelCancel = view.findViewById<Button>(R.id.btnDelCancel)
+            val dialog = builder.create()
+            btnDelConfirm.setOnClickListener{
+                dialog.dismiss()
+                deleteMemo()
+            }
+            btnDelCancel.setOnClickListener{
+                dialog.dismiss()
+            }
             dialog.show()
         }
     }
@@ -198,6 +241,21 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
                 database.insert(DBHelper.TOD_TABLE_NAME, null, value)
             }
         }
+    }
+
+    private fun saveMemo() {
+        if (toDoId == -1) {
+            insertToDo()
+        }
+        else {
+            updateToDo()
+        }
+        finish()
+    }
+
+    private fun deleteMemo() {
+        database.execSQL("DELETE FROM ${DBHelper.TODL_TABLE_NAME} WHERE _id = $toDoId")
+        finish()
     }
 
     private fun View.hideKeyboard() {

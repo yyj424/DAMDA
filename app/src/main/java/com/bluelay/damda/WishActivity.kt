@@ -5,9 +5,9 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.database.getIntOrNull
@@ -32,6 +32,7 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         val wishAdapter = WishAdapter(this, this, wishList)
 
         if (intent.hasExtra("memo")) {
+            btnDeleteMemo.visibility = View.VISIBLE
             val memo = intent.getSerializableExtra("memo") as MemoInfo
             wid = memo.id
             color = memo.color
@@ -50,9 +51,29 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         lvWish.adapter = wishAdapter
         lvWish.itemsCanFocus = true
 
-        settingLayout.visibility = View.INVISIBLE
-        btnSettings.setOnClickListener {
-            settingLayout.visibility = if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE else View.INVISIBLE
+        fabMemoSetting.setOnClickListener {
+            it.startAnimation(
+                AnimationUtils.loadAnimation(
+                    applicationContext, R.anim.fade_out
+                ))
+            btnCloseSetting.startAnimation(
+                AnimationUtils.loadAnimation(
+                    applicationContext, R.anim.fade_in
+                ))
+            it.visibility = View.INVISIBLE
+            settingLayout.visibility = View.VISIBLE
+        }
+        btnCloseSetting.setOnClickListener {
+            settingLayout.startAnimation(
+                AnimationUtils.loadAnimation(
+                    applicationContext, R.anim.fade_out
+                ))
+            fabMemoSetting.startAnimation(
+                AnimationUtils.loadAnimation(
+                    applicationContext, R.anim.fade_in
+                ))
+            settingLayout.visibility = View.INVISIBLE
+            fabMemoSetting.visibility = View.VISIBLE
         }
 
         cbLock.setOnCheckedChangeListener { _, isChecked ->
@@ -106,6 +127,27 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
 
             dialog.show()
         }
+
+        btnSaveMemo.setOnClickListener {
+            saveMemo()
+        }
+
+        btnDeleteMemo.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            val view = LayoutInflater.from(this).inflate(R.layout.dialog_delete_memo, null)
+            builder.setView(view)
+            val btnDelConfirm = view.findViewById<Button>(R.id.btnDelConfirm)
+            val btnDelCancel = view.findViewById<Button>(R.id.btnDelCancel)
+            val dialog = builder.create()
+            btnDelConfirm.setOnClickListener{
+                dialog.dismiss()
+                deleteMemo()
+            }
+            btnDelCancel.setOnClickListener{
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
     }
 
     private fun getWishList() {
@@ -145,6 +187,10 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
     }
 
     override fun onBackPressed() {
+        saveMemo()
+    }
+
+    private fun saveMemo() {
         val contentValues = ContentValues()
         contentValues.put(DBHelper.WISL_COL_WDATE, System.currentTimeMillis() / 1000L)
         contentValues.put(DBHelper.WISL_COL_COLOR, color)
@@ -152,7 +198,7 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         contentValues.put(DBHelper.WISL_COL_LOCK, lock)
         contentValues.put(DBHelper.WISL_COL_BKMR, bkmr)
 
-       if (wid != -1) {
+        if (wid != -1) {
             var whereClause = "_id=?"
             val whereArgs = arrayOf(wid.toString())
             database.update(DBHelper.WISL_TABLE_NAME, contentValues, whereClause, whereArgs)
@@ -160,9 +206,9 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
             whereClause = "wid=?"
             database.delete(DBHelper.WIS_TABLE_NAME, whereClause, whereArgs)
         }
-       else {
-           wid = database.insert(DBHelper.WISL_TABLE_NAME, null, contentValues).toInt()
-       }
+        else {
+            wid = database.insert(DBHelper.WISL_TABLE_NAME, null, contentValues).toInt()
+        }
         for(wish in wishList){
             contentValues.clear()
             if (wish.item.replace(" ", "") != "") {
@@ -175,6 +221,11 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
             }
         }
 
+        finish()
+    }
+
+    private fun deleteMemo() {
+        database.execSQL("DELETE FROM ${DBHelper.WISL_TABLE_NAME} WHERE _id = $wid")
         finish()
     }
 

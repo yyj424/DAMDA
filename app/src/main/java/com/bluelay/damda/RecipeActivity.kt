@@ -7,12 +7,11 @@ import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.AnimationUtils
+import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_memo.*
 import kotlinx.android.synthetic.main.activity_recipe.*
-import kotlinx.android.synthetic.main.activity_recipe.btnSettings
-import kotlinx.android.synthetic.main.activity_recipe.settingLayout
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 
 class RecipeActivity : AppCompatActivity(), SetMemo{
@@ -32,6 +31,7 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
         dbHelper = DBHelper(this)
 
         if (intent.hasExtra("memo")) {
+            btnDeleteMemo.visibility = View.VISIBLE
             val memo = intent.getSerializableExtra("memo") as MemoInfo
             color = memo.color
             recipeId = memo.id
@@ -44,9 +44,29 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
         }
         setColor(this, color, activity_recipe)
 
-        settingLayout.visibility = View.INVISIBLE
-        btnSettings.setOnClickListener {
-            settingLayout.visibility = if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE  else View.INVISIBLE
+        fabMemoSetting.setOnClickListener {
+            it.startAnimation(
+                AnimationUtils.loadAnimation(
+                applicationContext, R.anim.fade_out
+            ))
+            btnCloseSetting.startAnimation(
+                AnimationUtils.loadAnimation(
+                applicationContext, R.anim.fade_in
+            ))
+            it.visibility = View.INVISIBLE
+            settingLayout.visibility = View.VISIBLE
+        }
+        btnCloseSetting.setOnClickListener {
+            settingLayout.startAnimation(
+                AnimationUtils.loadAnimation(
+                applicationContext, R.anim.fade_out
+            ))
+            fabMemoSetting.startAnimation(
+                AnimationUtils.loadAnimation(
+                applicationContext, R.anim.fade_in
+            ))
+            settingLayout.visibility = View.INVISIBLE
+            fabMemoSetting.visibility = View.VISIBLE
         }
 
         cbLock.setOnCheckedChangeListener { _, isChecked ->
@@ -98,16 +118,31 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
             ivColor6!!.setOnClickListener(colorClickListener)
             dialog.show()
         }
+
+        btnSaveMemo.setOnClickListener {
+            saveMemo()
+        }
+
+        btnDeleteMemo.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            val view = LayoutInflater.from(this).inflate(R.layout.dialog_delete_memo, null)
+            builder.setView(view)
+            val btnDelConfirm = view.findViewById<Button>(R.id.btnDelConfirm)
+            val btnDelCancel = view.findViewById<Button>(R.id.btnDelCancel)
+            val dialog = builder.create()
+            btnDelConfirm.setOnClickListener{
+                dialog.dismiss()
+                deleteMemo()
+            }
+            btnDelCancel.setOnClickListener{
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
     }
 
     override fun onBackPressed() {
-        if (recipeId == -1) {
-            insertRecipe()
-        }
-        else {
-            updateRecipe()
-        }
-        finish()
+
     }
 
     private fun selectRecipe() {
@@ -157,6 +192,21 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
         contentValues.put(DBHelper.REC_COL_LOCK, lock)
 
         database.update(DBHelper.REC_TABLE_NAME, contentValues, "${DBHelper.REC_COL_ID}=?", arrayOf(recipeId.toString()))
+    }
+
+    private fun saveMemo() {
+        if (recipeId == -1) {
+            insertRecipe()
+        }
+        else {
+            updateRecipe()
+        }
+        finish()
+    }
+
+    private fun deleteMemo() {
+        database.execSQL("DELETE FROM ${DBHelper.REC_TABLE_NAME} WHERE _id = $recipeId")
+        finish()
     }
 
     override fun onDestroy() {

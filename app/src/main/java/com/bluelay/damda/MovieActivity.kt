@@ -20,7 +20,9 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -29,7 +31,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import kotlinx.android.synthetic.main.activity_memo.*
 import kotlinx.android.synthetic.main.activity_movie.*
+import kotlinx.android.synthetic.main.activity_movie.fabMemoSetting
+import kotlinx.android.synthetic.main.activity_movie.settingLayout
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -62,6 +67,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
         color = intent.getIntExtra("color", 0)
 
         if (intent.hasExtra("memo")) {
+            btnDeleteMemo.visibility = View.VISIBLE
             val memo = intent.getSerializableExtra("memo") as MemoInfo
             color = memo.color
             movieId = memo.id
@@ -105,10 +111,31 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
             ).show()
         }
 
-        settingLayout.visibility = View.INVISIBLE
-        btnSettings.setOnClickListener {
-            settingLayout.visibility = if (settingLayout.visibility == View.INVISIBLE) View.VISIBLE  else View.INVISIBLE
+        fabMemoSetting.setOnClickListener {
+            it.startAnimation(
+                AnimationUtils.loadAnimation(
+                applicationContext, R.anim.fade_out
+            ))
+            btnCloseSetting.startAnimation(
+                AnimationUtils.loadAnimation(
+                applicationContext, R.anim.fade_in
+            ))
+            it.visibility = View.INVISIBLE
+            settingLayout.visibility = View.VISIBLE
         }
+        btnCloseSetting.setOnClickListener {
+            settingLayout.startAnimation(
+                AnimationUtils.loadAnimation(
+                applicationContext, R.anim.fade_out
+            ))
+            fabMemoSetting.startAnimation(
+                AnimationUtils.loadAnimation(
+                applicationContext, R.anim.fade_in
+            ))
+            settingLayout.visibility = View.INVISIBLE
+            fabMemoSetting.visibility = View.VISIBLE
+        }
+
 
         cbLock.setOnCheckedChangeListener { _, isChecked ->
             if (checkExistPassword(this) && isChecked) {
@@ -198,6 +225,27 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
                 alertDialog.dismiss()
             }
         }
+
+        btnSaveMovie.setOnClickListener {
+            saveMovie()
+        }
+
+        btnDeleteMemo.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            val view = LayoutInflater.from(this).inflate(R.layout.dialog_delete_memo, null)
+            builder.setView(view)
+            val btnDelConfirm = view.findViewById<Button>(R.id.btnDelConfirm)
+            val btnDelCancel = view.findViewById<Button>(R.id.btnDelCancel)
+            val dialog = builder.create()
+            btnDelConfirm.setOnClickListener{
+                dialog.dismiss()
+                deleteMovie()
+            }
+            btnDelCancel.setOnClickListener{
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -251,13 +299,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     }
 
     override fun onBackPressed() {
-        if (movieId == -1) {
-            insertMovie()
-        }
-        else {
-            updateMovie()
-        }
-        finish()
+        saveMovie()
     }
 
     private fun insertMovie() {
@@ -316,6 +358,21 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
             "${DBHelper.MOV_COL_ID}=?",
             arrayOf(movieId.toString())
         )
+    }
+
+    private fun saveMovie() {
+        if (movieId == -1) {
+            insertMovie()
+        }
+        else {
+            updateMovie()
+        }
+        finish()
+    }
+
+    private fun deleteMovie() {
+        database.execSQL("DELETE FROM ${DBHelper.MOV_TABLE_NAME} WHERE _id = $movieId")
+        finish()
     }
 
     private fun View.hideKeyboard() {
