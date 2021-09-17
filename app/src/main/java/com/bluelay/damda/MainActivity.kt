@@ -291,9 +291,9 @@ class MainActivity : AppCompatActivity() {
                                 val btnDelCancel = view.findViewById<Button>(R.id.btnDelCancel)
                                 val dialog = builder.create()
                                 btnDelConfirm.setOnClickListener{
+                                    dialog.dismiss()
                                     val intent = Intent(this, UnlockPWActivity::class.java)
                                     getResult_mmList.launch(intent)
-                                    dialog.dismiss()
                                 }
                                 btnDelCancel.setOnClickListener{
                                     dialog.dismiss()
@@ -330,9 +330,9 @@ class MainActivity : AppCompatActivity() {
                                 val btnDelCancel = view.findViewById<Button>(R.id.btnDelCancel)
                                 val dialog = builder.create()
                                 btnDelConfirm.setOnClickListener{
+                                    dialog.dismiss()
                                     val intent = Intent(this, UnlockPWActivity::class.java)
                                     getResult_bmList.launch(intent)
-                                    dialog.dismiss()
                                 }
                                 btnDelCancel.setOnClickListener{
                                     dialog.dismiss()
