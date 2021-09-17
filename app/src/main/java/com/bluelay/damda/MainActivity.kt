@@ -60,6 +60,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var getResult_mainMemoDelete : ActivityResultLauncher<Intent>
     private lateinit var getResult_mmList : ActivityResultLauncher<Intent>
     private lateinit var getResult_bmList : ActivityResultLauncher<Intent>
+    private lateinit var getResult_unLock : ActivityResultLauncher<Intent>
+    private lateinit var unLockedMemo : MemoInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,10 +86,28 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        getResult_unLock = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                when (unLockedMemo.type) {
+                    "Memo" -> nextIntent = Intent(this@MainActivity, MemoActivity::class.java)
+                    "TodoList" -> nextIntent = Intent(this@MainActivity, ToDoActivity::class.java)
+                    "WishList" -> nextIntent = Intent(this@MainActivity, WishActivity::class.java)
+                    "Weekly" -> nextIntent = Intent(this@MainActivity, WeeklyActivity::class.java)
+                    "Recipe" -> nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
+                    "Movie" -> nextIntent = Intent(this@MainActivity, MovieActivity::class.java)
+                }
+                nextIntent?.putExtra("memo", unLockedMemo)
+                startActivity(nextIntent)
+            }
+        }
+
         val mainMemoItemClickListener = object: MainMemoAdapter.ItemClickListener{
             override fun onClick(view: View, position: Int) {
                 if (mmList[position].lock == 1) {
                     nextIntent = Intent(this@MainActivity, UnlockPWActivity::class.java)
+                    getResult_unLock.launch(nextIntent)
+                    unLockedMemo = mmList[position]
                 }
                 else {
                     when (mmList[position].type) {
@@ -98,9 +118,9 @@ class MainActivity : AppCompatActivity() {
                         "Recipe" -> nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
                         "Movie" -> nextIntent = Intent(this@MainActivity, MovieActivity::class.java)
                     }
+                    nextIntent?.putExtra("memo", mmList[position])
+                    startActivity(nextIntent)
                 }
-                nextIntent?.putExtra("memo", mmList[position])
-                startActivity(nextIntent)
             }
         }
 
@@ -108,6 +128,8 @@ class MainActivity : AppCompatActivity() {
             override fun onClick(view: View, position: Int) {
                 if (bmList[position].lock == 1) {
                     nextIntent = Intent(this@MainActivity, UnlockPWActivity::class.java)
+                    getResult_unLock.launch(nextIntent)
+                    unLockedMemo = bmList[position]
                 }
                 else {
                     when (bmList[position].type) {
@@ -118,9 +140,9 @@ class MainActivity : AppCompatActivity() {
                         "Recipe" ->  nextIntent = Intent(this@MainActivity, RecipeActivity::class.java)
                         "Movie" -> nextIntent = Intent(this@MainActivity, MovieActivity::class.java)
                     }
+                    nextIntent?.putExtra("memo", bmList[position])
+                    startActivity(nextIntent)
                 }
-                nextIntent?.putExtra("memo", bmList[position])
-                startActivity(nextIntent)
             }
         }
 
