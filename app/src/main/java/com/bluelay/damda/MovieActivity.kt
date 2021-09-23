@@ -227,7 +227,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
         }
 
         btnSaveMovie.setOnClickListener {
-            saveMovie()
+            saveMemo()
         }
 
         btnDeleteMemo.setOnClickListener {
@@ -299,7 +299,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     }
 
     override fun onBackPressed() {
-        saveMovie()
+        saveMemo()
     }
 
     private fun insertMovie() {
@@ -360,7 +360,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
         )
     }
 
-    private fun saveMovie() {
+    private fun saveMemo() {
         if (movieId == -1) {
             insertMovie()
         }

@@ -171,13 +171,7 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
     }
 
     override fun onBackPressed() {
-        if (toDoId == -1) {
-            insertToDo()
-        }
-       else {
-           updateToDo()
-        }
-        finish()
+        saveMemo()
     }
 
     private fun insertToDo() {
