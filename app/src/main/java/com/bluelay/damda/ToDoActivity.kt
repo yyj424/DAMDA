@@ -168,6 +168,12 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
             }
             dialog.show()
         }
+
+        btnAddItem.visibility = View.VISIBLE
+        btnAddItem.setOnClickListener {
+            toDoList.add(ToDo("", 0))
+            toDoAdapter.notifyDataSetChanged()
+        }
     }
 
     override fun onBackPressed() {
