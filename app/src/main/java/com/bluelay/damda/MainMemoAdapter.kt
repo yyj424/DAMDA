@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import io.sulek.ssml.OnSwipeListener
 import kotlinx.android.synthetic.main.adapter_view_main_memo.view.*
 import java.text.SimpleDateFormat
 
@@ -41,11 +42,22 @@ class MainMemoAdapter(val context : Context, private val mmList : ArrayList<Memo
         holder.itemView.setOnClickListener {
             itemClickListener.onClick(it, position)
         }
+        holder.setSampleData(mm)
+
     }
 
     class ViewHolder(val context : Context, itemView: View, private val edit : Boolean) : RecyclerView.ViewHolder(itemView), SetMemo{
         private var view : View = itemView
         private val formatWDate = SimpleDateFormat("yy.MM.dd")
+
+        fun setSampleData(memoInfo: MemoInfo) {
+            itemView.swipeContainer.setOnSwipeListener(object : OnSwipeListener {
+                override fun onSwipe(isExpanded: Boolean) {
+                    memoInfo.isExpanded = isExpanded
+                }
+            })
+            itemView.swipeContainer.apply(memoInfo.isExpanded)
+        }
 
         fun getMainMemo(mm: MemoInfo){
             if (edit) {

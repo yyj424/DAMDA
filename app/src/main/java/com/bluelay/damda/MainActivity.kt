@@ -7,14 +7,12 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bluelay.damda.DBHelper.Companion.MEM_COL_CONTENT
@@ -31,6 +29,7 @@ import com.bluelay.damda.DBHelper.Companion.WISL_COL_CATEGORY
 import com.bluelay.damda.DBHelper.Companion.WISL_TABLE_NAME
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import io.sulek.ssml.SSMLLinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -42,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     var tabTableName = ""
     private lateinit var mainMemoAdapter : MainMemoAdapter
+    private lateinit var layoutManager: RecyclerView.LayoutManager
     val mmList = arrayListOf<MemoInfo>()
 
     private lateinit var bkmrMemoAdapter : BkmrMemoAdapter
@@ -57,11 +57,12 @@ class MainActivity : AppCompatActivity() {
         REC_TABLE_NAME to REC_COL_NAME,
         MOV_TABLE_NAME to MOV_COL_TITLE)
 
-    private lateinit var getResult_mainMemoDelete : ActivityResultLauncher<Intent>
     private lateinit var getResult_mmList : ActivityResultLauncher<Intent>
     private lateinit var getResult_bmList : ActivityResultLauncher<Intent>
     private lateinit var getResult_unLock : ActivityResultLauncher<Intent>
     private lateinit var unLockedMemo : MemoInfo
+
+    private lateinit var swipelayoutManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,50 +153,14 @@ class MainActivity : AppCompatActivity() {
         bkmrMemoAdapter.setItemClickListener(bkmrMemoItemClickListener)
         rvBKMR_memo.adapter = bkmrMemoAdapter
 
-        var swipeLockDelete = -1
-        getResult_mainMemoDelete = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()) { result ->
-            if(result.resultCode == RESULT_OK){
-                swipeLockDelete = 1
-            }
-        }
-
-
         val mmLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvMain_memo.layoutManager = mmLayoutManager
         mainMemoAdapter = MainMemoAdapter(this, mmList, false)
         mainMemoAdapter.setItemClickListener(mainMemoItemClickListener)
-        val swipeGesture = object : SwipeGesture(this){
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-                when(direction){
-                    ItemTouchHelper.LEFT -> {
-                        if(mmList[viewHolder.adapterPosition].lock == 1){ //잠금상태인 경우
-                            val intent = Intent(this@MainActivity, UnlockPWActivity::class.java)
-                            getResult_mainMemoDelete.launch(intent)
-                            if(swipeLockDelete == 1){
-                                database.execSQL("DELETE FROM ${mmList[viewHolder.adapterPosition].type} WHERE _id = ${mmList[viewHolder.adapterPosition].id}")
-                                mainMemoAdapter.deleteItem(viewHolder.adapterPosition)
-                            }
-                        }
-                        else {
-                            database.execSQL("DELETE FROM ${mmList[viewHolder.adapterPosition].type} WHERE _id = ${mmList[viewHolder.adapterPosition].id}")
-                            mainMemoAdapter.deleteItem(viewHolder.adapterPosition)
-                        }
-                    }
-
-                    ItemTouchHelper.RIGHT -> {
-                        database.execSQL("UPDATE ${mmList[viewHolder.adapterPosition].type} SET bkmr = 1 WHERE _id = ${mmList[viewHolder.adapterPosition].id}")
-                        mainMemoAdapter.makeBKMRItem(viewHolder.adapterPosition)
-                        bkmrMemoAdapter.makeBKMRItem()
-                        getAllMemo()
-                    }
-                }
-            }
-        }
-        val touchHelper = ItemTouchHelper(swipeGesture)
-        touchHelper.attachToRecyclerView(rvMain_memo)
         rvMain_memo.adapter = mainMemoAdapter
+        swipelayoutManager = SSMLLinearLayoutManager(this)
+        rvMain_memo.layoutManager = swipelayoutManager
 
         selectTab()
 
@@ -654,5 +619,13 @@ class MainActivity : AppCompatActivity() {
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
+    }
+
+    public fun OnClick(v : View){
+        when (v.id){
+            R.id.btnSwipeBkmr -> Toast.makeText(this@MainActivity, "click bkmr", Toast.LENGTH_SHORT).show()
+            R.id.btnSwipeDelete -> Toast.makeText(this@MainActivity, "click delete", Toast.LENGTH_SHORT).show()
+        }
+
     }
 }
