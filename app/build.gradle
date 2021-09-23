@@ -51,5 +51,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation "androidx.recyclerview:recyclerview:1.2.1"
-    implementation 'com.github.xabaras:RecyclerViewSwipeDecorator:1.3' //
+    implementation 'com.itextpdf:itextpdf:5.0.6'
+    implementation 'io.sulek.ssml:simpleswipemenulayout:1.0.4'
 }
