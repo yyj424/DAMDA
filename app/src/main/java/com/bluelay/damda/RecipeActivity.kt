@@ -142,7 +142,7 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
     }
 
     override fun onBackPressed() {
-
+        saveMemo()
     }
 
     private fun selectRecipe() {
