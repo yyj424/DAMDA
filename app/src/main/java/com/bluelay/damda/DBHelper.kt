@@ -1,6 +1,7 @@
 package com.bluelay.damda
 
 import android.content.Context
+import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
@@ -8,7 +9,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
 
     companion object {
         const val DB_NAME = "DAMDA.db"
-        const val DB_VERSION = 1
+        const val DB_VERSION = 2
 
         const val CON_TABLE_NAME = "Connect"
         const val CON_COL_ID = "_id"
@@ -48,6 +49,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
         const val MEM_COL_ID = "_id"
         const val MEM_COL_WDATE = "wdate"
         const val MEM_COL_CONTENT = "content"
+        const val MEM_COL_PHOTO = "photo"
         const val MEM_COL_COLOR = "color"
         const val MEM_COL_LOCK = "lock"
         const val MEM_COL_BKMR = "bkmr"
@@ -97,130 +99,137 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-       var createTable =
-                "CREATE TABLE $CON_TABLE_NAME" +
-                        "($CON_COL_ID Integer PRIMARY KEY, " +
-                        "$CON_COL_TYPE_ID Integer, " +
-                        "$CON_COL_TYPE Integer, " +
-                        "$CON_COL_FOLDER_ID Integer);"
+        var createTable =
+            "CREATE TABLE $CON_TABLE_NAME" +
+                    "($CON_COL_ID Integer PRIMARY KEY, " +
+                    "$CON_COL_TYPE_ID Integer, " +
+                    "$CON_COL_TYPE Integer, " +
+                    "$CON_COL_FOLDER_ID Integer);"
         db?.execSQL(createTable)
 
         createTable =
-                "CREATE TABLE $FOL_TABLE_NAME" +
-                        "($FOL_COL_ID Integer PRIMARY KEY," +
-                        "$FOL_COL_NAME TEXT)"
+            "CREATE TABLE $FOL_TABLE_NAME" +
+                    "($FOL_COL_ID Integer PRIMARY KEY," +
+                    "$FOL_COL_NAME TEXT)"
         db?.execSQL(createTable)
 
         createTable =
-                "CREATE TABLE $TODL_TABLE_NAME" +
-                        "($TODL_COL_ID Integer PRIMARY KEY," +
-                        "$TODL_COL_WDATE Integer," +
-                        "$TODL_COL_DATE TEXT," +
-                        "$TODL_COL_LOCK Integer," +
-                        "$TODL_COL_BKMR Integer," +
-                        "$TODL_COL_COLOR Integer)"
+            "CREATE TABLE $TODL_TABLE_NAME" +
+                    "($TODL_COL_ID Integer PRIMARY KEY," +
+                    "$TODL_COL_WDATE Integer," +
+                    "$TODL_COL_DATE TEXT," +
+                    "$TODL_COL_LOCK Integer," +
+                    "$TODL_COL_BKMR Integer," +
+                    "$TODL_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
         createTable =
-                "CREATE TABLE $TOD_TABLE_NAME" +
-                        "($TOD_COL_ID Integer PRIMARY KEY," +
-                        "$TOD_COL_TID Integer," +
-                        "$TOD_COL_CONTENT TEXT," +
-                        "$TOD_COL_CHECKED Integer," +
-                        "FOREIGN KEY($TOD_COL_TID) REFERENCES $TODL_TABLE_NAME ($TODL_COL_ID) ON DELETE CASCADE)"
+            "CREATE TABLE $TOD_TABLE_NAME" +
+                    "($TOD_COL_ID Integer PRIMARY KEY," +
+                    "$TOD_COL_TID Integer," +
+                    "$TOD_COL_CONTENT TEXT," +
+                    "$TOD_COL_CHECKED Integer," +
+                    "FOREIGN KEY($TOD_COL_TID) REFERENCES $TODL_TABLE_NAME ($TODL_COL_ID) ON DELETE CASCADE)"
         db?.execSQL(createTable)
 
         createTable =
-                "CREATE TABLE $REC_TABLE_NAME" +
-                        "($REC_COL_ID Integer PRIMARY KEY," +
-                        "$REC_COL_WDATE Integer," +
-                        "$REC_COL_INGREDIENTS TEXT," +
-                        "$REC_COL_CONTENT TEXT," +
-                        "$REC_COL_NAME TEXT," +
-                        "$REC_COL_LOCK Integer," +
-                        "$REC_COL_BKMR Integer," +
-                        "$REC_COL_COLOR Integer)"
+            "CREATE TABLE $REC_TABLE_NAME" +
+                    "($REC_COL_ID Integer PRIMARY KEY," +
+                    "$REC_COL_WDATE Integer," +
+                    "$REC_COL_INGREDIENTS TEXT," +
+                    "$REC_COL_CONTENT TEXT," +
+                    "$REC_COL_NAME TEXT," +
+                    "$REC_COL_LOCK Integer," +
+                    "$REC_COL_BKMR Integer," +
+                    "$REC_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
         createTable =
-                "CREATE TABLE $MEM_TABLE_NAME" +
-                        "($MEM_COL_ID Integer PRIMARY KEY," +
-                        "$MEM_COL_WDATE Integer," +
-                        "$MEM_COL_CONTENT TEXT," +
-                        "$MEM_COL_LOCK Integer," +
-                        "$MEM_COL_BKMR Integer," +
-                        "$MEM_COL_COLOR Integer)"
+            "CREATE TABLE IF NOT EXISTS $MEM_TABLE_NAME" +
+                    "($MEM_COL_ID Integer PRIMARY KEY," +
+                    "$MEM_COL_WDATE Integer," +
+                    "$MEM_COL_CONTENT TEXT," +
+                    "$MEM_COL_PHOTO TEXT," +
+                    "$MEM_COL_LOCK Integer," +
+                    "$MEM_COL_BKMR Integer," +
+                    "$MEM_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
         createTable =
-                "CREATE TABLE $WEE_TABLE_NAME" +
-                        "($WEE_COL_ID Integer PRIMARY KEY," +
-                        "$WEE_COL_WDATE Integer," +
-                        "$WEE_COL_DATE TEXT," +
-                        "$WEE_COL_LOCK Integer," +
-                        "$WEE_COL_BKMR Integer," +
-                        "$WEE_COL_COLOR Integer)"
+            "CREATE TABLE $WEE_TABLE_NAME" +
+                    "($WEE_COL_ID Integer PRIMARY KEY," +
+                    "$WEE_COL_WDATE Integer," +
+                    "$WEE_COL_DATE TEXT," +
+                    "$WEE_COL_LOCK Integer," +
+                    "$WEE_COL_BKMR Integer," +
+                    "$WEE_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
         createTable =
-                "CREATE TABLE $DIA_TABLE_NAME" +
-                        "($DIA_COL_ID Integer PRIMARY KEY," +
-                        "$DIA_COL_DID Integer," +
-                        "$DIA_COL_WEATHER TEXT," +
-                        "$DIA_COL_MOODPIC TEXT," +
-                        "$DIA_COL_CONTENT TEXT," +
-                        "FOREIGN KEY($DIA_COL_DID) REFERENCES $WEE_TABLE_NAME ($WEE_COL_ID) ON DELETE CASCADE)"
+            "CREATE TABLE $DIA_TABLE_NAME" +
+                    "($DIA_COL_ID Integer PRIMARY KEY," +
+                    "$DIA_COL_DID Integer," +
+                    "$DIA_COL_WEATHER TEXT," +
+                    "$DIA_COL_MOODPIC TEXT," +
+                    "$DIA_COL_CONTENT TEXT," +
+                    "FOREIGN KEY($DIA_COL_DID) REFERENCES $WEE_TABLE_NAME ($WEE_COL_ID) ON DELETE CASCADE)"
         db?.execSQL(createTable)
 
         createTable =
-                "CREATE TABLE $WISL_TABLE_NAME" +
-                        "($WISL_COL_ID Integer PRIMARY KEY," +
-                        "$WISL_COL_WDATE Integer," +
-                        "$WISL_COL_CATEGORY TEXT," +
-                        "$WISL_COL_LOCK Integer," +
-                        "$WISL_COL_BKMR Integer," +
-                        "$WISL_COL_COLOR Integer)"
+            "CREATE TABLE $WISL_TABLE_NAME" +
+                    "($WISL_COL_ID Integer PRIMARY KEY," +
+                    "$WISL_COL_WDATE Integer," +
+                    "$WISL_COL_CATEGORY TEXT," +
+                    "$WISL_COL_LOCK Integer," +
+                    "$WISL_COL_BKMR Integer," +
+                    "$WISL_COL_COLOR Integer)"
         db?.execSQL(createTable)
 
         createTable =
-                "CREATE TABLE $WIS_TABLE_NAME" +
-                        "($WIS_COL_ID Integer PRIMARY KEY," +
-                        "$WIS_COL_WID Integer," +
-                        "$WIS_COL_ITEM TEXT," +
-                        "$WIS_COL_PRICE Integer," +
-                        "$WIS_COL_LINK TEXT," +
-                        "$WIS_COL_CHECKED Integer," +
-                        "FOREIGN KEY($WIS_COL_WID) REFERENCES $WISL_TABLE_NAME ($WISL_COL_ID) ON DELETE CASCADE)"
+            "CREATE TABLE $WIS_TABLE_NAME" +
+                    "($WIS_COL_ID Integer PRIMARY KEY," +
+                    "$WIS_COL_WID Integer," +
+                    "$WIS_COL_ITEM TEXT," +
+                    "$WIS_COL_PRICE Integer," +
+                    "$WIS_COL_LINK TEXT," +
+                    "$WIS_COL_CHECKED Integer," +
+                    "FOREIGN KEY($WIS_COL_WID) REFERENCES $WISL_TABLE_NAME ($WISL_COL_ID) ON DELETE CASCADE)"
         db?.execSQL(createTable)
 
         createTable =
-                "CREATE TABLE $MOV_TABLE_NAME" +
-                        "($MOV_COL_ID Integer PRIMARY KEY," +
-                        "$MOV_COL_WDATE Integer," +
-                        "$MOV_COL_DATE TEXT," +
-                        "$MOV_COL_TITLE TEXT," +
-                        "$MOV_COL_POSTERPIC TEXT," +
-                        "$MOV_COL_SCORE real," +
-                        "$MOV_COL_CONTENT Integer," +
-                        "$MOV_COL_LOCK Integer," +
-                        "$MOV_COL_BKMR Integer," +
-                        "$MOV_COL_COLOR Integer)"
+            "CREATE TABLE $MOV_TABLE_NAME" +
+                    "($MOV_COL_ID Integer PRIMARY KEY," +
+                    "$MOV_COL_WDATE Integer," +
+                    "$MOV_COL_DATE TEXT," +
+                    "$MOV_COL_TITLE TEXT," +
+                    "$MOV_COL_POSTERPIC TEXT," +
+                    "$MOV_COL_SCORE real," +
+                    "$MOV_COL_CONTENT Integer," +
+                    "$MOV_COL_LOCK Integer," +
+                    "$MOV_COL_BKMR Integer," +
+                    "$MOV_COL_COLOR Integer)"
         db?.execSQL(createTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE if exists $CON_TABLE_NAME")
-        db.execSQL("DROP TABLE if exists $FOL_TABLE_NAME")
-        db.execSQL("DROP TABLE if exists $TODL_TABLE_NAME")
-        db.execSQL("DROP TABLE if exists $TOD_TABLE_NAME")
-        db.execSQL("DROP TABLE if exists $REC_TABLE_NAME")
-        db.execSQL("DROP TABLE if exists $MEM_TABLE_NAME")
-        db.execSQL("DROP TABLE if exists $WEE_TABLE_NAME")
-        db.execSQL("DROP TABLE if exists $DIA_TABLE_NAME")
-        db.execSQL("DROP TABLE if exists $WISL_TABLE_NAME")
-        db.execSQL("DROP TABLE if exists $WIS_TABLE_NAME")
-        db.execSQL("DROP TABLE if exists $MOV_TABLE_NAME")
-        onCreate(db)
+        try {
+            if (oldVersion < 2) {
+                updateMemoColumn(db)
+            }
+        } catch (e: SQLException) {
+            db.execSQL("DROP TABLE if exists $CON_TABLE_NAME")
+            db.execSQL("DROP TABLE if exists $FOL_TABLE_NAME")
+            db.execSQL("DROP TABLE if exists $TODL_TABLE_NAME")
+            db.execSQL("DROP TABLE if exists $TOD_TABLE_NAME")
+            db.execSQL("DROP TABLE if exists $REC_TABLE_NAME")
+            db.execSQL("DROP TABLE if exists $MEM_TABLE_NAME")
+            db.execSQL("DROP TABLE if exists $WEE_TABLE_NAME")
+            db.execSQL("DROP TABLE if exists $DIA_TABLE_NAME")
+            db.execSQL("DROP TABLE if exists $WISL_TABLE_NAME")
+            db.execSQL("DROP TABLE if exists $WIS_TABLE_NAME")
+            db.execSQL("DROP TABLE if exists $MOV_TABLE_NAME")
+            onCreate(db)
+        }
     }
 
     override fun onOpen(db: SQLiteDatabase) {
@@ -228,5 +237,9 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VE
         if (!db.isReadOnly) {
             db.execSQL("PRAGMA foreign_keys=ON;")
         }
+    }
+
+    private fun updateMemoColumn(db: SQLiteDatabase) {
+        db.execSQL("ALTER TABLE $MEM_TABLE_NAME ADD COLUMN $MEM_COL_PHOTO TEXT")
     }
 }

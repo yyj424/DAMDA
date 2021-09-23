@@ -1,12 +1,17 @@
 package com.bluelay.damda
 
+import android.Manifest
 import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
-import android.text.Html
+import android.provider.MediaStore
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -14,22 +19,38 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.activity_memo.*
 import kotlinx.android.synthetic.main.layout_memo_settings.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+
 
 class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
     private lateinit var dbHelper: DBHelper
     private lateinit var database: SQLiteDatabase
+    private var saveFile: File? = null
+    private var photoUri : Uri? = null
     private var mid = -1
     private var lock = 0
     private var bkmr = 0
-    var color = -1
+    private var color = -1
+    private var photo = ""
+    private var path = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_memo)
+
+        btnAddPhoto.visibility = View.VISIBLE
+
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
 
@@ -139,10 +160,81 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
             }
             dialog.show()
         }
+
+        ivMemo.setOnLongClickListener {
+            true
+        }
+
+        btnAddPhoto.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_DENIED) {
+                ActivityCompat.requestPermissions(
+                    this, arrayOf(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    ), 200
+                )
+            } else {
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.type = "image/*"
+                startActivityForResult(intent, 100)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 100) {
+            if (resultCode == RESULT_OK) {
+                photoUri = data?.data!!
+                if (photoUri.toString().contains("/gallery/picker")) {
+                    Toast.makeText(this,"클라우드 사진은 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    return
+                }
+                var cursor: Cursor? = null
+                try {
+                    cursor = contentResolver.query(photoUri!!, null, null, null, null)
+                    if (cursor != null) {
+                        if (cursor.moveToFirst()) {
+                            photo = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
+                            ivMemo.visibility = View.VISIBLE
+                        }
+                        cursor.close()
+                    }
+                } finally {
+                    cursor?.close()
+                }
+
+                Glide.with(this)
+                    .load(photo)
+                    .fitCenter()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .dontAnimate()
+                    .into(ivMemo)
+            }
+        }
+    }
+
+    private fun savePhoto(imgBitmap: Bitmap) {
+        saveFile = File(this.filesDir, photo.substring(photo.lastIndexOf("/")+1))
+
+        try {
+            saveFile!!.createNewFile();
+            val out = FileOutputStream(saveFile)
+            imgBitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+            out.close()
+            path = saveFile!!.path
+        } catch (e: Exception) {
+            Toast.makeText(applicationContext, "파일 저장 실패", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun getMemo() {
-        val columns = arrayOf(DBHelper.MEM_COL_ID, DBHelper.MEM_COL_COLOR, DBHelper.MEM_COL_CONTENT)
+        val columns = arrayOf(DBHelper.MEM_COL_ID, DBHelper.MEM_COL_COLOR, DBHelper.MEM_COL_CONTENT, DBHelper.MEM_COL_PHOTO)
         val selection = "_id=?"
         val selectArgs = arrayOf(mid.toString())
         val c: Cursor = database.query(
@@ -157,6 +249,16 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
         c.moveToNext()
         setColor(this, c.getInt(c.getColumnIndex(DBHelper.MEM_COL_COLOR)), activity_memo)
         etMemo.setText(c.getString(c.getColumnIndex(DBHelper.MEM_COL_CONTENT)))
+        if (c.getString(c.getColumnIndex(DBHelper.MEM_COL_PHOTO)) != null) {
+            try {
+                path = c.getString(c.getColumnIndex(DBHelper.MEM_COL_PHOTO))
+                val bm = BitmapFactory.decodeFile(path)
+                ivMemo.visibility = View.VISIBLE
+                ivMemo.setImageBitmap(bm) // 내부 저장소에 저장된 이미지를 이미지뷰에 셋
+            } catch (e: java.lang.Exception) {
+                Toast.makeText(applicationContext, "파일 로드 실패", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         if (lock == 1) {
             cbLock.isChecked = true
@@ -172,10 +274,18 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
     }
 
     private fun saveMemo() {
+        if (photoUri != null) {
+            val instream: InputStream? = contentResolver.openInputStream(photoUri!!)
+            val imgBitmap = BitmapFactory.decodeStream(instream)
+            instream?.close()
+            savePhoto(imgBitmap)
+        } // 삭제 추가
+
         val contentValues = ContentValues()
         contentValues.put(DBHelper.MEM_COL_WDATE, System.currentTimeMillis() / 1000L)
         contentValues.put(DBHelper.MEM_COL_COLOR, color)
         contentValues.put(DBHelper.MEM_COL_CONTENT, etMemo.text.toString())
+        contentValues.put(DBHelper.MEM_COL_PHOTO, path)
         contentValues.put(DBHelper.MEM_COL_LOCK, lock)
         contentValues.put(DBHelper.MEM_COL_BKMR, bkmr)
 
