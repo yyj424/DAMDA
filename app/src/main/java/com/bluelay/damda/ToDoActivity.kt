@@ -7,6 +7,7 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -23,7 +24,8 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
 
     private lateinit var database : SQLiteDatabase
     private var dbHelper = DBHelper(this)
-    private var toDoList = arrayListOf<ToDo>()
+    private var oldToDoList = arrayListOf<ToDo>()
+    private var newToDoList = arrayListOf<ToDo>()
     private val calendar = Calendar.getInstance()
     private val dateFormat = "yyyy.MM.dd"
     private var sdf = SimpleDateFormat(dateFormat, Locale.KOREA)
@@ -34,17 +36,19 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
     private var lock = 0
     private var bkmr = 0
 
+    private lateinit var memo : MemoInfo
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_todo)
 
         etTodoDate.hideKeyboard()
-        val toDoAdapter = ToDoAdapter(this, toDoList)
+        val toDoAdapter = ToDoAdapter(this, newToDoList)
 
         color = intent.getIntExtra("color", 0)
         if (intent.hasExtra("memo")) {
             btnDeleteMemo.visibility = View.VISIBLE
-            val memo = intent.getSerializableExtra("memo") as MemoInfo
+            memo = intent.getSerializableExtra("memo") as MemoInfo
             color = memo.color
             toDoId = memo.id
             lock = memo.lock
@@ -105,11 +109,13 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
             bkmr = if(isChecked) 1 else 0
         }
 
-        val listSize = toDoList.size
+        val listSize = newToDoList.size
         for (i in 1.. 10-listSize) {
-            toDoList.add(ToDo("", 0))
+            newToDoList.add(ToDo("", 0))
+            oldToDoList.add(ToDo("", 0))
         }
-       lvToDo.adapter = toDoAdapter
+
+        lvToDo.adapter = toDoAdapter
 
         btnChangeColor.setOnClickListener {
             val builder = AlertDialog.Builder(this)
@@ -171,7 +177,7 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
 
         btnAddItem.visibility = View.VISIBLE
         btnAddItem.setOnClickListener {
-            toDoList.add(ToDo("", 0))
+            newToDoList.add(ToDo("", 0))
             toDoAdapter.notifyDataSetChanged()
         }
     }
@@ -192,7 +198,7 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
         val id =  database.insert(DBHelper.TODL_TABLE_NAME, null, value)
         value.clear()
 
-        for (toDo in toDoList) {
+        for (toDo in newToDoList) {
             if (toDo.content != "")  {
                 value.put(DBHelper.TOD_COL_CHECKED, toDo.checked)
                 value.put(DBHelper.TOD_COL_CONTENT, toDo.content)
@@ -208,13 +214,11 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
         var cursor: Cursor = database.rawQuery("SELECT * FROM ${DBHelper.TODL_TABLE_NAME} WHERE ${DBHelper.TODL_COL_ID}=?", arrayOf(toDoId.toString()))
         cursor.moveToNext()
         date = cursor.getString(cursor.getColumnIndex(DBHelper.TODL_COL_DATE))
-        color = cursor.getInt(cursor.getColumnIndex(DBHelper.TODL_COL_COLOR))
-        lock = cursor.getInt(cursor.getColumnIndex(DBHelper.TODL_COL_LOCK))
-        bkmr = cursor.getInt(cursor.getColumnIndex(DBHelper.TODL_COL_BKMR))
 
         cursor = database.rawQuery("SELECT * FROM ${DBHelper.TOD_TABLE_NAME} WHERE ${DBHelper.TOD_COL_TID}=?", arrayOf(toDoId.toString()))
         while(cursor.moveToNext()) {
-            toDoList.add(ToDo(cursor.getString(cursor.getColumnIndex(DBHelper.TOD_COL_CONTENT)), cursor.getInt(cursor.getColumnIndex(DBHelper.TOD_COL_CHECKED))))
+            newToDoList.add(ToDo(cursor.getString(cursor.getColumnIndex(DBHelper.TOD_COL_CONTENT)), cursor.getInt(cursor.getColumnIndex(DBHelper.TOD_COL_CHECKED))))
+            oldToDoList.add(ToDo(cursor.getString(cursor.getColumnIndex(DBHelper.TOD_COL_CONTENT)), cursor.getInt(cursor.getColumnIndex(DBHelper.TOD_COL_CHECKED))))
         }
 
         cursor.close()
@@ -233,7 +237,7 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
 
         database.delete(DBHelper.TOD_TABLE_NAME, "${DBHelper.TOD_COL_TID}=?",  arrayOf(toDoId.toString()))
         value.clear()
-        for (toDo in toDoList) {
+        for (toDo in newToDoList) {
             if (toDo.content != "")  {
                 value.put(DBHelper.TOD_COL_CHECKED, toDo.checked)
                 value.put(DBHelper.TOD_COL_CONTENT, toDo.content)
@@ -244,13 +248,26 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
     }
 
     private fun saveMemo() {
-        if (toDoId == -1) {
+        if (toDoId == -1)
             insertToDo()
-        }
-        else {
-            updateToDo()
-        }
+        else
+            if (checkUpdate())
+                updateToDo()
         finish()
+    }
+
+    private fun checkUpdate() : Boolean {
+        if (color != memo.color) return true
+        if (bkmr != memo.bkmr) return true
+        if (lock != memo.lock) return true
+        if (date != etTodoDate.text.toString()) return true
+        newToDoList.forEachIndexed { i, newToDo ->
+            var oldTodo = oldToDoList[i]
+            Log.d("goeun", "new $newToDo , old $oldTodo")
+            if (newToDo.content != oldTodo.content) return true
+            if (newToDo.checked != oldTodo.checked) return true
+        }
+        return false
     }
 
     private fun deleteMemo() {

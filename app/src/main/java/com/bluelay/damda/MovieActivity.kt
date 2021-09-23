@@ -12,7 +12,6 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -31,7 +30,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import kotlinx.android.synthetic.main.activity_memo.*
 import kotlinx.android.synthetic.main.activity_movie.*
 import kotlinx.android.synthetic.main.activity_movie.fabMemoSetting
 import kotlinx.android.synthetic.main.activity_movie.settingLayout
@@ -54,9 +52,12 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     private var date = ""
     private var title = ""
     private var image = ""
+    private var oldImage = ""
     private var content = ""
     private var lock = 0
     private var bkmr = 0
+
+    private lateinit var memo : MemoInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +69,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
 
         if (intent.hasExtra("memo")) {
             btnDeleteMemo.visibility = View.VISIBLE
-            val memo = intent.getSerializableExtra("memo") as MemoInfo
+            memo = intent.getSerializableExtra("memo") as MemoInfo
             color = memo.color
             movieId = memo.id
             lock = memo.lock
@@ -333,9 +334,8 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
             title = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_TITLE))
             image = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_POSTERPIC))
             content = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_CONTENT))
-            lock = cursor.getInt(cursor.getColumnIndex(DBHelper.MOV_COL_LOCK))
-            bkmr = cursor.getInt(cursor.getColumnIndex(DBHelper.MOV_COL_BKMR))
         }
+        oldImage = image
         cursor.close()
     }
 
@@ -361,13 +361,24 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     }
 
     private fun saveMemo() {
-        if (movieId == -1) {
+        if (movieId == -1)
             insertMovie()
-        }
-        else {
-            updateMovie()
-        }
+        else
+            if (checkUpdate())
+                updateMovie()
         finish()
+    }
+
+    private fun checkUpdate() : Boolean {
+        if (color != memo.color) return true
+        if (bkmr != memo.bkmr) return true
+        if (lock != memo.lock) return true
+        if (date != etMovieDate.text.toString()) return true
+        if (content != etMovieReview.text.toString()) return true
+        if (title != etMovieTitle.text.toString()) return true
+        if (score != rbMovieScore.rating) return true
+        if (oldImage != image) return true
+        return false
     }
 
     private fun deleteMovie() {
