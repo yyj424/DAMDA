@@ -25,13 +25,17 @@
         <activity android:name=".MovieActivity"/>
         <activity android:name=".WishActivity"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".WeeklyActivity" />
+        <activity android:name=".WeeklyActivity"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
         <activity android:name=".SettingBGActivity" />
         <activity android:name=".SettingPWActivity" />
         <activity android:name=".ToDoActivity"
             android:windowSoftInputMode="adjustPan">
         </activity>
-        <activity android:name=".MemoActivity"/>
+        <activity android:name=".MemoActivity"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
         <activity android:name=".RecipeActivity"/>
         <activity android:name=".UnlockPWActivity"/>
         <activity android:name=".LicenseActivity"/>
