@@ -57,6 +57,8 @@ class MainActivity : AppCompatActivity() {
         REC_TABLE_NAME to REC_COL_NAME,
         MOV_TABLE_NAME to MOV_COL_TITLE)
 
+    private lateinit var getResult_mainMemoDelete : ActivityResultLauncher<Intent>
+    var swipeLockDelete = -1
     private lateinit var getResult_mmList : ActivityResultLauncher<Intent>
     private lateinit var getResult_bmList : ActivityResultLauncher<Intent>
     private lateinit var getResult_unLock : ActivityResultLauncher<Intent>
@@ -157,6 +159,41 @@ class MainActivity : AppCompatActivity() {
         rvMain_memo.layoutManager = mmLayoutManager
         mainMemoAdapter = MainMemoAdapter(this, mmList, false)
         mainMemoAdapter.setItemClickListener(mainMemoItemClickListener)
+
+        val mainMemoSwipeBKMRClickListener = object: MainMemoAdapter.SwipeBKMRClickListener{
+            override fun makeBKMRItem(view: View, position: Int) {
+                database.execSQL("UPDATE ${mmList[position].type} SET bkmr = 1 WHERE _id = ${mmList[position].id}")
+                mainMemoAdapter.makeBKMRItem(position)
+                bkmrMemoAdapter.makeBKMRItem()
+                getAllMemo()
+            }
+        }
+        mainMemoAdapter.setSwipeBKMRClickListener(mainMemoSwipeBKMRClickListener)
+
+        getResult_mainMemoDelete = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()) { result ->
+            val position = result.data?.getIntExtra("deletePos", -1)
+            if(result.resultCode == RESULT_OK && position != null){
+                database.execSQL("DELETE FROM ${mmList[position!!].type} WHERE _id = ${mmList[position].id}")
+                mainMemoAdapter.deleteItem(position)
+            }
+        }
+        val mainMemoSwipeDeleteClickListener = object: MainMemoAdapter.SwipeDeleteClickListener{
+            override fun deleteItem(view: View, position: Int) {
+                if(mmList[position].lock == 1){ //잠금상태인 경우
+                    val intent = Intent(this@MainActivity, UnlockPWActivity::class.java)
+                    intent.putExtra("deletePos", position)
+                    getResult_mainMemoDelete.launch(intent)
+
+                }
+                else {
+                    database.execSQL("DELETE FROM ${mmList[position].type} WHERE _id = ${mmList[position].id}")
+                    mainMemoAdapter.deleteItem(position)
+                }
+                getAllMemo()
+            }
+        }
+        mainMemoAdapter.setSwipeDeleteClickListener(mainMemoSwipeDeleteClickListener)
 
         rvMain_memo.adapter = mainMemoAdapter
         swipelayoutManager = SSMLLinearLayoutManager(this)
@@ -619,13 +656,5 @@ class MainActivity : AppCompatActivity() {
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
-    }
-
-    public fun OnClick(v : View){
-        when (v.id){
-            R.id.btnSwipeBkmr -> Toast.makeText(this@MainActivity, "click bkmr", Toast.LENGTH_SHORT).show()
-            R.id.btnSwipeDelete -> Toast.makeText(this@MainActivity, "click delete", Toast.LENGTH_SHORT).show()
-        }
-
     }
 }

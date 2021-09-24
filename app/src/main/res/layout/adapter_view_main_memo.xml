@@ -23,11 +23,10 @@
             android:background="#FFC107"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:onClick="OnClick">
+            android:layout_height="match_parent">
 
             <ImageView
-                android:src="@drawable/bkmr_checked"
+                android:src="@drawable/bkmr_default"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -40,8 +39,7 @@
             android:background="#FF3E3E"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:onClick="OnClick">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:src="@drawable/delete"

@@ -27,6 +27,8 @@ class UnlockPWActivity : AppCompatActivity() {
                 if (s.toString().length == 4) {
                     if (sharedPref.getString("memoLock", "0").equals(s.toString())) {
                         val resultIntent = Intent()
+                        val deletePosIntent = intent
+                        resultIntent.putExtra("deletePos", deletePosIntent.getIntExtra("deletePos", -1))
                         setResult(RESULT_OK, resultIntent)
                         inputMethodManager.hideSoftInputFromWindow(etUnlockPassword.windowToken, 0)
                         finish()
