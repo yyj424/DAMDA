@@ -37,13 +37,13 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
     private lateinit var dbHelper: DBHelper
     private lateinit var database: SQLiteDatabase
     private var saveFile: File? = null
+    private var savePhotoPath: String? = null
     private var photoUri : Uri? = null
     private var mid = -1
     private var lock = 0
     private var bkmr = 0
     private var color = -1
     private var photo = ""
-    private var path = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -161,10 +161,6 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
             dialog.show()
         }
 
-        ivMemo.setOnLongClickListener {
-            true
-        }
-
         btnAddPhoto.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     this,
@@ -181,6 +177,13 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
                 intent.type = "image/*"
                 startActivityForResult(intent, 100)
             }
+        }
+
+        ivDelPhoto.setOnClickListener {
+            memoPhotoLayout.visibility = View.GONE
+            photo = ""
+            photoUri = null
+            savePhotoPath = null
         }
     }
 
@@ -200,7 +203,7 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
                     if (cursor != null) {
                         if (cursor.moveToFirst()) {
                             photo = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-                            ivMemo.visibility = View.VISIBLE
+                            memoPhotoLayout.visibility = View.VISIBLE
                         }
                         cursor.close()
                     }
@@ -220,16 +223,24 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
     }
 
     private fun savePhoto(imgBitmap: Bitmap) {
-        saveFile = File(this.filesDir, photo.substring(photo.lastIndexOf("/")+1))
+        if (photo != "") {
+            saveFile = File(this.filesDir, photo.substring(photo.lastIndexOf("/")+1))
+        }
+        else {
+            photoUri = null
+            Toast.makeText(applicationContext, "사진 첨부를 실패하였습니다", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         try {
             saveFile!!.createNewFile();
             val out = FileOutputStream(saveFile)
             imgBitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
             out.close()
-            path = saveFile!!.path
+            savePhotoPath = saveFile!!.path
         } catch (e: Exception) {
-            Toast.makeText(applicationContext, "파일 저장 실패", Toast.LENGTH_SHORT).show()
+            savePhotoPath = null
+            Toast.makeText(applicationContext, "사진 첨부를 실패하였습니다", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -251,12 +262,19 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
         etMemo.setText(c.getString(c.getColumnIndex(DBHelper.MEM_COL_CONTENT)))
         if (c.getString(c.getColumnIndex(DBHelper.MEM_COL_PHOTO)) != null) {
             try {
-                path = c.getString(c.getColumnIndex(DBHelper.MEM_COL_PHOTO))
-                val bm = BitmapFactory.decodeFile(path)
-                ivMemo.visibility = View.VISIBLE
-                ivMemo.setImageBitmap(bm) // 내부 저장소에 저장된 이미지를 이미지뷰에 셋
+                savePhotoPath = c.getString(c.getColumnIndex(DBHelper.MEM_COL_PHOTO))
+                val bm = BitmapFactory.decodeFile(savePhotoPath)
+                memoPhotoLayout.visibility = View.VISIBLE
+                Glide.with(this)
+                    .load(bm)
+                    .fitCenter()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .dontAnimate()
+                    .into(ivMemo)
             } catch (e: java.lang.Exception) {
-                Toast.makeText(applicationContext, "파일 로드 실패", Toast.LENGTH_SHORT).show()
+                memoPhotoLayout.visibility = View.GONE
+                Toast.makeText(applicationContext, "사진을 가져오지 못했습니다", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -285,7 +303,7 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
         contentValues.put(DBHelper.MEM_COL_WDATE, System.currentTimeMillis() / 1000L)
         contentValues.put(DBHelper.MEM_COL_COLOR, color)
         contentValues.put(DBHelper.MEM_COL_CONTENT, etMemo.text.toString())
-        contentValues.put(DBHelper.MEM_COL_PHOTO, path)
+        contentValues.put(DBHelper.MEM_COL_PHOTO, savePhotoPath)
         contentValues.put(DBHelper.MEM_COL_LOCK, lock)
         contentValues.put(DBHelper.MEM_COL_BKMR, bkmr)
 

@@ -6,19 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/ivMemo"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="28dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
-        app:srcCompat="@drawable/add_photo" />
-
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
@@ -33,30 +20,68 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/etMemo"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="30dp"
-        android:autofillHints=""
-        android:background="@null"
-        android:fontFamily="@font/nanumsquareroundb"
-        android:gravity="start"
-        android:includeFontPadding="false"
-        android:inputType="textMultiLine"
-        android:lineSpacingExtra="5sp"
-        android:padding="10dp"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/settingLayout"
+        android:layout_height="500dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivMemo">
+        app:layout_constraintTop_toBottomOf="@+id/textView5">
 
-        <requestFocus />
-    </EditText>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/memoPhotoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/ivMemo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/add_photo" />
+
+                <ImageView
+                    android:id="@+id/ivDelPhoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_del_photo" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <EditText
+                android:id="@+id/etMemo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                android:autofillHints=""
+                android:background="@null"
+                android:fontFamily="@font/nanumsquareroundb"
+                android:gravity="start"
+                android:includeFontPadding="false"
+                android:inputType="textMultiLine"
+                android:lineSpacingExtra="5sp"
+                android:padding="10dp"
+                android:textColor="#000000">
+
+                <requestFocus />
+            </EditText>
+
+        </LinearLayout>
+    </ScrollView>
 
     <include
         android:id="@+id/settingLayout"
