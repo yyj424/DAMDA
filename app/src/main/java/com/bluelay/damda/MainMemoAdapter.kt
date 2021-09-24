@@ -13,10 +13,26 @@ class MainMemoAdapter(val context : Context, private val mmList : ArrayList<Memo
     interface ItemClickListener {
         fun onClick(view: View, position: Int)
     }
+    interface SwipeBKMRClickListener {
+        fun makeBKMRItem(view: View, position: Int)
+    }
+    interface SwipeDeleteClickListener {
+        fun deleteItem(view: View, position: Int)
+    }
 
     private lateinit var itemClickListener: ItemClickListener
     fun setItemClickListener(itemClickListener: ItemClickListener) {
         this.itemClickListener = itemClickListener
+    }
+
+    private lateinit var swipeBKMRClickListener: SwipeBKMRClickListener
+    fun setSwipeBKMRClickListener(swipeBKMRClickListener: SwipeBKMRClickListener) {
+        this.swipeBKMRClickListener = swipeBKMRClickListener
+    }
+
+    private lateinit var swipeDeleteClickListener: SwipeDeleteClickListener
+    fun setSwipeDeleteClickListener(swipeDeleteClickListener: SwipeDeleteClickListener) {
+        this.swipeDeleteClickListener = swipeDeleteClickListener
     }
 
     fun deleteItem(i : Int){
@@ -44,6 +60,13 @@ class MainMemoAdapter(val context : Context, private val mmList : ArrayList<Memo
         }
         holder.setSampleData(mm)
 
+        holder.itemView.btnSwipeBkmr.setOnClickListener {
+            swipeBKMRClickListener.makeBKMRItem(it, position)
+        }
+
+        holder.itemView.btnSwipeDelete.setOnClickListener {
+            swipeDeleteClickListener.deleteItem(it, position)
+        }
     }
 
     class ViewHolder(val context : Context, itemView: View, private val edit : Boolean) : RecyclerView.ViewHolder(itemView), SetMemo{
@@ -77,4 +100,5 @@ class MainMemoAdapter(val context : Context, private val mmList : ArrayList<Memo
             }
         }
     }
+
 }
