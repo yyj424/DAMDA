@@ -19,7 +19,6 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -36,14 +35,17 @@ import java.io.InputStream
 class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
     private lateinit var dbHelper: DBHelper
     private lateinit var database: SQLiteDatabase
+    private lateinit var memo : MemoInfo
     private var saveFile: File? = null
-    private var savePhotoPath: String? = null
+    private var photoPath: String? = null
+    private var savedPhotoPath: String? = null
     private var photoUri : Uri? = null
     private var mid = -1
     private var lock = 0
     private var bkmr = 0
     private var color = -1
     private var photo = ""
+    private var content = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +58,7 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
 
         if (intent.hasExtra("memo")) {
             btnDeleteMemo.visibility = View.VISIBLE
-            val memo = intent.getSerializableExtra("memo") as MemoInfo
+            memo = intent.getSerializableExtra("memo") as MemoInfo
             mid = memo.id
             color = memo.color
             lock = memo.lock
@@ -183,7 +185,7 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
             memoPhotoLayout.visibility = View.GONE
             photo = ""
             photoUri = null
-            savePhotoPath = null
+            photoPath = null
         }
     }
 
@@ -213,7 +215,6 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
 
                 Glide.with(this)
                     .load(photo)
-                    .fitCenter()
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .dontAnimate()
@@ -237,9 +238,9 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
             val out = FileOutputStream(saveFile)
             imgBitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
             out.close()
-            savePhotoPath = saveFile!!.path
+            photoPath = saveFile!!.path
         } catch (e: Exception) {
-            savePhotoPath = null
+            photoPath = null
             Toast.makeText(applicationContext, "사진 첨부를 실패하였습니다", Toast.LENGTH_SHORT).show()
         }
     }
@@ -262,12 +263,12 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
         etMemo.setText(c.getString(c.getColumnIndex(DBHelper.MEM_COL_CONTENT)))
         if (c.getString(c.getColumnIndex(DBHelper.MEM_COL_PHOTO)) != null) {
             try {
-                savePhotoPath = c.getString(c.getColumnIndex(DBHelper.MEM_COL_PHOTO))
-                val bm = BitmapFactory.decodeFile(savePhotoPath)
+                savedPhotoPath = c.getString(c.getColumnIndex(DBHelper.MEM_COL_PHOTO))
+                photoPath = savedPhotoPath
+                val bm = BitmapFactory.decodeFile(savedPhotoPath)
                 memoPhotoLayout.visibility = View.VISIBLE
                 Glide.with(this)
                     .load(bm)
-                    .fitCenter()
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .dontAnimate()
@@ -297,20 +298,22 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
             val imgBitmap = BitmapFactory.decodeStream(instream)
             instream?.close()
             savePhoto(imgBitmap)
-        } // 삭제 추가
+        }
 
         val contentValues = ContentValues()
         contentValues.put(DBHelper.MEM_COL_WDATE, System.currentTimeMillis() / 1000L)
         contentValues.put(DBHelper.MEM_COL_COLOR, color)
         contentValues.put(DBHelper.MEM_COL_CONTENT, etMemo.text.toString())
-        contentValues.put(DBHelper.MEM_COL_PHOTO, savePhotoPath)
+        contentValues.put(DBHelper.MEM_COL_PHOTO, photoPath)
         contentValues.put(DBHelper.MEM_COL_LOCK, lock)
         contentValues.put(DBHelper.MEM_COL_BKMR, bkmr)
 
         if (mid != -1) {
-            val whereCluase = "_id=?"
-            val whereArgs = arrayOf(mid.toString())
-            database.update(DBHelper.MEM_TABLE_NAME, contentValues, whereCluase, whereArgs)
+            if (checkUpdate()) {
+                val whereCluase = "_id=?"
+                val whereArgs = arrayOf(mid.toString())
+                database.update(DBHelper.MEM_TABLE_NAME, contentValues, whereCluase, whereArgs)
+            }
         }
         else {
             database.insert(DBHelper.MEM_TABLE_NAME, null, contentValues)
@@ -318,7 +321,34 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
         finish()
     }
 
+    private fun checkUpdate() : Boolean {
+        if (color != memo.color) return true
+        if (bkmr != memo.bkmr) return true
+        if (lock != memo.lock) return true
+        if (savedPhotoPath != photoPath) {
+            delSavedPhtoto()
+            return true
+        }
+        if (content != etMemo.text.toString()) return true
+        return false
+    }
+
+    private fun delSavedPhtoto() {
+        try {
+            val file = this.filesDir
+            val fileList = file.listFiles()
+            for (i in fileList.indices) {
+                if (fileList[i].path == savedPhotoPath) {
+                    fileList[i].delete()
+                }
+            }
+        } catch (e: java.lang.Exception) {
+            Toast.makeText(applicationContext, "기존 사진 파일을 삭제하지 못했습니다", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun deleteMemo() {
+        delSavedPhtoto()
         database.execSQL("DELETE FROM ${DBHelper.MEM_TABLE_NAME} WHERE _id = $mid")
         finish()
     }
