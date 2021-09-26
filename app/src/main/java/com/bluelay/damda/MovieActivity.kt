@@ -10,13 +10,14 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -34,6 +35,9 @@ import kotlinx.android.synthetic.main.activity_movie.*
 import kotlinx.android.synthetic.main.activity_movie.fabMemoSetting
 import kotlinx.android.synthetic.main.activity_movie.settingLayout
 import kotlinx.android.synthetic.main.layout_memo_settings.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,11 +55,14 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     private var score = 0.0F
     private var date = ""
     private var title = ""
-    private var image = ""
+    private var image : String? = null
     private var oldImage = ""
     private var content = ""
     private var lock = 0
     private var bkmr = 0
+    private var photo = ""
+    private var saveFile: File? = null
+    private var photoUri : Uri? = null
 
     private lateinit var memo : MemoInfo
 
@@ -269,18 +276,17 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
         }
         else if (requestCode == 200) {
             if (resultCode == RESULT_OK) {
-                val photoUri : Uri = data?.data!!
+                photoUri = data?.data!!
                 if (photoUri.toString().contains("/gallery/picker")) {
                     Toast.makeText(this,"클라우드 사진은 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
                     return
                 }
                 var cursor: Cursor? = null
                 try {
-                    cursor = contentResolver.query(photoUri, null, null, null, null)
+                    cursor = contentResolver.query(photoUri!!, null, null, null, null)
                     if (cursor != null) {
                         if (cursor.moveToFirst()) {
-                            image = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-                            Log.d("goeun", image)
+                            photo = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
                         }
                         cursor.close()
                     }
@@ -289,13 +295,35 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
                 }
 
                 Glide.with(this)
-                    .load(image)
+                    .load(photo)
                     .fitCenter()
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .dontAnimate()
                     .into(ivMoviePoster)
             }
+        }
+    }
+
+    private fun savePhoto(imgBitmap: Bitmap) {
+        if (photo != "") {
+            saveFile = File(this.filesDir, photo.substring(photo.lastIndexOf("/")+1))
+        }
+        else {
+            photoUri = null
+            Toast.makeText(applicationContext, "사진 첨부를 실패하였습니다", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        try {
+            saveFile!!.createNewFile();
+            val out = FileOutputStream(saveFile)
+            imgBitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+            out.close()
+            image = saveFile!!.path
+        } catch (e: Exception) {
+            image = null
+            Toast.makeText(applicationContext, "사진 첨부를 실패하였습니다", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -335,7 +363,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
             image = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_POSTERPIC))
             content = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_CONTENT))
         }
-        oldImage = image
+        oldImage = image.toString()
         cursor.close()
     }
 
@@ -361,6 +389,12 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     }
 
     private fun saveMemo() {
+        if (photoUri != null) {
+            val instream: InputStream? = contentResolver.openInputStream(photoUri!!)
+            val imgBitmap = BitmapFactory.decodeStream(instream)
+            instream?.close()
+            savePhoto(imgBitmap)
+        }
         if (movieId == -1)
             insertMovie()
         else

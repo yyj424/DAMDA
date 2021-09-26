@@ -263,7 +263,6 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
         if (date != etTodoDate.text.toString()) return true
         newToDoList.forEachIndexed { i, newToDo ->
             var oldTodo = oldToDoList[i]
-            Log.d("goeun", "new $newToDo , old $oldTodo")
             if (newToDo.content != oldTodo.content) return true
             if (newToDo.checked != oldTodo.checked) return true
         }
