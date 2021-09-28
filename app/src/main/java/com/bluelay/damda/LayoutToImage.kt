@@ -1,5 +1,5 @@
 package com.bluelay.damda
 
-class LayoutToImage {
+interface LayoutToImage {
 
 }

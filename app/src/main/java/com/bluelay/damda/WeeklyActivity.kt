@@ -13,8 +13,8 @@ import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.layout_memo_settings.*
 import kotlinx.android.synthetic.main.activity_weekly.*
+import kotlinx.android.synthetic.main.layout_memo_settings.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -28,12 +28,16 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
     private var lock = 0
     private var bkmr = 0
     private var color = -1
+    private var date = ""
 
     private val calendar = Calendar.getInstance()
     private val dateFormat = "yyyy.MM.dd"
     private var sdf = SimpleDateFormat(dateFormat, Locale.KOREA)
 
-    private var diaryList = arrayListOf<Weekly>()
+    private lateinit var memo : MemoInfo
+
+    private var oldDiaryList = arrayListOf<Weekly>()
+    private var newDiaryList = arrayListOf<Weekly>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +55,7 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
                 1 -> getWeeklyDay(-6)
                 2 -> getWeeklyDay(-7)
                 3 -> getWeeklyDay(-1)
-                4-> getWeeklyDay(-2)
+                4 -> getWeeklyDay(-2)
                 5 -> getWeeklyDay(-3)
                 6 -> getWeeklyDay(-4)
                 7 -> getWeeklyDay(-5)
@@ -68,10 +72,10 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
             ).show()
         }
 
-        val diaryAdapter = WeeklyAdapter(this, diaryList)
+        val diaryAdapter = WeeklyAdapter(this, newDiaryList)
         if (intent.hasExtra("memo")) {
             btnDeleteMemo.visibility = View.VISIBLE
-            val memo = intent.getSerializableExtra("memo") as MemoInfo
+            memo = intent.getSerializableExtra("memo") as MemoInfo
             color = memo.color
             did = memo.id
             lock = memo.lock
@@ -89,20 +93,26 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
                         1 -> "Mon"
                         2 -> "Tue"
                         3 -> "Wed"
-                        4-> "Thu"
+                        4 -> "Thu"
                         5 -> "Fri"
                         6 -> "Sat"
                         7 -> "Sun"
                         else -> ""
                     }
 
-                    diaryList.add(Weekly(day, "", getURLForResource(R.drawable.select_emoji),
+                    newDiaryList.add(Weekly(day, "", getURLForResource(R.drawable.select_emoji),
                         getURLForResource(R.drawable.select_weather)
                     ))
                 }
             }
         }
         setColor(this, color, activity_simpe_diary)
+
+        val listSize = newDiaryList.size
+        for (i in 1.. 7-listSize){
+            newDiaryList.add(Weekly("", "", "", ""))
+            oldDiaryList.add(Weekly("", "", "", ""))
+        }
 
         lvDiary.adapter = diaryAdapter
 
@@ -221,7 +231,8 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
         }
 
         c.moveToFirst()
-        etDiaryDate.setText(c.getString(c.getColumnIndex(DBHelper.WEE_COL_DATE)))
+        date = c.getString(c.getColumnIndex(DBHelper.WEE_COL_DATE))
+        etDiaryDate.setText(date)
 
         var day : String
         var moodPic : String
@@ -239,13 +250,14 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
                 1 -> "Mon"
                 2 -> "Tue"
                 3 -> "Wed"
-                4-> "Thu"
+                4 -> "Thu"
                 5 -> "Fri"
                 6 -> "Sat"
                 7 -> "Sun"
                 else -> ""
             }
-            diaryList.add(Weekly(day, content, moodPic, weather))
+            newDiaryList.add(Weekly(day, content, moodPic, weather))
+            oldDiaryList.add(Weekly(day, content, moodPic, weather))
         }
         c.close()
     }
@@ -264,17 +276,19 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
         contentValues.put(DBHelper.WEE_COL_DATE, etDiaryDate.text.toString())
 
         if (did != -1) {
-            var whereClause = "_id=?"
-            val whereArgs = arrayOf(did.toString())
-            database.update(DBHelper.WEE_TABLE_NAME, contentValues, whereClause, whereArgs)
+            if(checkUpdate()) {
+                var whereClause = "_id=?"
+                val whereArgs = arrayOf(did.toString())
+                database.update(DBHelper.WEE_TABLE_NAME, contentValues, whereClause, whereArgs)
 
-            whereClause = "did=?"
-            database.delete(DBHelper.DIA_TABLE_NAME, whereClause, whereArgs)
+                whereClause = "did=?"
+                database.delete(DBHelper.DIA_TABLE_NAME, whereClause, whereArgs)
+            }
         }
         else  {
             did = database.insert(DBHelper.WEE_TABLE_NAME, null, contentValues).toInt()
         }
-        for(diary in diaryList){
+        for(diary in newDiaryList){
             contentValues.clear()
 
             contentValues.put(DBHelper.DIA_COL_DID, did)
@@ -285,6 +299,20 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
 
         }
         finish()
+    }
+
+    private fun checkUpdate() : Boolean {
+        if (color != memo.color) return true
+        if (bkmr != memo.bkmr) return true
+        if (lock != memo.lock) return true
+        if (date != etDiaryDate.text.toString()) return true
+        newDiaryList.forEachIndexed { i, newDiary ->
+            var oldDiary = oldDiaryList[i]
+            if (newDiary.moodPic != oldDiary.moodPic) return true
+            if (newDiary.weather != oldDiary.weather) return true
+            if (newDiary.content != oldDiary.content) return true
+        }
+        return false
     }
 
     private fun deleteMemo() {

@@ -24,6 +24,12 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
     private var bkmr = 0
     var color = -1
 
+    private var name = ""
+    private var ingredients = ""
+    private var content = ""
+
+    private lateinit var memo : MemoInfo
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe)
@@ -32,7 +38,7 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
 
         if (intent.hasExtra("memo")) {
             btnDeleteMemo.visibility = View.VISIBLE
-            val memo = intent.getSerializableExtra("memo") as MemoInfo
+            memo = intent.getSerializableExtra("memo") as MemoInfo
             color = memo.color
             recipeId = memo.id
             lock = memo.lock
@@ -157,9 +163,13 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
         }
 
         while(c.moveToNext()){
-            etRecipeName.setText(c.getString(c.getColumnIndex(DBHelper.REC_COL_NAME)))
-            etIngredients.setText(c.getString(c.getColumnIndex(DBHelper.REC_COL_INGREDIENTS)))
-            etRecipeContent.setText(c.getString(c.getColumnIndex(DBHelper.REC_COL_CONTENT)))
+            name = c.getString(c.getColumnIndex(DBHelper.REC_COL_NAME))
+            ingredients = c.getString(c.getColumnIndex(DBHelper.REC_COL_INGREDIENTS))
+            content = c.getString(c.getColumnIndex(DBHelper.REC_COL_CONTENT))
+
+            etRecipeName.setText(name)
+            etIngredients.setText(ingredients)
+            etRecipeContent.setText(content)
         }
         c.close()
     }
@@ -199,9 +209,20 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
             insertRecipe()
         }
         else {
-            updateRecipe()
+            if(checkUpdate())
+                updateRecipe()
         }
         finish()
+    }
+
+    private fun checkUpdate() : Boolean {
+        if (color != memo.color) return true
+        if (bkmr != memo.bkmr) return true
+        if (lock != memo.lock) return true
+        if (name != etRecipeName.text.toString()) return true
+        if (ingredients != etIngredients.text.toString()) return true
+        if (content != etRecipeContent.text.toString()) return true
+        return false
     }
 
     private fun deleteMemo() {
