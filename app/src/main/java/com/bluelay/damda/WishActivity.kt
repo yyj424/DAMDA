@@ -12,16 +12,23 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.database.getIntOrNull
 import kotlinx.android.synthetic.main.activity_wish.*
+import kotlinx.android.synthetic.main.activity_wish.btnSaveMemo
+import kotlinx.android.synthetic.main.activity_wish.fabMemoSetting
+import kotlinx.android.synthetic.main.activity_wish.settingLayout
 import kotlinx.android.synthetic.main.layout_memo_settings.*
 
 class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
-    private var wishList = arrayListOf<Wish>()
+    private var oldWishList = arrayListOf<Wish>()
+    private var newWishList = arrayListOf<Wish>()
     private lateinit var dbHelper : DBHelper
     private lateinit var database : SQLiteDatabase
+    private lateinit var memo : MemoInfo
     private var wid = -1
     private var lock = 0
     private var bkmr = 0
     private var color = -1
+    private var category = ""
+    private var total = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,11 +36,11 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
 
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
-        val wishAdapter = WishAdapter(this, this, wishList)
+        val wishAdapter = WishAdapter(this, this, newWishList)
 
         if (intent.hasExtra("memo")) {
             btnDeleteMemo.visibility = View.VISIBLE
-            val memo = intent.getSerializableExtra("memo") as MemoInfo
+            memo = intent.getSerializableExtra("memo") as MemoInfo
             wid = memo.id
             color = memo.color
             lock = memo.lock
@@ -42,8 +49,8 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         }
         else {
             color = intent.getIntExtra("color", 0)
-            for (i in 1.. 10) {
-                wishList.add(Wish("", null, 0, ""))
+            for (i in 0.. 9) {
+                newWishList.add(Wish("", null, 0, ""))
             }
         }
 
@@ -156,8 +163,8 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         var selectArgs = arrayOf(wid.toString())
         var c : Cursor = database.query(DBHelper.WISL_TABLE_NAME, columns, selection, selectArgs, null, null, null)
         c.moveToNext()
-        etWishCategory.setText(c.getString(c.getColumnIndex(DBHelper.WISL_COL_CATEGORY)))
-        setColor(this, c.getInt(c.getColumnIndex(DBHelper.WISL_COL_COLOR)), activity_wish)
+        category = c.getString(c.getColumnIndex(DBHelper.WISL_COL_CATEGORY))
+        etWishCategory.setText(category)
 
         if (lock == 1) {
             cbLock.isChecked = true
@@ -170,19 +177,25 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         selection = "wid=?"
         selectArgs = arrayOf(wid.toString())
         c = database.query(DBHelper.WIS_TABLE_NAME, columns, selection, selectArgs, null, null, null)
-        wishList.clear()
-        for (whereClause in 1.. 10) {
+        newWishList.clear()
+        oldWishList.clear()
+        for (i in 0.. 9) {
             if (c.moveToNext()) {
                 var price: Int? = null
                 if (c.getIntOrNull(c.getColumnIndex(DBHelper.WIS_COL_PRICE)) != null) {
                     price = c.getInt(c.getColumnIndex(DBHelper.WIS_COL_PRICE))
+                    total += price
                 }
-                wishList.add(Wish(c.getString(c.getColumnIndex(DBHelper.WIS_COL_ITEM)), price, c.getInt(c.getColumnIndex(DBHelper.WIS_COL_CHECKED)), c.getString(c.getColumnIndex(DBHelper.WIS_COL_LINK))))
+                newWishList.add(Wish(c.getString(c.getColumnIndex(DBHelper.WIS_COL_ITEM)), price, c.getInt(c.getColumnIndex(DBHelper.WIS_COL_CHECKED)), c.getString(c.getColumnIndex(DBHelper.WIS_COL_LINK))))
+                oldWishList.add(Wish(c.getString(c.getColumnIndex(DBHelper.WIS_COL_ITEM)), price, c.getInt(c.getColumnIndex(DBHelper.WIS_COL_CHECKED)), c.getString(c.getColumnIndex(DBHelper.WIS_COL_LINK))))
             }
             else {
-                wishList.add(Wish("", null, 0, ""))
+                newWishList.add(Wish("", null, 0, ""))
+                oldWishList.add(Wish("", null, 0, ""))
             }
         }
+
+        tvWishTotal.text = total.toString()
         c.close()
     }
 
@@ -198,30 +211,53 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         contentValues.put(DBHelper.WISL_COL_LOCK, lock)
         contentValues.put(DBHelper.WISL_COL_BKMR, bkmr)
 
+        var dbChange = false
         if (wid != -1) {
-            var whereClause = "_id=?"
-            val whereArgs = arrayOf(wid.toString())
-            database.update(DBHelper.WISL_TABLE_NAME, contentValues, whereClause, whereArgs)
+            if (checkUpdate()) {
+                dbChange = true
+                var whereClause = "_id=?"
+                val whereArgs = arrayOf(wid.toString())
+                database.update(DBHelper.WISL_TABLE_NAME, contentValues, whereClause, whereArgs)
 
-            whereClause = "wid=?"
-            database.delete(DBHelper.WIS_TABLE_NAME, whereClause, whereArgs)
+                whereClause = "wid=?"
+                database.delete(DBHelper.WIS_TABLE_NAME, whereClause, whereArgs)
+            }
         }
         else {
+            dbChange = true
             wid = database.insert(DBHelper.WISL_TABLE_NAME, null, contentValues).toInt()
         }
-        for(wish in wishList){
-            contentValues.clear()
-            if (wish.item.replace(" ", "") != "") {
-                contentValues.put(DBHelper.WIS_COL_WID, wid)
-                contentValues.put(DBHelper.WIS_COL_ITEM, wish.item)
-                contentValues.put(DBHelper.WIS_COL_PRICE, wish.price)
-                contentValues.put(DBHelper.WIS_COL_CHECKED, wish.checked)
-                contentValues.put(DBHelper.WIS_COL_LINK, wish.link)
-                database.insert(DBHelper.WIS_TABLE_NAME, null, contentValues)
+
+        if (dbChange) {
+            for (wish in newWishList) {
+                contentValues.clear()
+                if (wish.item.replace(" ", "") != "" || wish.price != null || wish.link.replace(" ", "") != "") {
+                    contentValues.put(DBHelper.WIS_COL_WID, wid)
+                    contentValues.put(DBHelper.WIS_COL_ITEM, wish.item)
+                    contentValues.put(DBHelper.WIS_COL_PRICE, wish.price)
+                    contentValues.put(DBHelper.WIS_COL_CHECKED, wish.checked)
+                    contentValues.put(DBHelper.WIS_COL_LINK, wish.link)
+                    database.insert(DBHelper.WIS_TABLE_NAME, null, contentValues)
+                }
             }
         }
 
         finish()
+    }
+
+    private fun checkUpdate() : Boolean {
+        if (color != memo.color) return true
+        if (bkmr != memo.bkmr) return true
+        if (lock != memo.lock) return true
+        if (category != etWishCategory.text.toString()) return true
+        newWishList.forEachIndexed { i, newWish ->
+            var oldWish = oldWishList[i]
+            if (newWish.item != oldWish.item) return true
+            if (newWish.price != oldWish.price) return true
+            if (newWish.checked != oldWish.checked) return true
+            if (newWish.link != oldWish.link) return true
+        }
+        return false
     }
 
     private fun deleteMemo() {

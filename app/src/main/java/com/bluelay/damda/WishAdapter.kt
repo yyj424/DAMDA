@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -39,8 +38,6 @@ class WishAdapter(val calTotal: CalTotal, val context: Context, val wishList: Ar
         }
         else {
             etWishPrice.setText(wish.price.toString())
-            total += wish.price!!
-            calTotal.cal(total.toString())
         }
         if (wish.link != "") {
             btnWishLink.setBackgroundResource(R.drawable.link_checked)
