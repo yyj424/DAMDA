@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:fontFamily="@font/nanumsquareroundeb"
-        android:text="@string/movie_title"
+        android:text="MOVIE"
         android:textColor="#000000"
         android:textSize="35sp"
         app:layout_constraintEnd_toEndOf="parent"
