@@ -12,7 +12,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -259,8 +258,8 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
             null
         )
         c.moveToNext()
-        setColor(this, c.getInt(c.getColumnIndex(DBHelper.MEM_COL_COLOR)), activity_memo)
-        etMemo.setText(c.getString(c.getColumnIndex(DBHelper.MEM_COL_CONTENT)))
+        content = c.getString(c.getColumnIndex(DBHelper.MEM_COL_CONTENT))
+        etMemo.setText(content)
         if (c.getString(c.getColumnIndex(DBHelper.MEM_COL_PHOTO)) != null) {
             try {
                 savedPhotoPath = c.getString(c.getColumnIndex(DBHelper.MEM_COL_PHOTO))
@@ -326,14 +325,14 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
         if (bkmr != memo.bkmr) return true
         if (lock != memo.lock) return true
         if (savedPhotoPath != photoPath) {
-            delSavedPhtoto()
+            delSavedPhoto()
             return true
         }
         if (content != etMemo.text.toString()) return true
         return false
     }
 
-    private fun delSavedPhtoto() {
+    private fun delSavedPhoto() {
         try {
             val file = this.filesDir
             val fileList = file.listFiles()
@@ -348,7 +347,7 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
     }
 
     private fun deleteMemo() {
-        delSavedPhtoto()
+        delSavedPhoto()
         database.execSQL("DELETE FROM ${DBHelper.MEM_TABLE_NAME} WHERE _id = $mid")
         finish()
     }
