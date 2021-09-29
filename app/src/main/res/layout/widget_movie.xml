@@ -1,0 +1,100 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llWidgetMovie"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:theme="@style/Theme.DAMDA.AppWidgetContainer">
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:text="MOVIE"
+        android:textColor="#000000"
+        android:textSize="25sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/ivWidgetMoviePoster"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_baseline_movie_24" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvWidgetMovieTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:layout_weight="2"
+                android:background="@null"
+                android:ems="10"
+                android:fontFamily="@font/nanumsquareroundb"
+                android:gravity="center"
+                android:inputType="textMultiLine|text"
+                android:text="영화 제목"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/tvWidgetMovieDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:clickable="false"
+                android:ems="10"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:fontFamily="@font/nanumsquareroundb"
+                android:gravity="center"
+                android:inputType="date"
+                android:text="날짜"
+                android:textColor="#000000"
+                android:textColorHighlight="#00FFFFFF"
+                android:textColorLink="#00FFFFFF"
+                android:textCursorDrawable="@android:color/transparent"
+                android:textSize="18sp"
+                tools:ignore="TouchTargetSizeCheck" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvWidgetMovieReview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:background="@null"
+        android:ems="10"
+        android:fontFamily="@font/nanumsquareroundb"
+        android:gravity="start"
+        android:inputType="textMultiLine|text"
+        android:lines="15"
+        android:padding="5dp"
+        android:scrollbars="none"
+        android:text="감상평"
+        android:textColor="#000000" />
+
+</LinearLayout>
