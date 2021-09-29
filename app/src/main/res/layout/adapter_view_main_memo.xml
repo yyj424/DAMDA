@@ -20,7 +20,7 @@
 
         <FrameLayout
             android:id="@+id/btnSwipeBkmr"
-            android:background="#FFC107"
+            android:background="#FFD888"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent">
@@ -36,7 +36,7 @@
         <FrameLayout
             android:id="@+id/btnSwipeDelete"
             android:layout_gravity="center"
-            android:background="#FF3E3E"
+            android:background="#FF6C5C"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent">
