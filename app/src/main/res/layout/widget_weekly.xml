@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llWidgetWeekly"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="8dp"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/etDiaryDate"
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/nanumsquareroundeb"
+        android:layout_gravity="center"
+        android:text="WEEKLY"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvWidgetWeeklyDate"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -21,7 +35,7 @@
         android:inputType="date"
         android:layout_gravity="center"
         android:text="날짜"
-        android:textSize="15sp"
+        android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -32,9 +46,9 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivMoodPic_mon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:id="@+id/ivtvWidgetWeeklyMoodPic_mon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
@@ -56,7 +70,7 @@
                 android:layout_height="0dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginRight="40dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -79,10 +93,9 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/etDiaryContent_mon"
+                android:id="@+id/tvWidgetWeeklyContent_mon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginRight="40dp"
                 android:background="@null"
@@ -91,14 +104,13 @@
                 android:hint="당신의 하루는 어땠나요"
                 android:inputType="textPersonName"
                 android:textColor="#000000"
-                android:textSize="17sp" />
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
     <ImageView
         android:id="@+id/imageView100"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
         app:srcCompat="@drawable/line" />
 
     <LinearLayout
@@ -107,9 +119,9 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivMoodPicTue_tue"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:id="@+id/ivtvWidgetWeeklyMoodPicTue_tue"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
@@ -131,7 +143,7 @@
                 android:layout_height="0dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginRight="40dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -154,10 +166,9 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/etDiaryContent_tue"
+                android:id="@+id/tvWidgetWeeklyContent_tue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginRight="40dp"
                 android:background="@null"
@@ -166,14 +177,13 @@
                 android:hint="당신의 하루는 어땠나요"
                 android:inputType="textPersonName"
                 android:textColor="#000000"
-                android:textSize="17sp" />
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
     <ImageView
         android:id="@+id/imageView101"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
         app:srcCompat="@drawable/line" />
 
     <LinearLayout
@@ -182,9 +192,9 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivMoodPic_wed"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:id="@+id/ivtvWidgetWeeklyMoodPic_wed"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
@@ -206,7 +216,7 @@
                 android:layout_height="0dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginRight="40dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -229,10 +239,9 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/etDiaryContent_wed"
+                android:id="@+id/tvWidgetWeeklyContent_wed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginRight="40dp"
                 android:background="@null"
@@ -241,14 +250,13 @@
                 android:hint="당신의 하루는 어땠나요"
                 android:inputType="textPersonName"
                 android:textColor="#000000"
-                android:textSize="17sp" />
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
     <ImageView
         android:id="@+id/imageView102"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
         app:srcCompat="@drawable/line" />
 
     <LinearLayout
@@ -257,9 +265,9 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivMoodPic_thr"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:id="@+id/ivtvWidgetWeeklyMoodPic_thr"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
@@ -281,7 +289,7 @@
                 android:layout_height="0dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginRight="40dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -304,10 +312,9 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/etDiaryContent_thr"
+                android:id="@+id/tvWidgetWeeklyContent_thr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginRight="40dp"
                 android:background="@null"
@@ -316,14 +323,13 @@
                 android:hint="당신의 하루는 어땠나요"
                 android:inputType="textPersonName"
                 android:textColor="#000000"
-                android:textSize="17sp" />
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
     <ImageView
         android:id="@+id/imageView103"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
         app:srcCompat="@drawable/line" />
 
     <LinearLayout
@@ -332,9 +338,9 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivMoodPic_fri"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:id="@+id/ivtvWidgetWeeklyMoodPic_fri"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
@@ -356,7 +362,7 @@
                 android:layout_height="0dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginRight="40dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -379,10 +385,9 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/etDiaryContent_fri"
+                android:id="@+id/tvWidgetWeeklyContent_fri"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginRight="40dp"
                 android:background="@null"
@@ -391,14 +396,13 @@
                 android:hint="당신의 하루는 어땠나요"
                 android:inputType="textPersonName"
                 android:textColor="#000000"
-                android:textSize="17sp" />
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
     <ImageView
         android:id="@+id/imageView104"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
         app:srcCompat="@drawable/line" />
 
     <LinearLayout
@@ -407,9 +411,9 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivMoodPic_sat"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:id="@+id/ivtvWidgetWeeklyMoodPic_sat"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
@@ -431,7 +435,7 @@
                 android:layout_height="0dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginRight="40dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -454,10 +458,9 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/etDiaryContent_sat"
+                android:id="@+id/tvWidgetWeeklyContent_sat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginRight="40dp"
                 android:background="@null"
@@ -466,14 +469,13 @@
                 android:hint="당신의 하루는 어땠나요"
                 android:inputType="textPersonName"
                 android:textColor="#000000"
-                android:textSize="17sp" />
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
     <ImageView
         android:id="@+id/imageView105"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
         app:srcCompat="@drawable/line" />
 
     <LinearLayout
@@ -482,9 +484,9 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivMoodPic_sun"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:id="@+id/ivtvWidgetWeeklyMoodPic_sun"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
@@ -506,7 +508,7 @@
                 android:layout_height="0dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginRight="40dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -529,10 +531,9 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/etDiaryContent_sun"
+                android:id="@+id/tvWidgetWeeklyContent_sun"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginRight="40dp"
                 android:background="@null"
@@ -541,7 +542,7 @@
                 android:hint="당신의 하루는 어땠나요"
                 android:inputType="textPersonName"
                 android:textColor="#000000"
-                android:textSize="17sp" />
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 
