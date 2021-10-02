@@ -157,7 +157,7 @@ class AppWidgetConfigure : AppCompatActivity() {
             remoteView.setCharSequence(R.id.tvWidgetMovieDate, "setText", date)
             remoteView.setCharSequence(R.id.tvWidgetMovieReview, "setText", content)
             val ivWidgetMoviePoster = AppWidgetTarget(this, R.id.ivWidgetMoviePoster, remoteView, mAppWidgetId)
-            Glide.with(this.applicationContext).asBitmap().centerCrop().load(image).into(ivWidgetMoviePoster)
+            Glide.with(this.applicationContext).asBitmap().fitCenter().load(image).into(ivWidgetMoviePoster)
             setColor(R.id.llWidgetMovie, memo.color)
         }
 
