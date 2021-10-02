@@ -8,7 +8,7 @@ import android.widget.RemoteViews
 /**
  * Implementation of App Widget functionality.
  */
-abstract class BaseWidget : AppWidgetProvider() {
+class BaseWidget : AppWidgetProvider() {
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
