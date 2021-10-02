@@ -46,7 +46,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivtvWidgetWeeklyMoodPic_mon"
+            android:id="@+id/ivWidgetWeeklyMoodPic_mon"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_gravity="center"
@@ -119,7 +119,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivtvWidgetWeeklyMoodPicTue_tue"
+            android:id="@+id/ivWidgetWeeklyMoodPic_tue"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_gravity="center"
@@ -192,7 +192,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivtvWidgetWeeklyMoodPic_wed"
+            android:id="@+id/ivWidgetWeeklyMoodPic_wed"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_gravity="center"
@@ -265,7 +265,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivtvWidgetWeeklyMoodPic_thr"
+            android:id="@+id/ivWidgetWeeklyMoodPic_thr"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_gravity="center"
@@ -411,7 +411,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivtvWidgetWeeklyMoodPic_sat"
+            android:id="@+id/ivWidgetWeeklyMoodPic_sat"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_gravity="center"
@@ -484,7 +484,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivtvWidgetWeeklyMoodPic_sun"
+            android:id="@+id/ivWidgetWeeklyMoodPic_sun"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_gravity="center"
