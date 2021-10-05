@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/ivWidgetWish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            app:srcCompat="@drawable/custom_wish_checkbox" />
+
+        <TextView
+            android:id="@+id/tvWidgetWishItem"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="8"
+            android:background="@null"
+            android:ems="10"
+            android:fontFamily="@font/nanumsquareroundb"
+            android:inputType="textPersonName"
+            android:textColor="#000000"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/imageView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/vertical_line" />
+
+        <TextView
+            android:id="@+id/tvWidgetWishPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="7dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_weight="5"
+            android:background="@null"
+            android:digits="0123456789"
+            android:ems="10"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/nanumsquareroundb"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="9"
+            android:singleLine="true"
+            android:textColor="#000000"
+            android:textIsSelectable="true"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/imageView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            app:srcCompat="@drawable/vertical_line" />
+
+        <ImageView
+            android:id="@+id/ivWidgetWishLink"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            app:srcCompat="@drawable/link_default" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-4dp"
+        app:srcCompat="@drawable/thin_line" />
+
+</LinearLayout>
