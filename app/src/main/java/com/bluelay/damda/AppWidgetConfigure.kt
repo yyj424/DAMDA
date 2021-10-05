@@ -4,18 +4,26 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import android.widget.RemoteViews
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.database.getIntOrNull
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.AppWidgetTarget
 import kotlinx.android.synthetic.main.activity_app_widget_configure.*
 import kotlinx.android.synthetic.main.activity_recipe.*
 import kotlinx.android.synthetic.main.widget_weekly.*
+import kotlinx.android.synthetic.main.activity_memo.*
+import kotlinx.android.synthetic.main.activity_wish.*
+import kotlinx.android.synthetic.main.widget_memo.*
 
 class AppWidgetConfigure : AppCompatActivity() {
     private lateinit var remoteView : RemoteViews
@@ -112,13 +120,14 @@ class AppWidgetConfigure : AppCompatActivity() {
 
         when (memo.type) {
             "Memo" -> {
-                remoteView = RemoteViews(this.packageName, R.layout.widget_movie)
+                remoteView = RemoteViews(this.packageName, R.layout.widget_memo)
+                setMemoWidget(memo)
             }
             "TodoList" -> {
                 remoteView = RemoteViews(this.packageName, R.layout.widget_todo)
             }
             "WishList" -> {
-                remoteView = RemoteViews(this.packageName, R.layout.widget_movie)
+                remoteView = RemoteViews(this.packageName, R.layout.widget_wish)
             }
             "Weekly" -> {
                 remoteView = RemoteViews(this.packageName, R.layout.widget_weekly)
@@ -250,5 +259,34 @@ class AppWidgetConfigure : AppCompatActivity() {
             5 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_purple)
             6 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_pink)
         }
+    }
+
+    private fun setMemoWidget(memo: MemoInfo) {
+        val cursor: Cursor = database.rawQuery(
+            "SELECT * FROM ${DBHelper.MEM_TABLE_NAME} WHERE ${DBHelper.MEM_COL_ID}=?", arrayOf(
+                memo.id.toString()
+            )
+        )
+
+        if (cursor.moveToNext()) {
+            val content = cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_CONTENT))
+            remoteView.setCharSequence(R.id.tvWidgetMemo, "setText", content)
+            if (cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_PHOTO)) != null) {
+                try {
+                    val savedPhotoPath = cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_PHOTO))
+                    remoteView.setViewVisibility(R.id.ivWidgetMemo, View.VISIBLE)
+                    val ivWidgetMemo = AppWidgetTarget(this, R.id.ivWidgetMemo, remoteView, mAppWidgetId)
+                    Glide.with(this.applicationContext).asBitmap().load(savedPhotoPath).into(ivWidgetMemo)
+                } catch (e: java.lang.Exception) {
+                    remoteView.setViewVisibility(R.id.ivWidgetMemo, View.GONE)
+                }
+            }
+            setColor(R.id.llWidgetMemo, memo.color)
+        }
+        cursor.close()
+    }
+
+    private fun setWishWidget(memo: MemoInfo) {
+
     }
 }
