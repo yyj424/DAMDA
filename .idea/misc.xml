@@ -3,8 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/work/DAMDA/app/src/main/res/layout/activity_recipe.xml" value="0.25364583333333335" />
+        <entry key="..\:/work/DAMDA/app/src/main/res/layout/activity_license.xml" value="0.2346014492753623" />
+        <entry key="..\:/work/DAMDA/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/work/DAMDA/app/src/main/res/layout/activity_movie.xml" value="0.264" />
+        <entry key="..\:/work/DAMDA/app/src/main/res/layout/activity_recipe.xml" value="0.264" />
+        <entry key="..\:/work/DAMDA/app/src/main/res/layout/activity_search_movie.xml" value="0.25317028985507245" />
         <entry key="..\:/work/DAMDA/app/src/main/res/layout/activity_todo.xml" value="0.24818840579710144" />
+        <entry key="..\:/work/DAMDA/app/src/main/res/layout/activity_weekly.xml" value="0.264" />
+        <entry key="..\:/work/DAMDA/app/src/main/res/layout/adapter_view_main_memo.xml" value="0.176" />
+        <entry key="..\:/work/DAMDA/app/src/main/res/layout/adapter_view_weekly.xml" value="0.25364583333333335" />
+        <entry key="..\:/work/DAMDA/app/src/main/res/layout/swipelayout.xml" value="0.1" />
+        <entry key="..\:/work/DAMDA/app/src/main/res/layout/widget_movie.xml" value="0.25364583333333335" />
+        <entry key="..\:/work/DAMDA/app/src/main/res/layout/widget_recipe.xml" value="0.25364583333333335" />
+        <entry key="..\:/work/DAMDA/app/src/main/res/layout/widget_weekly.xml" value="0.264" />
       </map>
     </option>
   </component>

@@ -76,7 +76,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/ivWeather_mon"
+                    android:id="@+id/ivWidgetWeeklyWeather_mon"
                     android:layout_width="35dp"
                     android:layout_height="18dp"
                     android:layout_marginEnd="8dp"
@@ -149,7 +149,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/ivWeather_tue"
+                    android:id="@+id/ivWidgetWeeklyWeather_tue"
                     android:layout_width="35dp"
                     android:layout_height="18dp"
                     android:layout_marginEnd="8dp"
@@ -222,7 +222,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/ivWeather_wed"
+                    android:id="@+id/ivWidgetWeeklyWeather_wed"
                     android:layout_width="35dp"
                     android:layout_height="18dp"
                     android:layout_marginEnd="8dp"
@@ -295,7 +295,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/ivWeather_thr"
+                    android:id="@+id/ivWidgetWeeklyWeather_thr"
                     android:layout_width="35dp"
                     android:layout_height="18dp"
                     android:layout_marginEnd="8dp"
@@ -338,7 +338,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivtvWidgetWeeklyMoodPic_fri"
+            android:id="@+id/ivWidgetWeeklyMoodPic_fri"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_gravity="center"
@@ -368,7 +368,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/ivWeather_fri"
+                    android:id="@+id/ivWidgetWeeklyWeather_fri"
                     android:layout_width="35dp"
                     android:layout_height="18dp"
                     android:layout_marginEnd="8dp"
@@ -441,7 +441,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/ivWeather_sat"
+                    android:id="@+id/ivWidgetWeeklyWeather_sat"
                     android:layout_width="35dp"
                     android:layout_height="18dp"
                     android:layout_marginEnd="8dp"
@@ -514,7 +514,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/ivWeather_sun"
+                    android:id="@+id/ivWidgetWeeklyWeather_sun"
                     android:layout_width="35dp"
                     android:layout_height="18dp"
                     android:layout_marginEnd="8dp"

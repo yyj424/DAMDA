@@ -5,17 +5,17 @@ import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.AppWidgetTarget
 import kotlinx.android.synthetic.main.activity_app_widget_configure.*
+import kotlinx.android.synthetic.main.activity_recipe.*
+import kotlinx.android.synthetic.main.widget_weekly.*
 
 class AppWidgetConfigure : AppCompatActivity() {
     private lateinit var remoteView : RemoteViews
@@ -121,10 +121,12 @@ class AppWidgetConfigure : AppCompatActivity() {
                 remoteView = RemoteViews(this.packageName, R.layout.widget_movie)
             }
             "Weekly" -> {
-                remoteView = RemoteViews(this.packageName, R.layout.widget_movie)
+                remoteView = RemoteViews(this.packageName, R.layout.widget_weekly)
+                setWeeklyWidget(memo)
             }
             "Recipe" -> {
-                remoteView = RemoteViews(this.packageName, R.layout.widget_movie)
+                remoteView = RemoteViews(this.packageName, R.layout.widget_recipe)
+                setRecipeWidget(memo)
             }
             "Movie" -> {
                 remoteView = RemoteViews(this.packageName, R.layout.widget_movie)
@@ -138,6 +140,80 @@ class AppWidgetConfigure : AppCompatActivity() {
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
         setResult(RESULT_OK, resultValue)
         finish()
+    }
+
+    private fun setWeeklyWidget(memo: MemoInfo){
+        var c : Cursor = database.rawQuery(
+            "SELECT * FROM ${DBHelper.WEE_TABLE_NAME} WHERE ${DBHelper.WEE_COL_ID} = ?", arrayOf(memo.id.toString()))
+        c.moveToFirst()
+        val date = c.getString(c.getColumnIndex(DBHelper.WEE_COL_DATE))
+        remoteView.setCharSequence(R.id.tvWidgetWeeklyDate, "setText", date)
+
+        c = database.rawQuery("SELECT * FROM ${DBHelper.DIA_TABLE_NAME} WHERE ${DBHelper.DIA_COL_DID} = ?", arrayOf(memo.id.toString()))
+        for (i in 1.. 7) {
+            c.moveToNext()
+            val moodPic = c.getString(c.getColumnIndex(DBHelper.DIA_COL_MOODPIC))
+            val weather = c.getString(c.getColumnIndex(DBHelper.DIA_COL_WEATHER))
+            val content = c.getString(c.getColumnIndex(DBHelper.DIA_COL_CONTENT))
+
+            when(i){
+                1 -> {
+                    remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_mon, moodPic.toUri())
+                    remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_mon, weather.toUri())
+                    remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_mon, "setText", content)
+                }
+                2 -> {
+                    remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_tue, moodPic.toUri())
+                    remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_tue, weather.toUri())
+                    remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_tue, "setText", content)
+                }
+                3 -> {
+                    remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_wed, moodPic.toUri())
+                    remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_wed, weather.toUri())
+                    remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_wed, "setText", content)
+                }
+                4 -> {
+                    remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_thr, moodPic.toUri())
+                    remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_thr, weather.toUri())
+                    remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_thr, "setText", content)
+                }
+                5 -> {
+                    remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_fri, moodPic.toUri())
+                    remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_fri, weather.toUri())
+                    remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_fri, "setText", content)
+                }
+                6 -> {
+                    remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_sat, moodPic.toUri())
+                    remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_sat, weather.toUri())
+                    remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_sat, "setText", content)
+                }
+                7 -> {
+                    remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_sun, moodPic.toUri())
+                    remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_sun, weather.toUri())
+                    remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_sun, "setText", content)
+                }
+            }
+            setColor(R.id.llWidgetWeekly, memo.color)
+        }
+        c.close()
+    }
+
+    private fun setRecipeWidget(memo: MemoInfo){
+        val c : Cursor = database.rawQuery(
+            "SELECT * FROM ${DBHelper.REC_TABLE_NAME} WHERE ${DBHelper.REC_COL_ID} = ?", arrayOf(memo.id.toString()))
+
+        remoteView.setCharSequence(R.id.tvWidgetRecipeName, "setText", memo.title)
+        if(c.moveToNext()){
+            val name = c.getString(c.getColumnIndex(DBHelper.REC_COL_NAME))
+            val ingredients = c.getString(c.getColumnIndex(DBHelper.REC_COL_INGREDIENTS))
+            val content = c.getString(c.getColumnIndex(DBHelper.REC_COL_CONTENT))
+
+            remoteView.setCharSequence(R.id.tvWidgetRecipeName, "setText", name)
+            remoteView.setCharSequence(R.id.tvWidgetRecipeIngredients, "setText", ingredients)
+            remoteView.setCharSequence(R.id.tvWidgetRecipeContent, "setText", content)
+            setColor(R.id.llWidgetRecipe, memo.color)
+        }
+        c.close()
     }
 
     private fun setMovieWidget(memo: MemoInfo) {
