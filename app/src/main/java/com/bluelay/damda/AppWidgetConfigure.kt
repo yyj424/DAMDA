@@ -129,7 +129,6 @@ class AppWidgetConfigure : AppCompatActivity() {
             }
             "TodoList" -> {
                 remoteView = RemoteViews(this.packageName, R.layout.widget_todo)
-                setToDoWidget(memo)
             }
             "WishList" -> {
                 remoteView = RemoteViews(this.packageName, R.layout.widget_movie)
@@ -179,22 +178,7 @@ class AppWidgetConfigure : AppCompatActivity() {
         cursor.close()
     }
 
-    private fun setToDoWidget(memo: MemoInfo) {
-        val cursor: Cursor = database.rawQuery(
-            "SELECT * FROM ${DBHelper.TODL_TABLE_NAME} WHERE ${DBHelper.TODL_COL_ID}=?", arrayOf(
-                memo.id.toString()
-            )
-        )
 
-        if (cursor.moveToNext()) {
-            val date = cursor.getString(cursor.getColumnIndex(DBHelper.TODL_COL_DATE))
-
-            remoteView.setTextViewText(R.id.tvWidgetTodoDate, date)
-            setColor(R.id.llWidgetToDo, memo.color)
-        }
-
-        cursor.close()
-    }
 
     private fun setWeeklyWidget(memo: MemoInfo){
         var c : Cursor = database.rawQuery(
