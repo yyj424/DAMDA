@@ -4,15 +4,14 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
-import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.RemoteViews
+import androidx.core.database.getIntOrNull
+import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.AppWidgetTarget
-import kotlinx.android.synthetic.main.widget_todo.*
 
 /**
  * Implementation of App Widget functionality.
@@ -54,6 +53,7 @@ class BaseWidget : AppWidgetProvider() {
             when (memoType) {
                 "Memo" -> {
                     remoteView = RemoteViews(context.packageName, R.layout.widget_memo)
+                    setMemoWidget(memoId, context, remoteView, appWidgetId)
                 }
                 "TodoList" -> {
                     remoteView = RemoteViews(context.packageName, R.layout.widget_todo)
@@ -67,6 +67,13 @@ class BaseWidget : AppWidgetProvider() {
                 }
                 "WishList" -> {
                     remoteView = RemoteViews(context.packageName, R.layout.widget_wish)
+                    val serviceIntent = Intent(context, WishWidgetService::class.java)
+                    serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                    serviceIntent.data = Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME))
+                    serviceIntent.putExtra("widgetId", appWidgetId)
+                    remoteView.setRemoteAdapter(R.id.lvWidgetWish, serviceIntent)
+                    setWishWidget(memoId, context, remoteView)
+                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lvWidgetWish)
                 }
                 "Weekly" -> {
                     remoteView = RemoteViews(context.packageName, R.layout.widget_weekly)
@@ -98,6 +105,75 @@ class BaseWidget : AppWidgetProvider() {
                 setColor(R.id.llWidgetToDo, color, remoteView)
             }
 
+            cursor.close()
+        }
+
+        private fun setMemoWidget(memoId : Int, context: Context, remoteView : RemoteViews, appWidgetId: Int) {
+            val dbHelper = DBHelper(context)
+            val database = dbHelper.readableDatabase
+            val cursor: Cursor = database.rawQuery(
+                "SELECT * FROM ${DBHelper.MEM_TABLE_NAME} WHERE ${DBHelper.MEM_COL_ID}=?", arrayOf(
+                    memoId.toString()
+                )
+            )
+
+            if (cursor.moveToNext()) {
+                val content = cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_CONTENT))
+                remoteView.setCharSequence(R.id.tvWidgetMemo, "setText", content)
+                if (cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_PHOTO)) != null) {
+                    try {
+                        val savedPhotoPath = cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_PHOTO))
+                        remoteView.setViewVisibility(R.id.ivWidgetMemo, View.VISIBLE)
+                        val ivWidgetMemo = AppWidgetTarget(context, R.id.ivWidgetMemo, remoteView, appWidgetId)
+                        Glide.with(context).asBitmap().load(savedPhotoPath).into(ivWidgetMemo)
+                    } catch (e: java.lang.Exception) {
+                        remoteView.setViewVisibility(R.id.ivWidgetMemo, View.GONE)
+                    }
+                }
+                val color = cursor.getInt(cursor.getColumnIndex(DBHelper.MEM_COL_COLOR))
+                setColor(R.id.llWidgetMemo, color, remoteView)
+            }
+            cursor.close()
+        }
+
+        private fun setWishWidget(memoId : Int, context: Context, remoteView : RemoteViews) {
+            val dbHelper = DBHelper(context)
+            val database = dbHelper.readableDatabase
+            val wishList = arrayListOf<Wish>()
+            var cursor: Cursor = database.rawQuery(
+                "SELECT * FROM ${DBHelper.WISL_TABLE_NAME} WHERE ${DBHelper.WISL_COL_ID}=?", arrayOf(
+                    memoId.toString()
+                )
+            )
+            if (cursor.moveToNext()) {
+                val category = cursor.getString(cursor.getColumnIndex(DBHelper.WISL_COL_CATEGORY))
+                remoteView.setTextViewText(R.id.tvWidgetWishCatgory, category)
+                val color = cursor.getInt(cursor.getColumnIndex(DBHelper.WISL_COL_COLOR))
+                setColor(R.id.llWidgetWish, color, remoteView)
+
+                cursor = database.rawQuery(
+                    "SELECT * FROM ${DBHelper.WIS_TABLE_NAME} WHERE ${DBHelper.WIS_COL_WID}=?", arrayOf(
+                        memoId.toString()
+                    )
+                )
+                var total = 0
+                while (cursor.moveToNext()) {
+                    var price: Int? = null
+                    if (cursor.getIntOrNull(cursor.getColumnIndex(DBHelper.WIS_COL_PRICE)) != null) {
+                        price = cursor.getInt(cursor.getColumnIndex(DBHelper.WIS_COL_PRICE))
+                        total += price
+                    }
+                    wishList.add(
+                        Wish(
+                            cursor.getString(cursor.getColumnIndex(DBHelper.WIS_COL_ITEM)),
+                            price,
+                            cursor.getInt(cursor.getColumnIndex(DBHelper.WIS_COL_CHECKED)),
+                            cursor.getString(cursor.getColumnIndex(DBHelper.WIS_COL_LINK))
+                        )
+                    )
+                }
+                remoteView.setTextViewText(R.id.tvWidgetWishTotal, total.toString())
+            }
             cursor.close()
         }
 

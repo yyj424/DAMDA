@@ -16,23 +16,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             app:srcCompat="@drawable/custom_wish_checkbox" />
 
         <TextView
             android:id="@+id/tvWidgetWishItem"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:layout_weight="8"
             android:background="@null"
             android:ems="10"
             android:fontFamily="@font/nanumsquareroundb"
-            android:inputType="textPersonName"
             android:textColor="#000000"
             android:textSize="17sp" />
 
@@ -45,25 +43,19 @@
 
         <TextView
             android:id="@+id/tvWidgetWishPrice"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="7dp"
             android:layout_marginLeft="7dp"
             android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
-            android:layout_weight="5"
+            android:layout_weight="1"
             android:background="@null"
-            android:digits="0123456789"
             android:ems="10"
-            android:focusableInTouchMode="true"
             android:fontFamily="@font/nanumsquareroundb"
             android:gravity="center"
-            android:inputType="number"
-            android:maxLength="9"
-            android:singleLine="true"
             android:textColor="#000000"
-            android:textIsSelectable="true"
             android:textSize="17sp" />
 
         <ImageView
@@ -72,7 +64,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="3dp"
-            android:layout_marginRight="3dp"
             app:srcCompat="@drawable/vertical_line" />
 
         <ImageView
@@ -81,7 +72,6 @@
             android:layout_height="20dp"
             android:layout_gravity="center"
             android:layout_marginEnd="3dp"
-            android:layout_marginRight="3dp"
             app:srcCompat="@drawable/link_default" />
 
     </LinearLayout>
