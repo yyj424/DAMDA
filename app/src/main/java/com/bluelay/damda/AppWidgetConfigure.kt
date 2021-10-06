@@ -1,29 +1,26 @@
 package com.bluelay.damda
 
 import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.database.getIntOrNull
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.AppWidgetTarget
 import kotlinx.android.synthetic.main.activity_app_widget_configure.*
-import kotlinx.android.synthetic.main.activity_recipe.*
-import kotlinx.android.synthetic.main.widget_weekly.*
-import kotlinx.android.synthetic.main.activity_memo.*
-import kotlinx.android.synthetic.main.activity_wish.*
-import kotlinx.android.synthetic.main.widget_memo.*
 
 class AppWidgetConfigure : AppCompatActivity() {
     private lateinit var remoteView : RemoteViews
@@ -36,12 +33,15 @@ class AppWidgetConfigure : AppCompatActivity() {
     private lateinit var dbHelper : DBHelper
     private lateinit var database : SQLiteDatabase
 
+    private lateinit var sharedPref : SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_app_widget_configure)
 
         dbHelper = DBHelper(this)
         database = dbHelper.readableDatabase
+        sharedPref = getSharedPreferences("widget", Context.MODE_PRIVATE)
 
         getAllMemo()
         val mmLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -117,7 +117,11 @@ class AppWidgetConfigure : AppCompatActivity() {
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish()
         }
-
+        sharedPref.edit().apply {
+            putString("type$mAppWidgetId", memo.type)
+            putInt("id$mAppWidgetId", memo.id)
+            apply()
+        }
         when (memo.type) {
             "Memo" -> {
                 remoteView = RemoteViews(this.packageName, R.layout.widget_memo)
@@ -125,9 +129,10 @@ class AppWidgetConfigure : AppCompatActivity() {
             }
             "TodoList" -> {
                 remoteView = RemoteViews(this.packageName, R.layout.widget_todo)
+                setToDoWidget(memo)
             }
             "WishList" -> {
-                remoteView = RemoteViews(this.packageName, R.layout.widget_wish)
+                remoteView = RemoteViews(this.packageName, R.layout.widget_movie)
             }
             "Weekly" -> {
                 remoteView = RemoteViews(this.packageName, R.layout.widget_weekly)
@@ -142,13 +147,53 @@ class AppWidgetConfigure : AppCompatActivity() {
                 setMovieWidget(memo)
             }
         }
-        appWidgetManager.updateAppWidget(mAppWidgetId, remoteView)
-
+        BaseWidget.updateAppWidget(this, appWidgetManager, mAppWidgetId)
 
         val resultValue = Intent()
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
         setResult(RESULT_OK, resultValue)
         finish()
+    }
+
+    private fun setMovieWidget(memo: MemoInfo) {
+        val cursor: Cursor = database.rawQuery(
+            "SELECT * FROM ${DBHelper.MOV_TABLE_NAME} WHERE ${DBHelper.MOV_COL_ID}=?", arrayOf(
+                memo.id.toString()
+            )
+        )
+
+        remoteView.setCharSequence(R.id.tvWidgetMovieTitle, "setText", memo.title)
+        if (cursor.moveToNext()) {
+            val date = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_DATE))
+            val score = cursor.getFloat(cursor.getColumnIndex(DBHelper.MOV_COL_SCORE))
+            val image = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_POSTERPIC))
+            val content = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_CONTENT))
+
+            remoteView.setCharSequence(R.id.tvWidgetMovieDate, "setText", date)
+            remoteView.setCharSequence(R.id.tvWidgetMovieReview, "setText", content)
+            val ivWidgetMoviePoster = AppWidgetTarget(this, R.id.ivWidgetMoviePoster, remoteView, mAppWidgetId)
+            Glide.with(this.applicationContext).asBitmap().fitCenter().load(image).into(ivWidgetMoviePoster)
+            setColor(R.id.llWidgetMovie, memo.color)
+        }
+
+        cursor.close()
+    }
+
+    private fun setToDoWidget(memo: MemoInfo) {
+        val cursor: Cursor = database.rawQuery(
+            "SELECT * FROM ${DBHelper.TODL_TABLE_NAME} WHERE ${DBHelper.TODL_COL_ID}=?", arrayOf(
+                memo.id.toString()
+            )
+        )
+
+        if (cursor.moveToNext()) {
+            val date = cursor.getString(cursor.getColumnIndex(DBHelper.TODL_COL_DATE))
+
+            remoteView.setTextViewText(R.id.tvWidgetTodoDate, date)
+            setColor(R.id.llWidgetToDo, memo.color)
+        }
+
+        cursor.close()
     }
 
     private fun setWeeklyWidget(memo: MemoInfo){
@@ -225,41 +270,7 @@ class AppWidgetConfigure : AppCompatActivity() {
         c.close()
     }
 
-    private fun setMovieWidget(memo: MemoInfo) {
-        val cursor: Cursor = database.rawQuery(
-            "SELECT * FROM ${DBHelper.MOV_TABLE_NAME} WHERE ${DBHelper.MOV_COL_ID}=?", arrayOf(
-                memo.id.toString()
-            )
-        )
 
-        remoteView.setCharSequence(R.id.tvWidgetMovieTitle, "setText", memo.title)
-        if (cursor.moveToNext()) {
-            val date = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_DATE))
-            val score = cursor.getFloat(cursor.getColumnIndex(DBHelper.MOV_COL_SCORE))
-            val image = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_POSTERPIC))
-            val content = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_CONTENT))
-
-            remoteView.setCharSequence(R.id.tvWidgetMovieDate, "setText", date)
-            remoteView.setCharSequence(R.id.tvWidgetMovieReview, "setText", content)
-            val ivWidgetMoviePoster = AppWidgetTarget(this, R.id.ivWidgetMoviePoster, remoteView, mAppWidgetId)
-            Glide.with(this.applicationContext).asBitmap().fitCenter().load(image).into(ivWidgetMoviePoster)
-            setColor(R.id.llWidgetMovie, memo.color)
-        }
-
-        cursor.close()
-    }
-
-    private fun setColor(layoutId : Int, color : Int) {
-        when (color) {
-            0 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.white)
-            1 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_red)
-            2 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_yellow)
-            3 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_green)
-            4 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_blue)
-            5 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_purple)
-            6 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_pink)
-        }
-    }
 
     private fun setMemoWidget(memo: MemoInfo) {
         val cursor: Cursor = database.rawQuery(
@@ -288,5 +299,17 @@ class AppWidgetConfigure : AppCompatActivity() {
 
     private fun setWishWidget(memo: MemoInfo) {
 
+    }
+
+    private fun setColor(layoutId : Int, color : Int) {
+        when (color) {
+            0 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.white)
+            1 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_red)
+            2 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_yellow)
+            3 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_green)
+            4 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_blue)
+            5 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_purple)
+            6 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_pink)
+        }
     }
 }

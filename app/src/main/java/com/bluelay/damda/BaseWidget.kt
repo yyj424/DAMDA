@@ -44,19 +44,36 @@ class BaseWidget : AppWidgetProvider() {
             appWidgetId: Int
         ) {
             val sharedPref = context.getSharedPreferences("widget", Context.MODE_PRIVATE)
-            val memoType = sharedPref.getString(appWidgetId.toString(), "")
+            val memoType = sharedPref.getString("type$appWidgetId", "")
 
-            val remoteView = RemoteViews(context.packageName, R.layout.widget_todo)
+            var remoteView = RemoteViews(context.packageName, R.layout.widget_movie)
 
-            val serviceIntent : Intent
-            if (memoType == "ToDoList") {
-                serviceIntent = Intent(context, ToDoRemoteViewsService::class.java)
-                serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                serviceIntent.data = Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME))
-                serviceIntent.putExtra("widgetId", appWidgetId)
-                remoteView.setRemoteAdapter(R.id.lvWidgetToDo, serviceIntent)
-                remoteView.setEmptyView(R.id.lvWidgetToDo, R.id.empty_view)
-                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lvWidgetToDo)
+            when (memoType) {
+                "Memo" -> {
+                    remoteView = RemoteViews(context.packageName, R.layout.widget_memo)
+                }
+                "TodoList" -> {
+                    remoteView = RemoteViews(context.packageName, R.layout.widget_todo)
+                    val serviceIntent = Intent(context, ToDoRemoteViewsService::class.java)
+                    serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                    serviceIntent.data = Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME))
+                    serviceIntent.putExtra("widgetId", appWidgetId)
+                    remoteView.setRemoteAdapter(R.id.lvWidgetToDo, serviceIntent)
+                    remoteView.setEmptyView(R.id.lvWidgetToDo, R.id.empty_view)
+                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lvWidgetToDo)
+                }
+                "WishList" -> {
+                    remoteView = RemoteViews(context.packageName, R.layout.widget_wish)
+                }
+                "Weekly" -> {
+                    remoteView = RemoteViews(context.packageName, R.layout.widget_weekly)
+                }
+                "Recipe" -> {
+                    remoteView = RemoteViews(context.packageName, R.layout.widget_recipe)
+                }
+                "Movie" -> {
+                    remoteView = RemoteViews(context.packageName, R.layout.widget_movie)
+                }
             }
             appWidgetManager.updateAppWidget(appWidgetId, remoteView)
         }
