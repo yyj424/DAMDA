@@ -14,20 +14,34 @@ class ToDoRemoteViewsFactory(context : Context, appWidgetId : Int)  : RemoteView
     private val appWidgetId = appWidgetId
 
     override fun onCreate() {
+        Log.d("goeun", "oncreate")
         toDoList = arrayListOf()
         setToDoWidget()
+        Log.d("goeun", "size " + toDoList.size.toString())
     }
 
     private fun setToDoWidget() {
         val dbHelper = DBHelper(context)
         val database = dbHelper.readableDatabase
         val sharedPref = context.getSharedPreferences("widget", Context.MODE_PRIVATE)
-        val memoId = sharedPref.getInt(appWidgetId.toString(), -1)
-
+        val memoId = sharedPref.getInt("id$appWidgetId", -1)
+        Log.d("goeun", "appWidgetId " + appWidgetId)
+        Log.d("goeun", "memoId " + memoId)
         if (memoId != -1) {
-            var cursor: Cursor = database.rawQuery("SELECT * FROM ${DBHelper.TOD_TABLE_NAME} WHERE ${DBHelper.TOD_COL_TID}=?", arrayOf(memoId.toString()))
+            var cursor: Cursor = database.rawQuery(
+                "SELECT * FROM ${DBHelper.TODL_TABLE_NAME} WHERE ${DBHelper.TODL_COL_ID}=?", arrayOf(memoId.toString()))
+            if (cursor.moveToNext()) {
+                date = cursor.getString(cursor.getColumnIndex(DBHelper.TODL_COL_DATE))
+                color = cursor.getInt(cursor.getColumnIndex(DBHelper.TODL_COL_COLOR))
+                Log.d("goeun", date + " " + color)
+            }
+            cursor.moveToNext()
+
+            cursor = database.rawQuery("SELECT * FROM ${DBHelper.TOD_TABLE_NAME} WHERE ${DBHelper.TOD_COL_TID}=?", arrayOf(memoId.toString()))
+
             while(cursor.moveToNext())
                 toDoList.add(ToDo(cursor.getString(cursor.getColumnIndex(DBHelper.TOD_COL_CONTENT)), cursor.getInt(cursor.getColumnIndex(DBHelper.TOD_COL_CHECKED))))
+
             cursor.close()
         }
     }
