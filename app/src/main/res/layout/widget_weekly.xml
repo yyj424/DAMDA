@@ -47,15 +47,15 @@
 
         <ImageView
             android:id="@+id/ivWidgetWeeklyMoodPic_mon"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="7dp"
+            android:layout_marginBottom="5dp"
             app:srcCompat="@drawable/select_emoji" />
 
         <LinearLayout
@@ -107,11 +107,11 @@
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
-    <ImageView
-        android:id="@+id/imageView100"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/line" />
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView100"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:srcCompat="@drawable/line" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -120,15 +120,15 @@
 
         <ImageView
             android:id="@+id/ivWidgetWeeklyMoodPic_tue"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="7dp"
+            android:layout_marginBottom="5dp"
             app:srcCompat="@drawable/select_emoji" />
 
         <LinearLayout
@@ -180,11 +180,11 @@
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
-    <ImageView
-        android:id="@+id/imageView101"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/line" />
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView101"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:srcCompat="@drawable/line" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -193,15 +193,15 @@
 
         <ImageView
             android:id="@+id/ivWidgetWeeklyMoodPic_wed"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="7dp"
+            android:layout_marginBottom="5dp"
             app:srcCompat="@drawable/select_emoji" />
 
         <LinearLayout
@@ -253,11 +253,11 @@
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
-    <ImageView
-        android:id="@+id/imageView102"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/line" />
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView102"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:srcCompat="@drawable/line" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -266,15 +266,15 @@
 
         <ImageView
             android:id="@+id/ivWidgetWeeklyMoodPic_thr"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="7dp"
+            android:layout_marginBottom="5dp"
             app:srcCompat="@drawable/select_emoji" />
 
         <LinearLayout
@@ -326,11 +326,11 @@
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
-    <ImageView
-        android:id="@+id/imageView103"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/line" />
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView103"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:srcCompat="@drawable/line" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -339,15 +339,15 @@
 
         <ImageView
             android:id="@+id/ivWidgetWeeklyMoodPic_fri"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="7dp"
+            android:layout_marginBottom="5dp"
             app:srcCompat="@drawable/select_emoji" />
 
         <LinearLayout
@@ -399,11 +399,11 @@
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
-    <ImageView
-        android:id="@+id/imageView104"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/line" />
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView104"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:srcCompat="@drawable/line" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -412,15 +412,15 @@
 
         <ImageView
             android:id="@+id/ivWidgetWeeklyMoodPic_sat"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="7dp"
+            android:layout_marginBottom="5dp"
             app:srcCompat="@drawable/select_emoji" />
 
         <LinearLayout
@@ -472,11 +472,11 @@
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
-    <ImageView
-        android:id="@+id/imageView105"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/line" />
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView105"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:srcCompat="@drawable/line" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -485,15 +485,15 @@
 
         <ImageView
             android:id="@+id/ivWidgetWeeklyMoodPic_sun"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="7dp"
+            android:layout_marginBottom="5dp"
             app:srcCompat="@drawable/select_emoji" />
 
         <LinearLayout
