@@ -122,21 +122,25 @@ class BaseWidget : AppWidgetProvider() {
                     memoId.toString()
                 )
             )
-            
-            val content = cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_CONTENT))
-            remoteView.setCharSequence(R.id.tvWidgetMemo, "setText", content)
-            if (cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_PHOTO)) != null) {
-                try {
-                    val savedPhotoPath = cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_PHOTO))
-                    remoteView.setViewVisibility(R.id.ivWidgetMemo, View.VISIBLE)
-                    val ivWidgetMemo = AppWidgetTarget(context, R.id.ivWidgetMemo, remoteView, appWidgetId)
-                    Glide.with(context).asBitmap().load(savedPhotoPath).into(ivWidgetMemo)
-                } catch (e: java.lang.Exception) {
-                    remoteView.setViewVisibility(R.id.ivWidgetMemo, View.GONE)
+            if (cursor.moveToNext()) {
+                val content = cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_CONTENT))
+                remoteView.setTextViewText(R.id.tvWidgetMemo, content)
+                if (cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_PHOTO)) != null) {
+                    try {
+                        val savedPhotoPath =
+                            cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_PHOTO))
+                        remoteView.setViewVisibility(R.id.ivWidgetMemo, View.VISIBLE)
+                        val ivWidgetMemo =
+                            AppWidgetTarget(context, R.id.ivWidgetMemo, remoteView, appWidgetId)
+                        Glide.with(context.applicationContext).asBitmap().load(savedPhotoPath)
+                            .into(ivWidgetMemo)
+                    } catch (e: java.lang.Exception) {
+                        remoteView.setViewVisibility(R.id.ivWidgetMemo, View.GONE)
+                    }
                 }
+                val color = cursor.getInt(cursor.getColumnIndex(DBHelper.MEM_COL_COLOR))
+                setColor(R.id.llWidgetMemo, color, remoteView)
             }
-            val color = cursor.getInt(cursor.getColumnIndex(DBHelper.MEM_COL_COLOR))
-            setColor(R.id.llWidgetMemo, color, remoteView)
             cursor.close()
         }
             
@@ -184,6 +188,7 @@ class BaseWidget : AppWidgetProvider() {
                 )
             )
             if (cursor.moveToNext()) {
+                remoteView.setImageViewResource(R.id.ivWidgetWishBottomLine, R.drawable.thin_line)
                 val category = cursor.getString(cursor.getColumnIndex(DBHelper.WISL_COL_CATEGORY))
                 remoteView.setTextViewText(R.id.tvWidgetWishCatgory, category)
                 val color = cursor.getInt(cursor.getColumnIndex(DBHelper.WISL_COL_COLOR))

@@ -43,8 +43,16 @@ class WishWidgetFactory(context: Context, appWidgetId: Int) : RemoteViewsService
         val listviewWidget = RemoteViews(context.packageName, R.layout.adapter_view_widget_wish)
         listviewWidget.setImageViewResource(R.id.ivWidgetWish, R.drawable.heart_default)
         listviewWidget.setTextViewText(R.id.tvWidgetWishItem, wishList[position].item)
-        listviewWidget.setTextViewText(R.id.tvWidgetWishPrice, wishList[position].price.toString())
+        if (wishList[position].price == null) {
+            listviewWidget.setTextViewText(R.id.tvWidgetWishPrice, "")
+        }
+        else {
+            listviewWidget.setTextViewText(R.id.tvWidgetWishPrice, wishList[position].price.toString())
+        }
         listviewWidget.setImageViewResource(R.id.ivWidgetWishLink, R.drawable.link_default)
+        listviewWidget.setImageViewResource(R.id.ivWidgetWishVerticalLine1, R.drawable.vertical_line)
+        listviewWidget.setImageViewResource(R.id.ivWidgetWishVerticalLine2, R.drawable.vertical_line)
+        listviewWidget.setImageViewResource(R.id.ivWidgetWishBottomLine, R.drawable.thin_line)
 
         if (wishList[position].checked == 1) {
             listviewWidget.setTextColor(R.id.tvWidgetWishItem, Color.parseColor("#969191"))
