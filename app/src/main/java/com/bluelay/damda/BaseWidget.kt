@@ -7,10 +7,10 @@ import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
-import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.database.getIntOrNull
+import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.AppWidgetTarget
 
@@ -84,9 +84,11 @@ class BaseWidget : AppWidgetProvider() {
                 }
                 "Weekly" -> {
                     remoteView = RemoteViews(context.packageName, R.layout.widget_weekly)
+                    setWeeklyWidget(memoId, remoteView)
                 }
                 "Recipe" -> {
                     remoteView = RemoteViews(context.packageName, R.layout.widget_recipe)
+                    setRecipeWidget(memoId, remoteView)
                 }
                 "Movie" -> {
                     remoteView = RemoteViews(context.packageName, R.layout.widget_movie)
@@ -211,6 +213,81 @@ class BaseWidget : AppWidgetProvider() {
                 }
                 remoteView.setTextViewText(R.id.tvWidgetWishTotal, total.toString())
             }
+        }
+
+        private fun setWeeklyWidget(memoId: Int, remoteView : RemoteViews){
+            var c : Cursor = database.rawQuery(
+                "SELECT * FROM ${DBHelper.WEE_TABLE_NAME} WHERE ${DBHelper.WEE_COL_ID} = ?", arrayOf(memoId.toString()))
+            c.moveToFirst()
+            val date = c.getString(c.getColumnIndex(DBHelper.WEE_COL_DATE))
+            val color = c.getInt(c.getColumnIndex(DBHelper.WEE_COL_COLOR))
+            remoteView.setCharSequence(R.id.tvWidgetWeeklyDate, "setText", date)
+
+            c = database.rawQuery("SELECT * FROM ${DBHelper.DIA_TABLE_NAME} WHERE ${DBHelper.DIA_COL_DID} = ?", arrayOf(memoId.toString()))
+            for (i in 1.. 7) {
+                c.moveToNext()
+                val moodPic = c.getString(c.getColumnIndex(DBHelper.DIA_COL_MOODPIC))
+                val weather = c.getString(c.getColumnIndex(DBHelper.DIA_COL_WEATHER))
+                val content = c.getString(c.getColumnIndex(DBHelper.DIA_COL_CONTENT))
+
+                when(i){
+                    1 -> {
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_mon, moodPic.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_mon, weather.toUri())
+                        remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_mon, "setText", content)
+                    }
+                    2 -> {
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_tue, moodPic.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_tue, weather.toUri())
+                        remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_tue, "setText", content)
+                    }
+                    3 -> {
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_wed, moodPic.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_wed, weather.toUri())
+                        remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_wed, "setText", content)
+                    }
+                    4 -> {
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_thr, moodPic.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_thr, weather.toUri())
+                        remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_thr, "setText", content)
+                    }
+                    5 -> {
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_fri, moodPic.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_fri, weather.toUri())
+                        remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_fri, "setText", content)
+                    }
+                    6 -> {
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_sat, moodPic.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_sat, weather.toUri())
+                        remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_sat, "setText", content)
+                    }
+                    7 -> {
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_sun, moodPic.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_sun, weather.toUri())
+                        remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_sun, "setText", content)
+                    }
+                }
+                setColor(R.id.llWidgetWeekly, color, remoteView)
+            }
+            c.close()
+        }
+
+        private fun setRecipeWidget(memoId: Int, remoteView : RemoteViews){
+            val c : Cursor = database.rawQuery(
+                "SELECT * FROM ${DBHelper.REC_TABLE_NAME} WHERE ${DBHelper.REC_COL_ID} = ?", arrayOf(memoId.toString()))
+
+            if(c.moveToNext()){
+                val name = c.getString(c.getColumnIndex(DBHelper.REC_COL_NAME))
+                val ingredients = c.getString(c.getColumnIndex(DBHelper.REC_COL_INGREDIENTS))
+                val content = c.getString(c.getColumnIndex(DBHelper.REC_COL_CONTENT))
+                val color = c.getInt(c.getColumnIndex(DBHelper.REC_COL_COLOR))
+
+                remoteView.setCharSequence(R.id.tvWidgetRecipeName, "setText", name)
+                remoteView.setCharSequence(R.id.tvWidgetRecipeIngredients, "setText", ingredients)
+                remoteView.setCharSequence(R.id.tvWidgetRecipeContent, "setText", content)
+                setColor(R.id.llWidgetRecipe, color, remoteView)
+            }
+            c.close()
         }
 
         private fun setColor(layoutId : Int, color : Int, remoteView : RemoteViews) {
