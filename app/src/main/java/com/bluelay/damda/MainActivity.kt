@@ -7,6 +7,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -31,6 +32,10 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import io.sulek.ssml.SSMLLinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.nio.channels.FileChannel
 
 
 class MainActivity : AppCompatActivity() {
@@ -383,6 +388,10 @@ class MainActivity : AppCompatActivity() {
                     }
                     R.id.optionSetPW -> {
                         nextIntent = Intent(this, SettingPWActivity::class.java)
+                        startActivity(nextIntent)
+                    }
+                    R.id.optionBackup -> {
+                        nextIntent = Intent(this, BackupRestoreActivity::class.java)
                         startActivity(nextIntent)
                     }
                     R.id.optionLicense -> {
