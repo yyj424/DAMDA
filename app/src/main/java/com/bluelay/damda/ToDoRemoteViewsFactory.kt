@@ -59,6 +59,12 @@ class ToDoRemoteViewsFactory(context : Context, appWidgetId : Int)  : RemoteView
     override fun getViewAt(position: Int): RemoteViews {
         val toDoWidget = RemoteViews(context.packageName, R.layout.adapter_view_widget_todo)
         toDoWidget.setTextViewText(R.id.tvWidgetToDoContent, toDoList[position].content)
+        if (toDoList[position].checked == 1){
+            toDoWidget.setImageViewResource(R.id.ivWidgetToDoCheckBox, R.drawable.checkbox_checked)
+        }
+        else {
+            toDoWidget.setImageViewResource(R.id.ivWidgetToDoCheckBox, R.drawable.checkbox_default)
+        }
         return toDoWidget
     }
 
