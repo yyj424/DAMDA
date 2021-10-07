@@ -143,7 +143,6 @@ class AppWidgetConfigure : AppCompatActivity() {
             }
             "Movie" -> {
                 remoteView = RemoteViews(this.packageName, R.layout.widget_movie)
-                setMovieWidget(memo)
             }
         }
         BaseWidget.updateAppWidget(this, appWidgetManager, mAppWidgetId)
@@ -154,29 +153,7 @@ class AppWidgetConfigure : AppCompatActivity() {
         finish()
     }
 
-    private fun setMovieWidget(memo: MemoInfo) {
-        val cursor: Cursor = database.rawQuery(
-            "SELECT * FROM ${DBHelper.MOV_TABLE_NAME} WHERE ${DBHelper.MOV_COL_ID}=?", arrayOf(
-                memo.id.toString()
-            )
-        )
 
-        remoteView.setCharSequence(R.id.tvWidgetMovieTitle, "setText", memo.title)
-        if (cursor.moveToNext()) {
-            val date = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_DATE))
-            val score = cursor.getFloat(cursor.getColumnIndex(DBHelper.MOV_COL_SCORE))
-            val image = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_POSTERPIC))
-            val content = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_CONTENT))
-
-            remoteView.setCharSequence(R.id.tvWidgetMovieDate, "setText", date)
-            remoteView.setCharSequence(R.id.tvWidgetMovieReview, "setText", content)
-            val ivWidgetMoviePoster = AppWidgetTarget(this, R.id.ivWidgetMoviePoster, remoteView, mAppWidgetId)
-            Glide.with(this.applicationContext).asBitmap().fitCenter().load(image).into(ivWidgetMoviePoster)
-            setColor(R.id.llWidgetMovie, memo.color)
-        }
-
-        cursor.close()
-    }
 
 
 
