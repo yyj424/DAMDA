@@ -79,7 +79,7 @@
 
     <ImageView
         android:id="@+id/ivWidgetWishBottomLine"
-        android:layout_width="285dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="-4dp"
         app:srcCompat="@drawable/thin_line" />

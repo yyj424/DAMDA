@@ -261,10 +261,14 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
         if (bkmr != memo.bkmr) return true
         if (lock != memo.lock) return true
         if (date != etTodoDate.text.toString()) return true
-        newToDoList.forEachIndexed { i, newToDo ->
-            var oldTodo = oldToDoList[i]
-            if (newToDo.content != oldTodo.content) return true
-            if (newToDo.checked != oldTodo.checked) return true
+
+        oldToDoList.forEachIndexed { i, oldToDo ->
+            if (newToDoList[i].content != oldToDo.content) return true
+            if (newToDoList[i].checked != oldToDo.checked) return true
+        }
+        var i = oldToDoList.size
+        while (i < newToDoList.size) {
+            if (newToDoList[i++].content != "") return true
         }
         return false
     }
