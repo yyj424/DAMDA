@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
@@ -13,10 +13,11 @@
 
         <ImageView
             android:id="@+id/ivWidgetWish"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="-2dp"
             app:srcCompat="@drawable/custom_wish_checkbox" />
 
         <TextView
@@ -24,20 +25,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="-2dp"
+            android:layout_marginEnd="7dp"
+            android:layout_weight="2"
             android:background="@null"
-            android:ems="10"
+            android:ems="7"
             android:fontFamily="@font/nanumsquareroundb"
             android:textColor="#000000"
-            android:textSize="17sp" />
+            android:textSize="13sp" />
 
         <ImageView
             android:id="@+id/ivWidgetWishVerticalLine1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/vertical_line" />
 
@@ -46,31 +47,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="7dp"
-            android:layout_marginLeft="7dp"
-            android:layout_marginEnd="7dp"
-            android:layout_marginRight="7dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="-2dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:background="@null"
-            android:ems="10"
+            android:ems="7"
             android:fontFamily="@font/nanumsquareroundb"
             android:gravity="center"
             android:textColor="#000000"
-            android:textSize="17sp" />
+            android:textSize="13sp" />
 
         <ImageView
             android:id="@+id/ivWidgetWishVerticalLine2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_gravity="center"
             android:layout_marginEnd="3dp"
             app:srcCompat="@drawable/vertical_line" />
 
         <ImageView
             android:id="@+id/ivWidgetWishLink"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:layout_gravity="center"
+            android:layout_marginTop="-2dp"
             android:layout_marginEnd="3dp"
             app:srcCompat="@drawable/link_default" />
 
@@ -78,7 +79,7 @@
 
     <ImageView
         android:id="@+id/ivWidgetWishBottomLine"
-        android:layout_width="match_parent"
+        android:layout_width="285dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="-4dp"
         app:srcCompat="@drawable/thin_line" />

@@ -132,7 +132,7 @@ class BaseWidget : AppWidgetProvider() {
                         remoteView.setViewVisibility(R.id.ivWidgetMemo, View.VISIBLE)
                         val ivWidgetMemo =
                             AppWidgetTarget(context, R.id.ivWidgetMemo, remoteView, appWidgetId)
-                        Glide.with(context.applicationContext).asBitmap().load(savedPhotoPath)
+                        Glide.with(context.applicationContext).asBitmap().fitCenter().load(savedPhotoPath)
                             .into(ivWidgetMemo)
                     } catch (e: java.lang.Exception) {
                         remoteView.setViewVisibility(R.id.ivWidgetMemo, View.GONE)
