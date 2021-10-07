@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.util.Log
 import android.view.View
@@ -114,35 +115,33 @@ class BaseWidget : AppWidgetProvider() {
         }
 
         private fun setMemoWidget(memoId : Int, context: Context, remoteView : RemoteViews, appWidgetId: Int) {
-            val dbHelper = DBHelper(context)
-            val database = dbHelper.readableDatabase
             val cursor: Cursor = database.rawQuery(
                 "SELECT * FROM ${DBHelper.MEM_TABLE_NAME} WHERE ${DBHelper.MEM_COL_ID}=?", arrayOf(
                     memoId.toString()
                 )
             )
             
-             val content = cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_CONTENT))
-                remoteView.setCharSequence(R.id.tvWidgetMemo, "setText", content)
-                if (cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_PHOTO)) != null) {
-                    try {
-                        val savedPhotoPath = cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_PHOTO))
-                        remoteView.setViewVisibility(R.id.ivWidgetMemo, View.VISIBLE)
-                        val ivWidgetMemo = AppWidgetTarget(context, R.id.ivWidgetMemo, remoteView, appWidgetId)
-                        Glide.with(context).asBitmap().load(savedPhotoPath).into(ivWidgetMemo)
-                    } catch (e: java.lang.Exception) {
-                        remoteView.setViewVisibility(R.id.ivWidgetMemo, View.GONE)
-                    }
+            val content = cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_CONTENT))
+            remoteView.setCharSequence(R.id.tvWidgetMemo, "setText", content)
+            if (cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_PHOTO)) != null) {
+                try {
+                    val savedPhotoPath = cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_PHOTO))
+                    remoteView.setViewVisibility(R.id.ivWidgetMemo, View.VISIBLE)
+                    val ivWidgetMemo = AppWidgetTarget(context, R.id.ivWidgetMemo, remoteView, appWidgetId)
+                    Glide.with(context).asBitmap().load(savedPhotoPath).into(ivWidgetMemo)
+                } catch (e: java.lang.Exception) {
+                    remoteView.setViewVisibility(R.id.ivWidgetMemo, View.GONE)
                 }
-                val color = cursor.getInt(cursor.getColumnIndex(DBHelper.MEM_COL_COLOR))
-                setColor(R.id.llWidgetMemo, color, remoteView)
             }
+            val color = cursor.getInt(cursor.getColumnIndex(DBHelper.MEM_COL_COLOR))
+            setColor(R.id.llWidgetMemo, color, remoteView)
             cursor.close()
         }
             
         private fun setMovieWidget(memoId : Int, remoteView : RemoteViews, appWidgetId : Int, context: Context) {
             val cursor: Cursor = database.rawQuery(
-                "SELECT * FROM ${DBHelper.MOV_TABLE_NAME} WHERE ${DBHelper.MOV_COL_ID}=?", arrayOf(
+                "SELECT * FROM ${DBHelper.MOV_TABLE_NAME} WHERE ${DBHelper.MOV_COL_ID}=?", arrayOf(memoId.toString()))
+
             if (cursor.moveToNext()) {
 
                 val date = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_DATE))
@@ -175,11 +174,10 @@ class BaseWidget : AppWidgetProvider() {
         }
 
         private fun setWishWidget(memoId : Int, context: Context, remoteView : RemoteViews) {
-            val dbHelper = DBHelper(context)
-            val database = dbHelper.readableDatabase
             val wishList = arrayListOf<Wish>()
             var cursor: Cursor = database.rawQuery(
-                "SELECT * FROM ${DBHelper.WISL_TABLE_NAME} WHERE ${DBHelper.WISL_COL_ID}=?", arrayOf(
+                "SELECT * FROM ${DBHelper.WISL_TABLE_NAME} WHERE ${DBHelper.WISL_COL_ID}=?",
+                arrayOf(
                     memoId.toString()
                 )
             )
@@ -190,7 +188,8 @@ class BaseWidget : AppWidgetProvider() {
                 setColor(R.id.llWidgetWish, color, remoteView)
 
                 cursor = database.rawQuery(
-                    "SELECT * FROM ${DBHelper.WIS_TABLE_NAME} WHERE ${DBHelper.WIS_COL_WID}=?", arrayOf(
+                    "SELECT * FROM ${DBHelper.WIS_TABLE_NAME} WHERE ${DBHelper.WIS_COL_WID}=?",
+                    arrayOf(
                         memoId.toString()
                     )
                 )
@@ -212,7 +211,7 @@ class BaseWidget : AppWidgetProvider() {
                 }
                 remoteView.setTextViewText(R.id.tvWidgetWishTotal, total.toString())
             }
-
+        }
 
         private fun setColor(layoutId : Int, color : Int, remoteView : RemoteViews) {
             when (color) {
