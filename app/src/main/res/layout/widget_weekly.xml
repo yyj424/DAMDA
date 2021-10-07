@@ -10,7 +10,7 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:fontFamily="@font/nanumsquareroundeb"
         android:layout_gravity="center"
         android:text="WEEKLY"
@@ -25,6 +25,7 @@
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
+        android:layout_marginBottom="4dp"
         android:background="@null"
         android:drawablePadding="3dp"
         android:ems="10"
@@ -52,10 +53,10 @@
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="3dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="3dp"
             app:srcCompat="@drawable/select_emoji" />
 
         <LinearLayout
@@ -77,8 +78,8 @@
 
                 <ImageView
                     android:id="@+id/ivWidgetWeeklyWeather_mon"
-                    android:layout_width="35dp"
-                    android:layout_height="18dp"
+                    android:layout_width="33dp"
+                    android:layout_height="16dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     app:srcCompat="@drawable/select_weather" />
@@ -126,10 +127,10 @@
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="3dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="3dp"
             app:srcCompat="@drawable/select_emoji" />
 
         <LinearLayout
@@ -151,8 +152,8 @@
 
                 <ImageView
                     android:id="@+id/ivWidgetWeeklyWeather_tue"
-                    android:layout_width="35dp"
-                    android:layout_height="18dp"
+                    android:layout_width="33dp"
+                    android:layout_height="16dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     app:srcCompat="@drawable/select_weather" />
@@ -200,10 +201,10 @@
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="3dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="3dp"
             app:srcCompat="@drawable/select_emoji" />
 
         <LinearLayout
@@ -225,8 +226,8 @@
 
                 <ImageView
                     android:id="@+id/ivWidgetWeeklyWeather_wed"
-                    android:layout_width="35dp"
-                    android:layout_height="18dp"
+                    android:layout_width="33dp"
+                    android:layout_height="16dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     app:srcCompat="@drawable/select_weather" />
@@ -274,10 +275,10 @@
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="3dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="3dp"
             app:srcCompat="@drawable/select_emoji" />
 
         <LinearLayout
@@ -299,8 +300,8 @@
 
                 <ImageView
                     android:id="@+id/ivWidgetWeeklyWeather_thr"
-                    android:layout_width="35dp"
-                    android:layout_height="18dp"
+                    android:layout_width="33dp"
+                    android:layout_height="16dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     app:srcCompat="@drawable/select_weather" />
@@ -348,10 +349,10 @@
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="3dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="3dp"
             app:srcCompat="@drawable/select_emoji" />
 
         <LinearLayout
@@ -373,8 +374,8 @@
 
                 <ImageView
                     android:id="@+id/ivWidgetWeeklyWeather_fri"
-                    android:layout_width="35dp"
-                    android:layout_height="18dp"
+                    android:layout_width="33dp"
+                    android:layout_height="16dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     app:srcCompat="@drawable/select_weather" />
@@ -422,10 +423,10 @@
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="3dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="3dp"
             app:srcCompat="@drawable/select_emoji" />
 
         <LinearLayout
@@ -447,8 +448,8 @@
 
                 <ImageView
                     android:id="@+id/ivWidgetWeeklyWeather_sat"
-                    android:layout_width="35dp"
-                    android:layout_height="18dp"
+                    android:layout_width="33dp"
+                    android:layout_height="16dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     app:srcCompat="@drawable/select_weather" />
@@ -496,10 +497,10 @@
             android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="3dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="3dp"
             app:srcCompat="@drawable/select_emoji" />
 
         <LinearLayout
@@ -521,8 +522,8 @@
 
                 <ImageView
                     android:id="@+id/ivWidgetWeeklyWeather_sun"
-                    android:layout_width="35dp"
-                    android:layout_height="18dp"
+                    android:layout_width="33dp"
+                    android:layout_height="16dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     app:srcCompat="@drawable/select_weather" />
