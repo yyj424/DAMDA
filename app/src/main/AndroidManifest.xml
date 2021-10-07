@@ -43,8 +43,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MovieSearchActivity" />
-        <activity android:name=".MovieActivity" />
+        <activity android:name=".MovieSearchActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".MovieActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".WishActivity"
             android:windowSoftInputMode="adjustPan" />
