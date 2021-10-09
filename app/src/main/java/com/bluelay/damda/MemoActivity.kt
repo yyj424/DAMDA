@@ -236,19 +236,19 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
         try {
             saveFile!!.createNewFile();
             val out = FileOutputStream(saveFile)
-            photoPath = saveFile!!.path
-            val savedPhoto = BitmapFactory.decodeFile(photo)
-            if (savedPhoto.width > 1080 && savedPhoto.height > 2220) {
+            val decodedPhoto = BitmapFactory.decodeFile(photo)
+            if (decodedPhoto.width > 1080 && decodedPhoto.height > 2220) {
                 val options = BitmapFactory.Options()
                 options.inSampleSize = 2
-                val src = BitmapFactory.decodeFile(photo, options)
-                val resized = Bitmap.createScaledBitmap(src, src.width, src.height, true)
-                resized.compress(Bitmap.CompressFormat.PNG, 100, out)
+                val resizedPhoto = BitmapFactory.decodeFile(photo, options)
+                val savePhoto = Bitmap.createScaledBitmap(resizedPhoto, resizedPhoto.width, resizedPhoto.height, true)
+                savePhoto.compress(Bitmap.CompressFormat.PNG, 100, out)
             }
             else {
                 imgBitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
             }
             out.close()
+            photoPath = saveFile!!.path
         } catch (e: Exception) {
             photoPath = null
             Toast.makeText(applicationContext, "사진 첨부를 실패하였습니다", Toast.LENGTH_SHORT).show()
