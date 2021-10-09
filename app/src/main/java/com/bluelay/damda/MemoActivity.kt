@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -235,7 +236,17 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
         try {
             saveFile!!.createNewFile();
             val out = FileOutputStream(saveFile)
-            imgBitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+            val decodedPhoto = BitmapFactory.decodeFile(photo)
+            if (decodedPhoto.width > 1080 && decodedPhoto.height > 2220) {
+                val options = BitmapFactory.Options()
+                options.inSampleSize = 2
+                val resizedPhoto = BitmapFactory.decodeFile(photo, options)
+                val savePhoto = Bitmap.createScaledBitmap(resizedPhoto, resizedPhoto.width, resizedPhoto.height, true)
+                savePhoto.compress(Bitmap.CompressFormat.PNG, 100, out)
+            }
+            else {
+                imgBitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+            }
             out.close()
             photoPath = saveFile!!.path
         } catch (e: Exception) {
@@ -293,9 +304,9 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
 
     private fun saveMemo() {
         if (photoUri != null) {
-            val instream: InputStream? = contentResolver.openInputStream(photoUri!!)
-            val imgBitmap = BitmapFactory.decodeStream(instream)
-            instream?.close()
+            val inStream: InputStream? = contentResolver.openInputStream(photoUri!!)
+            val imgBitmap = BitmapFactory.decodeStream(inStream)
+            inStream?.close()
             savePhoto(imgBitmap)
         }
 
