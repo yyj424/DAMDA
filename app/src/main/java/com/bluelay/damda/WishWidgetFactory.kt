@@ -104,6 +104,5 @@ class WishWidgetFactory(context: Context, appWidgetId: Int) : RemoteViewsService
             )
         }
         cursor.close()
-        Log.d("yyj", "getList: " + wishList.toString())
     }
 }
