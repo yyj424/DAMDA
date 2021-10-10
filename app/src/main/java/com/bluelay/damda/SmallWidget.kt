@@ -17,7 +17,7 @@ import com.bumptech.glide.request.target.AppWidgetTarget
 /**
  * Implementation of App Widget functionality.
  */
-class BaseWidget : AppWidgetProvider() {
+class SmallWidget : AppWidgetProvider() {
 
     override fun onUpdate(
         context: Context,
@@ -55,7 +55,7 @@ class BaseWidget : AppWidgetProvider() {
             val memoType = sharedPref.getString("type$appWidgetId", "")
             val memoId = sharedPref.getInt("id$appWidgetId", -1)
 
-            var remoteView = RemoteViews(context.packageName, R.layout.widget_movie)
+            var remoteView = RemoteViews(context.packageName, R.layout.widget_movie_small)
 
             when (memoType) {
                 "Memo" -> {
@@ -91,7 +91,7 @@ class BaseWidget : AppWidgetProvider() {
                     setRecipeWidget(memoId, remoteView)
                 }
                 "Movie" -> {
-                    remoteView = RemoteViews(context.packageName, R.layout.widget_movie)
+                    remoteView = RemoteViews(context.packageName, R.layout.widget_movie_small)
                     setMovieWidget(memoId, remoteView, appWidgetId, context)
                 }
             }
@@ -158,7 +158,6 @@ class BaseWidget : AppWidgetProvider() {
                 val color = cursor.getInt(cursor.getColumnIndex(DBHelper.MOV_COL_COLOR))
 
                 remoteView.setCharSequence(R.id.tvWidgetMovieDate, "setText", date)
-                remoteView.setCharSequence(R.id.tvWidgetMovieReview, "setText", content)
                 remoteView.setCharSequence(R.id.tvWidgetMovieTitle, "setText", title)
                 val ivWidgetMoviePoster = AppWidgetTarget(context, R.id.ivWidgetMoviePoster, remoteView, appWidgetId)
                 Glide.with(context.applicationContext).asBitmap().fitCenter().load(image).into(ivWidgetMoviePoster)
