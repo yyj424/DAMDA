@@ -2,6 +2,7 @@ package com.bluelay.damda
 
 import android.Manifest
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -9,6 +10,8 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -19,8 +22,10 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -303,6 +308,13 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
     }
 
     private fun saveMemo() {
+        val builder = AlertDialog.Builder(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_saving, null)
+        builder.setView(view)
+        val savingDialog = builder.create()
+        savingDialog.setCancelable(false)
+        savingDialog.setCanceledOnTouchOutside(false)
+        savingDialog.show()
         if (photoUri != null) {
             val inStream: InputStream? = contentResolver.openInputStream(photoUri!!)
             val imgBitmap = BitmapFactory.decodeStream(inStream)
@@ -328,6 +340,7 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
         else {
             database.insert(DBHelper.MEM_TABLE_NAME, null, contentValues)
         }
+
         finish()
     }
 
