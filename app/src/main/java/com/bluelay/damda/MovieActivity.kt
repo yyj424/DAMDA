@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
+import android.appwidget.AppWidgetManager
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -398,8 +399,10 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
         if (movieId == -1)
             insertMovie()
         else
-            if (checkUpdate())
+            if (checkUpdate()) {
                 updateMovie()
+                updateWidget()
+            }
         finish()
     }
 
@@ -444,5 +447,15 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
         } else {
             return connectivityManager.activeNetworkInfo?.isConnected ?: false
         }
+    }
+
+    private fun updateWidget() {
+        val largeWidgetIntent = Intent(this, LargeWidget::class.java)
+        largeWidgetIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        this.sendBroadcast(largeWidgetIntent)
+
+        val smallWidgetIntent = Intent(this, SmallWidget::class.java)
+        smallWidgetIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        this.sendBroadcast(smallWidgetIntent)
     }
 }
