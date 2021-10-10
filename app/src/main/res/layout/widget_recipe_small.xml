@@ -75,7 +75,7 @@
     <TextView
         android:id="@+id/tvWidgetRecipeContent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_marginStart="28dp"
         android:layout_marginLeft="28dp"
         android:layout_marginTop="20dp"
@@ -92,6 +92,5 @@
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
         android:textColor="#000000" />
-
 
 </LinearLayout>
