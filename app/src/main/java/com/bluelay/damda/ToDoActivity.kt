@@ -3,7 +3,9 @@ package com.bluelay.damda
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
+import android.appwidget.AppWidgetManager
 import android.content.ContentValues
+import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
@@ -251,8 +253,10 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
         if (toDoId == -1)
             insertToDo()
         else
-            if (checkUpdate())
+            if (checkUpdate()) {
                 updateToDo()
+                updateWidget()
+            }
         finish()
     }
 
@@ -286,5 +290,15 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
     override fun onDestroy() {
         super.onDestroy()
         dbHelper.close()
+    }
+
+    private fun updateWidget() {
+        val largeWidgetIntent = Intent(this, LargeWidget::class.java)
+        largeWidgetIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        this.sendBroadcast(largeWidgetIntent)
+
+        val smallWidgetIntent = Intent(this, SmallWidget::class.java)
+        smallWidgetIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        this.sendBroadcast(smallWidgetIntent)
     }
 }

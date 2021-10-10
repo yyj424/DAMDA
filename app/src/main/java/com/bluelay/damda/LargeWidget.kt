@@ -2,11 +2,13 @@ package com.bluelay.damda
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.database.getIntOrNull
@@ -31,11 +33,26 @@ class LargeWidget : AppWidgetProvider() {
     }
 
     override fun onEnabled(context: Context) {
-        // Enter relevant functionality for when the first widget is created
     }
 
     override fun onDisabled(context: Context) {
-        // Enter relevant functionality for when the last widget is disabled
+    }
+
+    override fun onReceive(context: Context?, intent: Intent?) {
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        val widget =
+            context?.let { ComponentName(it.packageName, LargeWidget::class.java.name) }
+
+        val widgetIds = appWidgetManager.getAppWidgetIds(widget)
+        val action = intent?.action
+
+        if(action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)){
+            if(widgetIds != null && widgetIds.isNotEmpty()){
+                if (context != null) {
+                    this.onUpdate(context, AppWidgetManager.getInstance(context), widgetIds)
+                }
+            }
+        }
     }
 
     companion object {
@@ -157,9 +174,10 @@ class LargeWidget : AppWidgetProvider() {
                 val title = cursor.getString(cursor.getColumnIndex(DBHelper.MOV_COL_TITLE))
                 val color = cursor.getInt(cursor.getColumnIndex(DBHelper.MOV_COL_COLOR))
 
-                remoteView.setCharSequence(R.id.tvWidgetMovieDate, "setText", date)
-                remoteView.setCharSequence(R.id.tvWidgetMovieReview, "setText", content)
-                remoteView.setCharSequence(R.id.tvWidgetMovieTitle, "setText", title)
+                setVisibility(date, remoteView, R.id.tvWidgetMovieDate)
+                setVisibility(title, remoteView, R.id.tvWidgetMovieTitle)
+                setVisibility(content, remoteView, R.id.tvWidgetMovieReview)
+
                 val ivWidgetMoviePoster = AppWidgetTarget(context, R.id.ivWidgetMoviePoster, remoteView, appWidgetId)
                 Glide.with(context.applicationContext).asBitmap().fitCenter().load(image).into(ivWidgetMoviePoster)
                 setColor(R.id.llWidgetMovie, color, remoteView)
@@ -177,6 +195,13 @@ class LargeWidget : AppWidgetProvider() {
                 }
             }
             cursor.close()
+        }
+
+        private fun setVisibility(text : String, remoteView : RemoteViews, viewId : Int) {
+            if (text != "")
+                remoteView.setTextViewText(viewId, text)
+            else
+                remoteView.setViewVisibility(viewId, View.GONE)
         }
 
         private fun setWishWidget(memoId : Int, context: Context, remoteView : RemoteViews) {
