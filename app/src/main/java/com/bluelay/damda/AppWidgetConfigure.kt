@@ -137,7 +137,13 @@ class AppWidgetConfigure : AppCompatActivity() {
                 remoteView = RemoteViews(this.packageName, R.layout.widget_movie)
             }
         }
-        BaseWidget.updateAppWidget(this, appWidgetManager, mAppWidgetId)
+        if (appWidgetManager.getAppWidgetInfo(mAppWidgetId).previewImage == R.drawable.example_appwidget_preview) {
+
+            LargeWidget.updateAppWidget(this, appWidgetManager, mAppWidgetId)
+        }
+        else {
+            SmallWidget.updateAppWidget(this, appWidgetManager, mAppWidgetId)
+        }
 
         val resultValue = Intent()
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
