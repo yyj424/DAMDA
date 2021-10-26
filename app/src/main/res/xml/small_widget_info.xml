@@ -3,6 +3,6 @@
     android:description="@string/app_widget_description"
     android:minWidth="250dp"
     android:minHeight="110dp"
-    android:previewImage="@drawable/ellipsis"
+    android:previewImage="@drawable/widget_smallimg"
     android:widgetCategory="home_screen"
     android:configure="com.bluelay.damda.AppWidgetConfigure" />

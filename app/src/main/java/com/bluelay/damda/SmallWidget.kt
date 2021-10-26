@@ -8,7 +8,6 @@ import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
-import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.database.getIntOrNull
@@ -100,11 +99,11 @@ class SmallWidget : AppWidgetProvider() {
                     appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lvWidgetWish)
                 }
                 "Weekly" -> {
-                    remoteView = RemoteViews(context.packageName, R.layout.widget_weekly)
+                    remoteView = RemoteViews(context.packageName, R.layout.widget_weekly_small)
                     setWeeklyWidget(memoId, remoteView)
                 }
                 "Recipe" -> {
-                    remoteView = RemoteViews(context.packageName, R.layout.widget_recipe)
+                    remoteView = RemoteViews(context.packageName, R.layout.widget_recipe_small)
                     setRecipeWidget(memoId, remoteView)
                 }
                 "Movie" -> {
@@ -255,43 +254,35 @@ class SmallWidget : AppWidgetProvider() {
                 c.moveToNext()
                 val moodPic = c.getString(c.getColumnIndex(DBHelper.DIA_COL_MOODPIC))
                 val weather = c.getString(c.getColumnIndex(DBHelper.DIA_COL_WEATHER))
-                val content = c.getString(c.getColumnIndex(DBHelper.DIA_COL_CONTENT))
 
                 when(i){
                     1 -> {
                         remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_mon, moodPic.toUri())
                         remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_mon, weather.toUri())
-                        remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_mon, "setText", content)
                     }
                     2 -> {
                         remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_tue, moodPic.toUri())
                         remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_tue, weather.toUri())
-                        remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_tue, "setText", content)
                     }
                     3 -> {
                         remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_wed, moodPic.toUri())
                         remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_wed, weather.toUri())
-                        remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_wed, "setText", content)
                     }
                     4 -> {
                         remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_thr, moodPic.toUri())
                         remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_thr, weather.toUri())
-                        remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_thr, "setText", content)
                     }
                     5 -> {
                         remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_fri, moodPic.toUri())
                         remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_fri, weather.toUri())
-                        remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_fri, "setText", content)
                     }
                     6 -> {
                         remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_sat, moodPic.toUri())
                         remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_sat, weather.toUri())
-                        remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_sat, "setText", content)
                     }
                     7 -> {
                         remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_sun, moodPic.toUri())
                         remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_sun, weather.toUri())
-                        remoteView.setCharSequence(R.id.tvWidgetWeeklyContent_sun, "setText", content)
                     }
                 }
                 setColor(R.id.llWidgetWeekly, color, remoteView)
@@ -312,6 +303,8 @@ class SmallWidget : AppWidgetProvider() {
                 remoteView.setCharSequence(R.id.tvWidgetRecipeName, "setText", name)
                 remoteView.setCharSequence(R.id.tvWidgetRecipeIngredients, "setText", ingredients)
                 remoteView.setCharSequence(R.id.tvWidgetRecipeContent, "setText", content)
+
+                remoteView.setImageViewResource(R.id.ivIngredients, R.drawable.line)
                 setColor(R.id.llWidgetRecipe, color, remoteView)
             }
             c.close()
