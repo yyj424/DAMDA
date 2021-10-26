@@ -2,7 +2,9 @@ package com.bluelay.damda
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.appwidget.AppWidgetManager
 import android.content.ContentValues
+import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
@@ -283,6 +285,8 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
 
                 whereClause = "did=?"
                 database.delete(DBHelper.DIA_TABLE_NAME, whereClause, whereArgs)
+
+                updateWidget()
             }
         }
         else  {
@@ -332,5 +336,15 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
         etDiaryDate.setText(sdf.format(calendar.time) + " ~ ")
         calendar.add(Calendar.DAY_OF_MONTH, +6)
         etDiaryDate.append(sdf.format(calendar.time))
+    }
+
+    private fun updateWidget() {
+        val largeWidgetIntent = Intent(this, LargeWidget::class.java)
+        largeWidgetIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        this.sendBroadcast(largeWidgetIntent)
+
+        val smallWidgetIntent = Intent(this, SmallWidget::class.java)
+        smallWidgetIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        this.sendBroadcast(smallWidgetIntent)
     }
 }
