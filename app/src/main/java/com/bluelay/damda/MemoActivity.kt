@@ -2,7 +2,6 @@ package com.bluelay.damda
 
 import android.Manifest
 import android.app.AlertDialog
-import android.app.ProgressDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,22 +9,17 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Bundle
+import android.os.*
 import android.provider.MediaStore
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -56,7 +50,7 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_memo)
 
-        btnAddPhoto.visibility = View.VISIBLE
+//        btnAddPhoto.visibility = View.VISIBLE
 
         dbHelper = DBHelper(this)
         database = dbHelper.writableDatabase
@@ -168,23 +162,23 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
             dialog.show()
         }
 
-        btnAddPhoto.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_DENIED) {
-                ActivityCompat.requestPermissions(
-                    this, arrayOf(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    ), 200
-                )
-            } else {
-                val intent = Intent(Intent.ACTION_PICK)
-                intent.type = "image/*"
-                startActivityForResult(intent, 100)
-            }
-        }
+//        btnAddPhoto.setOnClickListener {
+//            if (ContextCompat.checkSelfPermission(
+//                    this,
+//                    Manifest.permission.READ_EXTERNAL_STORAGE
+//                ) == PackageManager.PERMISSION_DENIED) {
+//                ActivityCompat.requestPermissions(
+//                    this, arrayOf(
+//                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                        Manifest.permission.READ_EXTERNAL_STORAGE
+//                    ), 200
+//                )
+//            } else {
+//                val intent = Intent(Intent.ACTION_PICK)
+//                intent.type = "image/*"
+//                startActivityForResult(intent, 100)
+//            }
+//        }
 
         ivDelPhoto.setOnClickListener {
             memoPhotoLayout.visibility = View.GONE
@@ -308,20 +302,20 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
     }
 
     private fun saveMemo() {
-        val builder = AlertDialog.Builder(this)
-        val view = LayoutInflater.from(this).inflate(R.layout.dialog_saving, null)
-        builder.setView(view)
-        val savingDialog = builder.create()
-        savingDialog.setCancelable(false)
-        savingDialog.setCanceledOnTouchOutside(false)
-        savingDialog.show()
         if (photoUri != null) {
+            val builder = AlertDialog.Builder(this)
+            val view = LayoutInflater.from(this).inflate(R.layout.dialog_saving, null)
+            builder.setView(view)
+            val savingDialog = builder.create()
+            savingDialog.setCancelable(false)
+            savingDialog.setCanceledOnTouchOutside(false)
+            savingDialog.show()
+
             val inStream: InputStream? = contentResolver.openInputStream(photoUri!!)
             val imgBitmap = BitmapFactory.decodeStream(inStream)
             inStream?.close()
             savePhoto(imgBitmap)
         }
-
         val contentValues = ContentValues()
         contentValues.put(DBHelper.MEM_COL_WDATE, System.currentTimeMillis() / 1000L)
         contentValues.put(DBHelper.MEM_COL_COLOR, color)
