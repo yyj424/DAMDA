@@ -75,7 +75,7 @@ class SmallWidget : AppWidgetProvider() {
 
             when (memoType) {
                 "Memo" -> {
-                    remoteView = RemoteViews(context.packageName, R.layout.widget_memo)
+                    remoteView = RemoteViews(context.packageName, R.layout.widget_memo_small)
                     setMemoWidget(memoId, context, remoteView, appWidgetId)
                 }
                 "TodoList" -> {
