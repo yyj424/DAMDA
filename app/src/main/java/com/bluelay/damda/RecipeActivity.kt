@@ -1,7 +1,9 @@
 package com.bluelay.damda
 
 import android.app.AlertDialog
+import android.appwidget.AppWidgetManager
 import android.content.ContentValues
+import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
@@ -209,8 +211,10 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
             insertRecipe()
         }
         else {
-            if(checkUpdate())
+            if(checkUpdate()) {
                 updateRecipe()
+                updateWidget()
+            }
         }
         finish()
     }
@@ -233,5 +237,15 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
     override fun onDestroy() {
         super.onDestroy()
         dbHelper.close()
+    }
+
+    private fun updateWidget() {
+        val largeWidgetIntent = Intent(this, LargeWidget::class.java)
+        largeWidgetIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        this.sendBroadcast(largeWidgetIntent)
+
+        val smallWidgetIntent = Intent(this, SmallWidget::class.java)
+        smallWidgetIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        this.sendBroadcast(smallWidgetIntent)
     }
 }
