@@ -1,5 +1,6 @@
 package com.bluelay.damda
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
@@ -71,12 +72,24 @@ class SmallWidget : AppWidgetProvider() {
             val memoType = sharedPref.getString("type$appWidgetId", "")
             val memoId = sharedPref.getInt("id$appWidgetId", -1)
 
-            var remoteView = RemoteViews(context.packageName, R.layout.widget_movie_small)
+            var remoteView: RemoteViews? = null
+            var memo : MemoInfo? = null
+            if (memoType != "") {
+                memo = getMemo(memoId, memoType)
+            }
+            var intent: Intent?
 
             when (memoType) {
                 "Memo" -> {
                     remoteView = RemoteViews(context.packageName, R.layout.widget_memo_small)
                     setMemoWidget(memoId, context, remoteView, appWidgetId)
+                    if (memoType != "") {
+                        intent = Intent(context, ToDoActivity::class.java)
+                        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+                        intent.putExtra("memo", memo)
+                        val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                        remoteView.setOnClickPendingIntent(R.id.llWidgetToDo, pi)
+                    }
                 }
                 "TodoList" -> {
                     remoteView = RemoteViews(context.packageName, R.layout.widget_todo)
@@ -87,6 +100,13 @@ class SmallWidget : AppWidgetProvider() {
                     remoteView.setRemoteAdapter(R.id.lvWidgetToDo, serviceIntent)
                     setToDoWidget(memoId, remoteView)
                     appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lvWidgetToDo)
+                    if (memoType != "") {
+                        intent = Intent(context, WishActivity::class.java)
+                        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+                        intent.putExtra("memo", memo)
+                        val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                        remoteView.setOnClickPendingIntent(R.id.llWidgetWish, pi)
+                    }
                 }
                 "WishList" -> {
                     remoteView = RemoteViews(context.packageName, R.layout.widget_wish)
@@ -101,18 +121,67 @@ class SmallWidget : AppWidgetProvider() {
                 "Weekly" -> {
                     remoteView = RemoteViews(context.packageName, R.layout.widget_weekly_small)
                     setWeeklyWidget(memoId, remoteView)
+                    if (memoType != "") {
+                        intent = Intent(context, WeeklyActivity::class.java)
+                        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+                        intent.putExtra("memo", memo)
+                        val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                        remoteView.setOnClickPendingIntent(R.id.llWidgetWeekly, pi)
+                    }
                 }
                 "Recipe" -> {
                     remoteView = RemoteViews(context.packageName, R.layout.widget_recipe_small)
                     setRecipeWidget(memoId, remoteView)
+                    if (memoType != "") {
+                        intent = Intent(context, RecipeActivity::class.java)
+                        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+                        intent.putExtra("memo", memo)
+                        val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                        remoteView.setOnClickPendingIntent(R.id.llWidgetRecipe, pi)
+                    }
                 }
                 "Movie" -> {
                     remoteView = RemoteViews(context.packageName, R.layout.widget_movie_small)
                     setMovieWidget(memoId, remoteView, appWidgetId, context)
+                    if (memoType != "") {
+                        intent = Intent(context, MovieActivity::class.java)
+                        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+                        intent.putExtra("memo", memo)
+                        val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                        remoteView.setOnClickPendingIntent(R.id.llWidgetMovie, pi)
+                    }
                 }
             }
             appWidgetManager.updateAppWidget(appWidgetId, remoteView)
         }
+
+        private fun getMemo(memoId : Int, memoType : String?) : MemoInfo {
+            val titles = mutableMapOf(
+                DBHelper.MEM_TABLE_NAME to DBHelper.MEM_COL_CONTENT,
+                DBHelper.TODL_TABLE_NAME to DBHelper.TODL_COL_DATE,
+                DBHelper.WISL_TABLE_NAME to DBHelper.WISL_COL_CATEGORY,
+                DBHelper.WEE_TABLE_NAME to DBHelper.WEE_COL_DATE,
+                DBHelper.REC_TABLE_NAME to DBHelper.REC_COL_NAME,
+                DBHelper.MOV_TABLE_NAME to DBHelper.MOV_COL_TITLE
+            )
+
+            val cursor: Cursor = database.rawQuery(
+                "SELECT * FROM $memoType WHERE _id = ?", arrayOf(
+                    memoId.toString()
+                )
+            )
+
+            cursor.moveToNext()
+            val id = cursor.getInt(cursor.getColumnIndex("_id"))
+            val wdate = cursor.getInt(cursor.getColumnIndex("wdate")) * 1000L
+            val color = cursor.getInt(cursor.getColumnIndex("color"))
+            val lock = cursor.getInt(cursor.getColumnIndex("lock"))
+            val bkmr = cursor.getInt(cursor.getColumnIndex("bkmr"))
+            val title = cursor.getString(cursor.getColumnIndex(titles[memoType]))
+
+            return MemoInfo(id, memoType, wdate, color, lock, bkmr, false, title)
+        }
+
 
         private fun setToDoWidget(memoId : Int, remoteView : RemoteViews) {
 
