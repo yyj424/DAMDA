@@ -326,35 +326,35 @@ class SmallWidget : AppWidgetProvider() {
 
                 when(i){
                     1 -> {
-                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_mon, moodPic.toUri())
-                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_mon, weather.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_mon_s, moodPic.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_mon_s, weather.toUri())
                     }
                     2 -> {
-                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_tue, moodPic.toUri())
-                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_tue, weather.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_tue_s, moodPic.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_tue_s, weather.toUri())
                     }
                     3 -> {
-                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_wed, moodPic.toUri())
-                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_wed, weather.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_wed_s, moodPic.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_wed_s, weather.toUri())
                     }
                     4 -> {
-                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_thr, moodPic.toUri())
-                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_thr, weather.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_thr_s, moodPic.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_thr_s, weather.toUri())
                     }
                     5 -> {
-                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_fri, moodPic.toUri())
-                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_fri, weather.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_fri_s, moodPic.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_fri_s, weather.toUri())
                     }
                     6 -> {
-                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_sat, moodPic.toUri())
-                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_sat, weather.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_sat_s, moodPic.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_sat_s, weather.toUri())
                     }
                     7 -> {
-                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_sun, moodPic.toUri())
-                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_sun, weather.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyMoodPic_sun_s, moodPic.toUri())
+                        remoteView.setImageViewUri(R.id.ivWidgetWeeklyWeather_sun_s, weather.toUri())
                     }
                 }
-                setColor(R.id.llWidgetWeekly, color, remoteView)
+                setColor(R.id.llWidgetWeekly_s, color, remoteView)
             }
             c.close()
         }
@@ -371,10 +371,10 @@ class SmallWidget : AppWidgetProvider() {
 
                 remoteView.setCharSequence(R.id.tvWidgetRecipeName, "setText", name)
                 remoteView.setCharSequence(R.id.tvWidgetRecipeIngredients, "setText", ingredients)
-                remoteView.setCharSequence(R.id.tvWidgetRecipeContent, "setText", content)
+                remoteView.setCharSequence(R.id.tvWidgetRecipeContentSmall, "setText", content)
 
                 remoteView.setImageViewResource(R.id.ivIngredients, R.drawable.line)
-                setColor(R.id.llWidgetRecipe, color, remoteView)
+                setColor(R.id.llWidgetRecipe_s, color, remoteView)
             }
             c.close()
         }

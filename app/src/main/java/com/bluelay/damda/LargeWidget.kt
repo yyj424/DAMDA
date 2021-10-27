@@ -391,6 +391,8 @@ class LargeWidget : AppWidgetProvider() {
                 remoteView.setCharSequence(R.id.tvWidgetRecipeName, "setText", name)
                 remoteView.setCharSequence(R.id.tvWidgetRecipeIngredients, "setText", ingredients)
                 remoteView.setCharSequence(R.id.tvWidgetRecipeContent, "setText", content)
+
+                remoteView.setImageViewResource(R.id.ivIngredients, R.drawable.line)
                 setColor(R.id.llWidgetRecipe, color, remoteView)
             }
             c.close()
