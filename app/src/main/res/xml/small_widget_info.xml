@@ -5,4 +5,5 @@
     android:minHeight="110dp"
     android:previewImage="@drawable/widget_smallimg"
     android:widgetCategory="home_screen"
-    android:configure="com.bluelay.damda.AppWidgetConfigure" />
+    android:configure="com.bluelay.damda.AppWidgetConfigure"
+    android:resizeMode="none" />

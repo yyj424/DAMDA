@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,7 +18,6 @@ import com.bumptech.glide.request.target.AppWidgetTarget
 import kotlinx.android.synthetic.main.activity_app_widget_configure.*
 
 class AppWidgetConfigure : AppCompatActivity() {
-    private lateinit var remoteView : RemoteViews
     private lateinit var appWidgetManager : AppWidgetManager
     private var mAppWidgetId : Int = 0
 
@@ -63,9 +63,6 @@ class AppWidgetConfigure : AppCompatActivity() {
             }
         }
         memoAdapter.setItemClickListener(allMemoItemClickListener)
-
-
-
     }
 
     private fun getAllMemo(){
@@ -116,29 +113,7 @@ class AppWidgetConfigure : AppCompatActivity() {
             putInt("id$mAppWidgetId", memo.id)
             apply()
         }
-        when (memo.type) {
-            "Memo" -> {
-                remoteView = RemoteViews(this.packageName, R.layout.widget_memo)
-                setMemoWidget(memo)
-            }
-            "TodoList" -> {
-                remoteView = RemoteViews(this.packageName, R.layout.widget_todo)
-            }
-            "WishList" -> {
-                remoteView = RemoteViews(this.packageName, R.layout.widget_wish)
-            }
-            "Weekly" -> {
-                remoteView = RemoteViews(this.packageName, R.layout.widget_weekly)
-            }
-            "Recipe" -> {
-                remoteView = RemoteViews(this.packageName, R.layout.widget_recipe)
-            }
-            "Movie" -> {
-                remoteView = RemoteViews(this.packageName, R.layout.widget_movie)
-            }
-        }
-        if (appWidgetManager.getAppWidgetInfo(mAppWidgetId).previewImage == R.drawable.example_appwidget_preview) {
-
+        if (appWidgetManager.getAppWidgetInfo(mAppWidgetId).provider.toString().contains("Large")) {
             LargeWidget.updateAppWidget(this, appWidgetManager, mAppWidgetId)
         }
         else {
@@ -149,43 +124,5 @@ class AppWidgetConfigure : AppCompatActivity() {
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
         setResult(RESULT_OK, resultValue)
         finish()
-    }
-
-
-    private fun setMemoWidget(memo: MemoInfo) {
-        val cursor: Cursor = database.rawQuery(
-            "SELECT * FROM ${DBHelper.MEM_TABLE_NAME} WHERE ${DBHelper.MEM_COL_ID}=?", arrayOf(
-                memo.id.toString()
-            )
-        )
-
-        if (cursor.moveToNext()) {
-            val content = cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_CONTENT))
-            remoteView.setCharSequence(R.id.tvWidgetMemo, "setText", content)
-            if (cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_PHOTO)) != null) {
-                try {
-                    val savedPhotoPath = cursor.getString(cursor.getColumnIndex(DBHelper.MEM_COL_PHOTO))
-                    remoteView.setViewVisibility(R.id.ivWidgetMemo, View.VISIBLE)
-                    val ivWidgetMemo = AppWidgetTarget(this, R.id.ivWidgetMemo, remoteView, mAppWidgetId)
-                    Glide.with(this.applicationContext).asBitmap().load(savedPhotoPath).into(ivWidgetMemo)
-                } catch (e: java.lang.Exception) {
-                    remoteView.setViewVisibility(R.id.ivWidgetMemo, View.GONE)
-                }
-            }
-            setColor(R.id.llWidgetMemo, memo.color)
-        }
-        cursor.close()
-    }
-
-    private fun setColor(layoutId : Int, color : Int) {
-        when (color) {
-            0 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.white)
-            1 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_red)
-            2 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_yellow)
-            3 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_green)
-            4 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_blue)
-            5 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_purple)
-            6 -> remoteView.setInt(layoutId, "setBackgroundResource", R.color.pastel_pink)
-        }
     }
 }
