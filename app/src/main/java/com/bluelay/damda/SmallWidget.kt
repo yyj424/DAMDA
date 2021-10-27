@@ -84,11 +84,11 @@ class SmallWidget : AppWidgetProvider() {
                     remoteView = RemoteViews(context.packageName, R.layout.widget_memo)
                     setMemoWidget(memoId, context, remoteView, appWidgetId)
                     if (memoType != "") {
-                        intent = Intent(context, ToDoActivity::class.java)
+                        intent = Intent(context, MemoActivity::class.java)
                         intent.addCategory(Intent.CATEGORY_LAUNCHER)
                         intent.putExtra("memo", memo)
                         val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-                        remoteView.setOnClickPendingIntent(R.id.llWidgetToDo, pi)
+                        remoteView.setOnClickPendingIntent(R.id.llWidgetMemo, pi)
                     }
                 }
                 "TodoList" -> {
@@ -101,11 +101,11 @@ class SmallWidget : AppWidgetProvider() {
                     setToDoWidget(memoId, remoteView)
                     appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lvWidgetToDo)
                     if (memoType != "") {
-                        intent = Intent(context, WishActivity::class.java)
+                        intent = Intent(context, ToDoActivity::class.java)
                         intent.addCategory(Intent.CATEGORY_LAUNCHER)
                         intent.putExtra("memo", memo)
                         val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-                        remoteView.setOnClickPendingIntent(R.id.llWidgetWish, pi)
+                        remoteView.setOnClickPendingIntent(R.id.llWidgetToDo, pi)
                     }
                 }
                 "WishList" -> {
@@ -117,6 +117,13 @@ class SmallWidget : AppWidgetProvider() {
                     remoteView.setRemoteAdapter(R.id.lvWidgetWish, serviceIntent)
                     setWishWidget(memoId, context, remoteView)
                     appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lvWidgetWish)
+                    if (memoType != "") {
+                        intent = Intent(context, WishActivity::class.java)
+                        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+                        intent.putExtra("memo", memo)
+                        val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                        remoteView.setOnClickPendingIntent(R.id.llWidgetWish, pi)
+                    }
                 }
                 "Weekly" -> {
                     remoteView = RemoteViews(context.packageName, R.layout.widget_weekly_small)
