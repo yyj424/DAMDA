@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/llWidgetWeekly"
+    android:id="@+id/llWidgetWeekly_s"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -60,15 +60,15 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/ivWidgetWeeklyWeather_tue"
+                    android:id="@+id/ivWidgetWeeklyWeather_mon_s"
                     android:layout_width="match_parent"
                     android:layout_height="13dp"
                     app:srcCompat="@drawable/select_weather" />
 
                 <ImageView
-                    android:id="@+id/ivWidgetWeeklyMoodPic_mon"
+                    android:id="@+id/ivWidgetWeeklyMoodPic_mon_s"
                     android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_height="52dp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
@@ -82,13 +82,13 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/ivWidgetWeeklyWeather_wed"
+                    android:id="@+id/ivWidgetWeeklyWeather_tue_s"
                     android:layout_width="match_parent"
                     android:layout_height="13dp"
                     app:srcCompat="@drawable/select_weather" />
 
                 <ImageView
-                    android:id="@+id/ivWidgetWeeklyMoodPic_fri"
+                    android:id="@+id/ivWidgetWeeklyMoodPic_tue_s"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
@@ -103,13 +103,13 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/ivWidgetWeeklyWeather_mon"
+                    android:id="@+id/ivWidgetWeeklyWeather_wed_s"
                     android:layout_width="match_parent"
                     android:layout_height="13dp"
                     app:srcCompat="@drawable/select_weather" />
 
                 <ImageView
-                    android:id="@+id/ivWidgetWeeklyMoodPic_thr"
+                    android:id="@+id/ivWidgetWeeklyMoodPic_wed_s"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
@@ -133,13 +133,13 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/ivWidgetWeeklyWeather_thr"
+                    android:id="@+id/ivWidgetWeeklyWeather_thr_s"
                     android:layout_width="match_parent"
                     android:layout_height="13dp"
                     app:srcCompat="@drawable/select_weather" />
 
                 <ImageView
-                    android:id="@+id/ivWidgetWeeklyMoodPic_sun"
+                    android:id="@+id/ivWidgetWeeklyMoodPic_thr_s"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
@@ -155,13 +155,13 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/ivWidgetWeeklyWeather_fri"
+                    android:id="@+id/ivWidgetWeeklyWeather_fri_s"
                     android:layout_width="match_parent"
                     android:layout_height="13dp"
                     app:srcCompat="@drawable/select_weather" />
 
                 <ImageView
-                    android:id="@+id/ivWidgetWeeklyMoodPic_sat"
+                    android:id="@+id/ivWidgetWeeklyMoodPic_fri_s"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
@@ -177,13 +177,13 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/ivWidgetWeeklyWeather_sat"
+                    android:id="@+id/ivWidgetWeeklyWeather_sat_s"
                     android:layout_width="match_parent"
                     android:layout_height="13dp"
                     app:srcCompat="@drawable/select_weather" />
 
                 <ImageView
-                    android:id="@+id/ivWidgetWeeklyMoodPic_tue"
+                    android:id="@+id/ivWidgetWeeklyMoodPic_sat_s"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
@@ -198,13 +198,13 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/ivWidgetWeeklyWeather_sun"
+                    android:id="@+id/ivWidgetWeeklyWeather_sun_s"
                     android:layout_width="match_parent"
                     android:layout_height="13dp"
                     app:srcCompat="@drawable/select_weather" />
 
                 <ImageView
-                    android:id="@+id/ivWidgetWeeklyMoodPic_wed"
+                    android:id="@+id/ivWidgetWeeklyMoodPic_sun_s"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
