@@ -1,7 +1,9 @@
 package com.bluelay.damda
 
 import android.app.AlertDialog
+import android.appwidget.AppWidgetManager
 import android.content.ContentValues
+import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
@@ -214,6 +216,7 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
         var dbChange = false
         if (wid != -1) {
             if (checkUpdate()) {
+                updateWidget()
                 dbChange = true
                 var whereClause = "_id=?"
                 val whereArgs = arrayOf(wid.toString())
@@ -272,5 +275,15 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
     override fun onDestroy() {
         super.onDestroy()
         dbHelper.close()
+    }
+
+    private fun updateWidget() {
+        val largeWidgetIntent = Intent(this, LargeWidget::class.java)
+        largeWidgetIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        this.sendBroadcast(largeWidgetIntent)
+
+        val smallWidgetIntent = Intent(this, SmallWidget::class.java)
+        smallWidgetIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        this.sendBroadcast(smallWidgetIntent)
     }
 }

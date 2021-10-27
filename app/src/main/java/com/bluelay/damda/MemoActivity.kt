@@ -2,6 +2,7 @@ package com.bluelay.damda
 
 import android.Manifest
 import android.app.AlertDialog
+import android.appwidget.AppWidgetManager
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -326,6 +327,7 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
 
         if (mid != -1) {
             if (checkUpdate()) {
+                updateWidget()
                 val whereCluase = "_id=?"
                 val whereArgs = arrayOf(mid.toString())
                 database.update(DBHelper.MEM_TABLE_NAME, contentValues, whereCluase, whereArgs)
@@ -373,5 +375,15 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
     override fun onDestroy() {
         super.onDestroy()
         dbHelper.close()
+    }
+
+    private fun updateWidget() {
+        val largeWidgetIntent = Intent(this, LargeWidget::class.java)
+        largeWidgetIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        this.sendBroadcast(largeWidgetIntent)
+
+        val smallWidgetIntent = Intent(this, SmallWidget::class.java)
+        smallWidgetIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        this.sendBroadcast(smallWidgetIntent)
     }
 }
