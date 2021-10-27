@@ -133,7 +133,7 @@ class SmallWidget : AppWidgetProvider() {
                         intent.addCategory(Intent.CATEGORY_LAUNCHER)
                         intent.putExtra("memo", memo)
                         val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-                        remoteView.setOnClickPendingIntent(R.id.llWidgetWeekly, pi)
+                        remoteView.setOnClickPendingIntent(R.id.llWidgetWeekly_s, pi)
                     }
                 }
                 "Recipe" -> {
@@ -144,7 +144,7 @@ class SmallWidget : AppWidgetProvider() {
                         intent.addCategory(Intent.CATEGORY_LAUNCHER)
                         intent.putExtra("memo", memo)
                         val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-                        remoteView.setOnClickPendingIntent(R.id.llWidgetRecipe, pi)
+                        remoteView.setOnClickPendingIntent(R.id.llWidgetRecipe_s, pi)
                     }
                 }
                 "Movie" -> {

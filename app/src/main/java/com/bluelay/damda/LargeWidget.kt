@@ -252,7 +252,8 @@ class LargeWidget : AppWidgetProvider() {
 
                 setVisibility(date, remoteView, R.id.tvWidgetMovieDate)
                 setVisibility(title, remoteView, R.id.tvWidgetMovieTitle)
-                setVisibility(content, remoteView, R.id.tvWidgetMovieReview)
+
+                remoteView.setTextViewText(R.id.tvWidgetMovieReview, content)
 
                 val ivWidgetMoviePoster = AppWidgetTarget(context, R.id.ivWidgetMoviePoster, remoteView, appWidgetId)
                 Glide.with(context.applicationContext).asBitmap().fitCenter().load(image).into(ivWidgetMoviePoster)
