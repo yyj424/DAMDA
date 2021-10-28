@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.database.getIntOrNull
@@ -98,7 +99,7 @@ class LargeWidget : AppWidgetProvider() {
                             intent = Intent(context, MemoActivity::class.java)
                             intent.addCategory(Intent.CATEGORY_LAUNCHER)
                             intent.putExtra("memo", memo)
-                            val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                            val pi = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
                             remoteView.setOnClickPendingIntent(R.id.llWidgetMemo, pi)
                         }
                     }
@@ -115,7 +116,7 @@ class LargeWidget : AppWidgetProvider() {
                             intent = Intent(context, ToDoActivity::class.java)
                             intent.addCategory(Intent.CATEGORY_LAUNCHER)
                             intent.putExtra("memo", memo)
-                            val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                            val pi = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
                             remoteView.setOnClickPendingIntent(R.id.llWidgetToDo, pi)
                         }
                     }
@@ -132,7 +133,7 @@ class LargeWidget : AppWidgetProvider() {
                             intent = Intent(context, WishActivity::class.java)
                             intent.addCategory(Intent.CATEGORY_LAUNCHER)
                             intent.putExtra("memo", memo)
-                            val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                            val pi = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
                             remoteView.setOnClickPendingIntent(R.id.llWidgetWish, pi)
                         }
                     }
@@ -143,7 +144,7 @@ class LargeWidget : AppWidgetProvider() {
                             intent = Intent(context, WeeklyActivity::class.java)
                             intent.addCategory(Intent.CATEGORY_LAUNCHER)
                             intent.putExtra("memo", memo)
-                            val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                            val pi = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
                             remoteView.setOnClickPendingIntent(R.id.llWidgetWeekly, pi)
                         }
                     }
@@ -154,7 +155,7 @@ class LargeWidget : AppWidgetProvider() {
                             intent = Intent(context, RecipeActivity::class.java)
                             intent.addCategory(Intent.CATEGORY_LAUNCHER)
                             intent.putExtra("memo", memo)
-                            val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                            val pi = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
                             remoteView.setOnClickPendingIntent(R.id.llWidgetRecipe, pi)
                         }
                     }
@@ -165,7 +166,7 @@ class LargeWidget : AppWidgetProvider() {
                             intent = Intent(context, MovieActivity::class.java)
                             intent.addCategory(Intent.CATEGORY_LAUNCHER)
                             intent.putExtra("memo", memo)
-                            val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                            val pi = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
                             remoteView.setOnClickPendingIntent(R.id.llWidgetMovie, pi)
                         }
                     }
