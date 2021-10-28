@@ -279,6 +279,7 @@ class ToDoActivity : AppCompatActivity(), SetMemo  {
 
     private fun deleteMemo() {
         database.execSQL("DELETE FROM ${DBHelper.TODL_TABLE_NAME} WHERE _id = $toDoId")
+        updateWidget()
         finish()
     }
 

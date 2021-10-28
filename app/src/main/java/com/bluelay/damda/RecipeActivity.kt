@@ -231,6 +231,7 @@ class RecipeActivity : AppCompatActivity(), SetMemo{
 
     private fun deleteMemo() {
         database.execSQL("DELETE FROM ${DBHelper.REC_TABLE_NAME} WHERE _id = $recipeId")
+        updateWidget()
         finish()
     }
 

@@ -419,8 +419,24 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
     }
 
     private fun deleteMovie() {
+        delSavedPhoto()
         database.execSQL("DELETE FROM ${DBHelper.MOV_TABLE_NAME} WHERE _id = $movieId")
+        updateWidget()
         finish()
+    }
+
+    private fun delSavedPhoto() {
+        try {
+            val file = this.filesDir
+            val fileList = file.listFiles()
+            for (i in fileList.indices) {
+                if (fileList[i].path.toString().equals(photoUri)) {
+                    fileList[i].delete()
+                }
+            }
+        } catch (e: java.lang.Exception) {
+            Toast.makeText(applicationContext, "기존 사진 파일을 삭제하지 못했습니다", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun View.hideKeyboard() {

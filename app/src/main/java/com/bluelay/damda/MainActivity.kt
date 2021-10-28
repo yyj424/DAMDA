@@ -1,6 +1,7 @@
 package com.bluelay.damda
 
 import android.app.AlertDialog
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
@@ -176,6 +177,7 @@ class MainActivity : AppCompatActivity() {
             if(result.resultCode == RESULT_OK && position != null){
                 database.execSQL("DELETE FROM ${mmList[position!!].type} WHERE _id = ${mmList[position].id}")
                 mainMemoAdapter.deleteItem(position)
+                updateWidget()
             }
         }
         val mainMemoSwipeDeleteClickListener = object: MainMemoAdapter.SwipeDeleteClickListener{
@@ -191,6 +193,7 @@ class MainActivity : AppCompatActivity() {
                     mainMemoAdapter.deleteItem(position)
                 }
                 getAllMemo()
+                updateWidget()
             }
         }
         mainMemoAdapter.setSwipeDeleteClickListener(mainMemoSwipeDeleteClickListener)
@@ -224,6 +227,7 @@ class MainActivity : AppCompatActivity() {
                         iterator.remove()
                     }
                 }
+                updateWidget()
             }
         }
 
@@ -238,6 +242,7 @@ class MainActivity : AppCompatActivity() {
                         iterator.remove()
                     }
                 }
+                updateWidget()
             }
         }
 
@@ -311,6 +316,7 @@ class MainActivity : AppCompatActivity() {
                                         iterator.remove()
                                     }
                                 }
+                                updateWidget()
                             }
 
                             var bmLocked = false
@@ -350,6 +356,7 @@ class MainActivity : AppCompatActivity() {
                                         iterator2.remove()
                                     }
                                 }
+                                updateWidget()
                             }
 
                             if(bmList.size == 0) {
@@ -660,5 +667,15 @@ class MainActivity : AppCompatActivity() {
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
+    }
+
+    private fun updateWidget() {
+        val largeWidgetIntent = Intent(this, LargeWidget::class.java)
+        largeWidgetIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        this.sendBroadcast(largeWidgetIntent)
+
+        val smallWidgetIntent = Intent(this, SmallWidget::class.java)
+        smallWidgetIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        this.sendBroadcast(smallWidgetIntent)
     }
 }
