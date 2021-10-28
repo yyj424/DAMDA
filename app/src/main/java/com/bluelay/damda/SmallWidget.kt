@@ -93,7 +93,7 @@ class SmallWidget : AppWidgetProvider() {
                             intent = Intent(context, MemoActivity::class.java)
                             intent.addCategory(Intent.CATEGORY_LAUNCHER)
                             intent.putExtra("memo", memo)
-                            val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                            val pi = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
                             remoteView.setOnClickPendingIntent(R.id.llWidgetMemo, pi)
                         }
                     }
@@ -110,7 +110,7 @@ class SmallWidget : AppWidgetProvider() {
                             intent = Intent(context, ToDoActivity::class.java)
                             intent.addCategory(Intent.CATEGORY_LAUNCHER)
                             intent.putExtra("memo", memo)
-                            val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                            val pi = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
                             remoteView.setOnClickPendingIntent(R.id.llWidgetToDo, pi)
                         }
                     }
@@ -127,7 +127,7 @@ class SmallWidget : AppWidgetProvider() {
                             intent = Intent(context, WishActivity::class.java)
                             intent.addCategory(Intent.CATEGORY_LAUNCHER)
                             intent.putExtra("memo", memo)
-                            val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                            val pi = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
                             remoteView.setOnClickPendingIntent(R.id.llWidgetWish, pi)
                         }
                     }
@@ -138,7 +138,7 @@ class SmallWidget : AppWidgetProvider() {
                             intent = Intent(context, WeeklyActivity::class.java)
                             intent.addCategory(Intent.CATEGORY_LAUNCHER)
                             intent.putExtra("memo", memo)
-                            val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                            val pi = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
                             remoteView.setOnClickPendingIntent(R.id.llWidgetWeekly_s, pi)
                         }
                     }
@@ -149,7 +149,7 @@ class SmallWidget : AppWidgetProvider() {
                             intent = Intent(context, RecipeActivity::class.java)
                             intent.addCategory(Intent.CATEGORY_LAUNCHER)
                             intent.putExtra("memo", memo)
-                            val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                            val pi = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
                             remoteView.setOnClickPendingIntent(R.id.llWidgetRecipe_s, pi)
                         }
                     }
@@ -160,7 +160,7 @@ class SmallWidget : AppWidgetProvider() {
                             intent = Intent(context, MovieActivity::class.java)
                             intent.addCategory(Intent.CATEGORY_LAUNCHER)
                             intent.putExtra("memo", memo)
-                            val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                            val pi = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
                             remoteView.setOnClickPendingIntent(R.id.llWidgetMovie, pi)
                         }
                     }
