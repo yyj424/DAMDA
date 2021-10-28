@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.view.View
 import android.widget.RemoteViews
@@ -15,6 +17,8 @@ import androidx.core.database.getIntOrNull
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.AppWidgetTarget
+import kotlinx.android.synthetic.main.activity_movie.*
+import java.net.URL
 
 
 /**
@@ -156,7 +160,7 @@ class LargeWidget : AppWidgetProvider() {
                     }
                     "Movie" -> {
                         remoteView = RemoteViews(context.packageName, R.layout.widget_movie)
-                        setMovieWidget(memoId, remoteView, appWidgetId, context)
+                        setMovieWidget(memoId, remoteView, context, appWidgetId)
                         if (memoType != "") {
                             intent = Intent(context, MovieActivity::class.java)
                             intent.addCategory(Intent.CATEGORY_LAUNCHER)
@@ -244,7 +248,7 @@ class LargeWidget : AppWidgetProvider() {
             cursor.close()
         }
 
-        private fun setMovieWidget(memoId : Int, remoteView : RemoteViews, appWidgetId : Int, context: Context) {
+        private fun setMovieWidget(memoId : Int, remoteView : RemoteViews, context: Context, appWidgetId: Int) {
             val cursor: Cursor = database.rawQuery(
                 "SELECT * FROM ${DBHelper.MOV_TABLE_NAME} WHERE ${DBHelper.MOV_COL_ID}=?", arrayOf(memoId.toString()))
 
@@ -263,7 +267,13 @@ class LargeWidget : AppWidgetProvider() {
                 remoteView.setTextViewText(R.id.tvWidgetMovieReview, content)
 
                 val ivWidgetMoviePoster = AppWidgetTarget(context, R.id.ivWidgetMoviePoster, remoteView, appWidgetId)
-                Glide.with(context.applicationContext).asBitmap().fitCenter().load(image).into(ivWidgetMoviePoster)
+                Glide.with(context.applicationContext)
+                    .asBitmap()
+                    .fitCenter()
+                    .load(image)
+                    .override(100, 141)
+                    .into(ivWidgetMoviePoster)
+
                 setColor(R.id.llWidgetMovie, color, remoteView)
 
                 val ratingStars = arrayOf(R.id.ivRatingStar1, R.id.ivRatingStar2, R.id.ivRatingStar3, R.id.ivRatingStar4, R.id.ivRatingStar5)
