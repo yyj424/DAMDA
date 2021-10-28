@@ -258,7 +258,12 @@ class SmallWidget : AppWidgetProvider() {
                 setVisibility(date, remoteView, R.id.tvWidgetMovieDate)
                 setVisibility(title, remoteView, R.id.tvWidgetMovieTitle)
                 val ivWidgetMoviePoster = AppWidgetTarget(context, R.id.ivWidgetMoviePoster, remoteView, appWidgetId)
-                Glide.with(context.applicationContext).asBitmap().fitCenter().load(image).into(ivWidgetMoviePoster)
+                Glide.with(context.applicationContext)
+                    .asBitmap()
+                    .fitCenter()
+                    .load(image)
+                    .override(100, 141)
+                    .into(ivWidgetMoviePoster)
                 setColor(R.id.llWidgetMovie, color, remoteView)
 
                 val ratingStars = arrayOf(R.id.ivRatingStar1, R.id.ivRatingStar2, R.id.ivRatingStar3, R.id.ivRatingStar4, R.id.ivRatingStar5)
