@@ -43,514 +43,522 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/ivWidgetWeeklyMoodPic_mon"
-            android:layout_width="43dp"
-            android:layout_height="43dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="3dp"
-            app:srcCompat="@drawable/select_emoji" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivWidgetWeeklyMoodPic_mon"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="3dp"
+                app:srcCompat="@drawable/select_emoji" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginBottom="5dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/ivWidgetWeeklyWeather_mon"
-                    android:layout_width="33dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    app:srcCompat="@drawable/select_weather" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/ivWidgetWeeklyWeather_mon"
+                        android:layout_width="33dp"
+                        android:layout_height="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        app:srcCompat="@drawable/select_weather" />
+
+                    <TextView
+                        android:id="@+id/tvDay_mon"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Mon"
+                        android:fontFamily="@font/nanumsquareroundr"
+                        android:textColor="#000000" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvDay_mon"
-                    android:layout_width="0dp"
+                    android:id="@+id/tvWidgetWeeklyContent_mon"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Mon"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
+                    android:background="@null"
+                    android:ems="10"
                     android:fontFamily="@font/nanumsquareroundr"
-                    android:textColor="#000000" />
+                    android:hint="당신의 하루는 어땠나요"
+                    android:inputType="textPersonName"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvWidgetWeeklyContent_mon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
-                android:background="@null"
-                android:ems="10"
-                android:fontFamily="@font/nanumsquareroundr"
-                android:hint="당신의 하루는 어땠나요"
-                android:inputType="textPersonName"
-                android:textColor="#000000"
-                android:textSize="14sp" />
         </LinearLayout>
-    </LinearLayout>
-<!--    <ImageView-->
-<!--        android:id="@+id/imageView100"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:srcCompat="@drawable/line" />-->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/ivWidgetWeeklyMoodPic_tue"
-            android:layout_width="43dp"
-            android:layout_height="43dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="3dp"
-            app:srcCompat="@drawable/select_emoji" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imageView100"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:srcCompat="@drawable/line" />-->
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivWidgetWeeklyMoodPic_tue"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="3dp"
+                app:srcCompat="@drawable/select_emoji" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginBottom="5dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/ivWidgetWeeklyWeather_tue"
-                    android:layout_width="33dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    app:srcCompat="@drawable/select_weather" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/ivWidgetWeeklyWeather_tue"
+                        android:layout_width="33dp"
+                        android:layout_height="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        app:srcCompat="@drawable/select_weather" />
+
+                    <TextView
+                        android:id="@+id/tvDay_tue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Tue"
+                        android:fontFamily="@font/nanumsquareroundr"
+                        android:textColor="#000000" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvDay_tue"
-                    android:layout_width="0dp"
+                    android:id="@+id/tvWidgetWeeklyContent_tue"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Tue"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
+                    android:background="@null"
+                    android:ems="10"
                     android:fontFamily="@font/nanumsquareroundr"
-                    android:textColor="#000000" />
+                    android:hint="당신의 하루는 어땠나요"
+                    android:inputType="textPersonName"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvWidgetWeeklyContent_tue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
-                android:background="@null"
-                android:ems="10"
-                android:fontFamily="@font/nanumsquareroundr"
-                android:hint="당신의 하루는 어땠나요"
-                android:inputType="textPersonName"
-                android:textColor="#000000"
-                android:textSize="14sp" />
         </LinearLayout>
-    </LinearLayout>
-<!--    <ImageView-->
-<!--        android:id="@+id/imageView101"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:srcCompat="@drawable/line" />-->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/ivWidgetWeeklyMoodPic_wed"
-            android:layout_width="43dp"
-            android:layout_height="43dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="3dp"
-            app:srcCompat="@drawable/select_emoji" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imageView101"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:srcCompat="@drawable/line" />-->
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivWidgetWeeklyMoodPic_wed"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="3dp"
+                app:srcCompat="@drawable/select_emoji" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginBottom="5dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/ivWidgetWeeklyWeather_wed"
-                    android:layout_width="33dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    app:srcCompat="@drawable/select_weather" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/ivWidgetWeeklyWeather_wed"
+                        android:layout_width="33dp"
+                        android:layout_height="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        app:srcCompat="@drawable/select_weather" />
+
+                    <TextView
+                        android:id="@+id/tvDay_wed"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Wed"
+                        android:fontFamily="@font/nanumsquareroundr"
+                        android:textColor="#000000" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvDay_wed"
-                    android:layout_width="0dp"
+                    android:id="@+id/tvWidgetWeeklyContent_wed"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Wed"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
+                    android:background="@null"
+                    android:ems="10"
                     android:fontFamily="@font/nanumsquareroundr"
-                    android:textColor="#000000" />
+                    android:hint="당신의 하루는 어땠나요"
+                    android:inputType="textPersonName"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvWidgetWeeklyContent_wed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
-                android:background="@null"
-                android:ems="10"
-                android:fontFamily="@font/nanumsquareroundr"
-                android:hint="당신의 하루는 어땠나요"
-                android:inputType="textPersonName"
-                android:textColor="#000000"
-                android:textSize="14sp" />
         </LinearLayout>
-    </LinearLayout>
-<!--    <ImageView-->
-<!--        android:id="@+id/imageView102"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:srcCompat="@drawable/line" />-->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/ivWidgetWeeklyMoodPic_thr"
-            android:layout_width="43dp"
-            android:layout_height="43dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="3dp"
-            app:srcCompat="@drawable/select_emoji" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imageView102"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:srcCompat="@drawable/line" />-->
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivWidgetWeeklyMoodPic_thr"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="3dp"
+                app:srcCompat="@drawable/select_emoji" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginBottom="5dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/ivWidgetWeeklyWeather_thr"
-                    android:layout_width="33dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    app:srcCompat="@drawable/select_weather" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/ivWidgetWeeklyWeather_thr"
+                        android:layout_width="33dp"
+                        android:layout_height="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        app:srcCompat="@drawable/select_weather" />
+
+                    <TextView
+                        android:id="@+id/tvDay_thr"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Thr"
+                        android:fontFamily="@font/nanumsquareroundr"
+                        android:textColor="#000000" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvDay_thr"
-                    android:layout_width="0dp"
+                    android:id="@+id/tvWidgetWeeklyContent_thr"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Thr"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
+                    android:background="@null"
+                    android:ems="10"
                     android:fontFamily="@font/nanumsquareroundr"
-                    android:textColor="#000000" />
+                    android:hint="당신의 하루는 어땠나요"
+                    android:inputType="textPersonName"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvWidgetWeeklyContent_thr"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
-                android:background="@null"
-                android:ems="10"
-                android:fontFamily="@font/nanumsquareroundr"
-                android:hint="당신의 하루는 어땠나요"
-                android:inputType="textPersonName"
-                android:textColor="#000000"
-                android:textSize="14sp" />
         </LinearLayout>
-    </LinearLayout>
-<!--    <ImageView-->
-<!--        android:id="@+id/imageView103"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:srcCompat="@drawable/line" />-->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/ivWidgetWeeklyMoodPic_fri"
-            android:layout_width="43dp"
-            android:layout_height="43dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="3dp"
-            app:srcCompat="@drawable/select_emoji" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imageView103"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:srcCompat="@drawable/line" />-->
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivWidgetWeeklyMoodPic_fri"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="3dp"
+                app:srcCompat="@drawable/select_emoji" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginBottom="5dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/ivWidgetWeeklyWeather_fri"
-                    android:layout_width="33dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    app:srcCompat="@drawable/select_weather" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/ivWidgetWeeklyWeather_fri"
+                        android:layout_width="33dp"
+                        android:layout_height="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        app:srcCompat="@drawable/select_weather" />
+
+                    <TextView
+                        android:id="@+id/tvDay_fri"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Fri"
+                        android:fontFamily="@font/nanumsquareroundr"
+                        android:textColor="#000000" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvDay_fri"
-                    android:layout_width="0dp"
+                    android:id="@+id/tvWidgetWeeklyContent_fri"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Fri"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
+                    android:background="@null"
+                    android:ems="10"
                     android:fontFamily="@font/nanumsquareroundr"
-                    android:textColor="#000000" />
+                    android:hint="당신의 하루는 어땠나요"
+                    android:inputType="textPersonName"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvWidgetWeeklyContent_fri"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
-                android:background="@null"
-                android:ems="10"
-                android:fontFamily="@font/nanumsquareroundr"
-                android:hint="당신의 하루는 어땠나요"
-                android:inputType="textPersonName"
-                android:textColor="#000000"
-                android:textSize="14sp" />
         </LinearLayout>
-    </LinearLayout>
-<!--    <ImageView-->
-<!--        android:id="@+id/imageView104"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:srcCompat="@drawable/line" />-->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/ivWidgetWeeklyMoodPic_sat"
-            android:layout_width="43dp"
-            android:layout_height="43dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="3dp"
-            app:srcCompat="@drawable/select_emoji" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imageView104"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:srcCompat="@drawable/line" />-->
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivWidgetWeeklyMoodPic_sat"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="3dp"
+                app:srcCompat="@drawable/select_emoji" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginBottom="5dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/ivWidgetWeeklyWeather_sat"
-                    android:layout_width="33dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    app:srcCompat="@drawable/select_weather" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/ivWidgetWeeklyWeather_sat"
+                        android:layout_width="33dp"
+                        android:layout_height="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        app:srcCompat="@drawable/select_weather" />
+
+                    <TextView
+                        android:id="@+id/tvDay_sat"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Sat"
+                        android:fontFamily="@font/nanumsquareroundr"
+                        android:textColor="#000000" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvDay_sat"
-                    android:layout_width="0dp"
+                    android:id="@+id/tvWidgetWeeklyContent_sat"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Sat"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
+                    android:background="@null"
+                    android:ems="10"
                     android:fontFamily="@font/nanumsquareroundr"
-                    android:textColor="#000000" />
+                    android:hint="당신의 하루는 어땠나요"
+                    android:inputType="textPersonName"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvWidgetWeeklyContent_sat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
-                android:background="@null"
-                android:ems="10"
-                android:fontFamily="@font/nanumsquareroundr"
-                android:hint="당신의 하루는 어땠나요"
-                android:inputType="textPersonName"
-                android:textColor="#000000"
-                android:textSize="14sp" />
         </LinearLayout>
-    </LinearLayout>
-<!--    <ImageView-->
-<!--        android:id="@+id/imageView105"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:srcCompat="@drawable/line" />-->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/ivWidgetWeeklyMoodPic_sun"
-            android:layout_width="43dp"
-            android:layout_height="43dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="3dp"
-            app:srcCompat="@drawable/select_emoji" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imageView105"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:srcCompat="@drawable/line" />-->
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivWidgetWeeklyMoodPic_sun"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="3dp"
+                app:srcCompat="@drawable/select_emoji" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginBottom="5dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/ivWidgetWeeklyWeather_sun"
-                    android:layout_width="33dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    app:srcCompat="@drawable/select_weather" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/ivWidgetWeeklyWeather_sun"
+                        android:layout_width="33dp"
+                        android:layout_height="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        app:srcCompat="@drawable/select_weather" />
+
+                    <TextView
+                        android:id="@+id/tvDay_sun"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Sun"
+                        android:fontFamily="@font/nanumsquareroundr"
+                        android:textColor="#000000" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvDay_sun"
-                    android:layout_width="0dp"
+                    android:id="@+id/tvWidgetWeeklyContent_sun"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Sun"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
+                    android:background="@null"
+                    android:ems="10"
                     android:fontFamily="@font/nanumsquareroundr"
-                    android:textColor="#000000" />
+                    android:hint="당신의 하루는 어땠나요"
+                    android:inputType="textPersonName"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvWidgetWeeklyContent_sun"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
-                android:background="@null"
-                android:ems="10"
-                android:fontFamily="@font/nanumsquareroundr"
-                android:hint="당신의 하루는 어땠나요"
-                android:inputType="textPersonName"
-                android:textColor="#000000"
-                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 
