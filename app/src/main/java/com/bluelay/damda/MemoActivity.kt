@@ -369,6 +369,7 @@ class MemoActivity : AppCompatActivity(), SetMemo, KeyEvent.Callback {
     private fun deleteMemo() {
         delSavedPhoto()
         database.execSQL("DELETE FROM ${DBHelper.MEM_TABLE_NAME} WHERE _id = $mid")
+        updateWidget()
         finish()
     }
 

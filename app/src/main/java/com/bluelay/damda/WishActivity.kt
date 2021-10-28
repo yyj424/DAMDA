@@ -265,6 +265,7 @@ class WishActivity : AppCompatActivity(), CalTotal, SetMemo {
 
     private fun deleteMemo() {
         database.execSQL("DELETE FROM ${DBHelper.WISL_TABLE_NAME} WHERE _id = $wid")
+        updateWidget()
         finish()
     }
 

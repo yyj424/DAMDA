@@ -321,6 +321,7 @@ class WeeklyActivity : AppCompatActivity(), SetMemo{
 
     private fun deleteMemo() {
         database.execSQL("DELETE FROM ${DBHelper.WEE_TABLE_NAME} WHERE _id = $did")
+        updateWidget()
         finish()
     }
 
