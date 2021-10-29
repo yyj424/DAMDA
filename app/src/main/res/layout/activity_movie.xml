@@ -89,7 +89,9 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_baseline_movie_24" />
+                    app:layout_constraintVertical_bias="0.0"
+                    app:srcCompat="@drawable/ic_baseline_movie_24"
+                    tools:srcCompat="@drawable/ic_baseline_movie_24" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline"

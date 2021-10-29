@@ -90,7 +90,7 @@ class MovieActivity : AppCompatActivity(), SetMemo  {
             etMovieReview.setText(content)
             if (lock == 1) cbLock.isChecked = true
             if (bkmr == 1) cbBkmr.isChecked = true
-            if (image != "") {
+            if (image != null && image != "") {
                 Glide.with(this)
                     .load(image)
                     .fitCenter()
