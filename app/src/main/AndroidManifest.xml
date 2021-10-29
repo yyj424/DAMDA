@@ -57,13 +57,13 @@
         <activity android:name=".MovieSearchActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".MovieActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".WishActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".WeeklyActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".SettingBGActivity" />
         <activity android:name=".SettingPWActivity" />
         <activity
@@ -71,8 +71,9 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MemoActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".RecipeActivity" />
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".RecipeActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".UnlockPWActivity" />
         <activity android:name=".LicenseActivity" />
         <activity android:name=".AppWidgetConfigure">
