@@ -51,6 +51,7 @@
         android:divider="@null"
         android:overScrollMode="never"
         android:scrollbars="none"
+        android:listSelector="@android:color/transparent"
         tools:listitem="@layout/adapter_view_widget_wish">
 
     </ListView>
