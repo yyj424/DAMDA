@@ -68,7 +68,7 @@
         <activity android:name=".SettingPWActivity" />
         <activity
             android:name=".ToDoActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MemoActivity"
             android:windowSoftInputMode="adjustPan" />

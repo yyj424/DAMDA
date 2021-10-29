@@ -116,6 +116,7 @@
         android:gravity="start"
         android:inputType="textMultiLine|text"
         android:lines="15"
+        android:overScrollMode="never"
         android:padding="5dp"
         android:scrollbars="none"
         android:text="감상평"
