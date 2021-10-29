@@ -110,7 +110,6 @@
                     android:background="@null"
                     android:ems="10"
                     android:fontFamily="@font/nanumsquareroundr"
-                    android:hint="당신의 하루는 어땠나요"
                     android:inputType="textPersonName"
                     android:textColor="#000000"
                     android:textSize="14sp" />
@@ -184,7 +183,6 @@
                     android:background="@null"
                     android:ems="10"
                     android:fontFamily="@font/nanumsquareroundr"
-                    android:hint="당신의 하루는 어땠나요"
                     android:inputType="textPersonName"
                     android:textColor="#000000"
                     android:textSize="14sp" />
@@ -258,7 +256,6 @@
                     android:background="@null"
                     android:ems="10"
                     android:fontFamily="@font/nanumsquareroundr"
-                    android:hint="당신의 하루는 어땠나요"
                     android:inputType="textPersonName"
                     android:textColor="#000000"
                     android:textSize="14sp" />
@@ -332,7 +329,6 @@
                     android:background="@null"
                     android:ems="10"
                     android:fontFamily="@font/nanumsquareroundr"
-                    android:hint="당신의 하루는 어땠나요"
                     android:inputType="textPersonName"
                     android:textColor="#000000"
                     android:textSize="14sp" />
@@ -406,7 +402,6 @@
                     android:background="@null"
                     android:ems="10"
                     android:fontFamily="@font/nanumsquareroundr"
-                    android:hint="당신의 하루는 어땠나요"
                     android:inputType="textPersonName"
                     android:textColor="#000000"
                     android:textSize="14sp" />
@@ -480,7 +475,6 @@
                     android:background="@null"
                     android:ems="10"
                     android:fontFamily="@font/nanumsquareroundr"
-                    android:hint="당신의 하루는 어땠나요"
                     android:inputType="textPersonName"
                     android:textColor="#000000"
                     android:textSize="14sp" />
@@ -554,7 +548,6 @@
                     android:background="@null"
                     android:ems="10"
                     android:fontFamily="@font/nanumsquareroundr"
-                    android:hint="당신의 하루는 어땠나요"
                     android:inputType="textPersonName"
                     android:textColor="#000000"
                     android:textSize="14sp" />
